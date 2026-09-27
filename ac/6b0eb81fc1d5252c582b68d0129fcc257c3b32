@@ -1,0 +1,25 @@
+docs/producthunt-launch.md
+  s_ee8a579a16e771::t_b71bedb4f1ee7c 47,62
+  s_ee8a579a16e771::t_5735c4c05e8ca7 2,4,11-42,44-46,48-55,57-60,63-64
+  s_ee8a579a16e771::t_0bb560165b0dba 1,3,5-10,43,56,61
+src/components/KanaPractice.tsx
+  s_ee8a579a16e771::t_28370a451a6c54 5,119-133
+src/components/KanaPractice.module.css
+  s_ee8a579a16e771::t_28370a451a6c54 5-17,485-495
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ac6b0eb81fc1d5252c582b68d0129fcc257c3b32",
+  "prompts": {},
+  "sessions": {
+    "s_ee8a579a16e771": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0e22b-120f-7192-9490-891a87f8313e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
