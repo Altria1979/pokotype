@@ -162,3 +162,9 @@ If you encounter a problem, notice an incorrect reading or unexpected typing beh
 - Bug reports: [Open an issue](https://github.com/Altria1979/pokotype/issues)
 
 When reporting a problem, include the page URL, browser version, steps to reproduce it, and screenshots where possible. Do not include API keys.
+
+## 5. License
+
+Copyright 2026 Altria1979.
+
+Pokotype is licensed under the [Apache License 2.0](LICENSE). Third-party dependencies and bundled third-party resources remain subject to their respective licenses.

@@ -162,3 +162,9 @@ npm run test:e2e
 - 问题反馈：[提交 Issue](https://github.com/Altria1979/pokotype/issues)
 
 反馈时可附上页面地址、浏览器版本、复现步骤和截图，请勿附带 API 密钥。
+
+## 5. 许可证
+
+Copyright 2026 Altria1979.
+
+Pokotype 采用 [Apache License 2.0](LICENSE) 许可证。第三方依赖与随附的第三方资源仍遵循各自的许可证。
