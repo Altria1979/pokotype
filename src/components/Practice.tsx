@@ -40,6 +40,7 @@ export function Practice({
   const { preferences, updatePreferences, addRecord } = useData();
   const [config] = useState(() => ({ articlePracticeMode, articleGroupSize }));
   const [run] = useState(() => new PracticeRun(items, mode, config.articlePracticeMode));
+  const [autoPaused, setAutoPaused] = useState(false);
   const continuous = mode === "article" && config.articlePracticeMode !== "sentence";
   const [sessionSpeech, setSessionSpeech] = useState(() => ({
     sentence: false,
@@ -95,6 +96,7 @@ export function Practice({
     advance(run.index);
   }, [run, audio, advance]);
   const pause = useCallback(() => {
+    setAutoPaused(false);
     audio.stopAll();
     if (!run.complete) {
       run.pause();
@@ -103,6 +105,7 @@ export function Practice({
   }, [audio, run, redraw]);
   function togglePause() {
     if (!run.paused) return pause();
+    setAutoPaused(false);
     if (preferences.keySoundEnabled && preferences.keySoundVolume > 0) void audio.unlock();
     run.resume();
     if (run.listening) listen();
@@ -140,13 +143,20 @@ export function Practice({
   }, [audio, mode, preferences.keySoundEnabled, preferences.keySoundVolume, preferences.kanaSpeechEnabled,
     articleSpeechEnabled, articleSegmentSpeechEnabled, run, advance]);
   useEffect(() => {
+    function pauseOnLeave() {
+      // Repeated blur/hidden events must preserve an existing manual pause.
+      if (run.paused || run.complete) return audio.stopAll();
+      pause();
+      setAutoPaused(true);
+    }
     function visibility() {
-      if (document.hidden) pause();
+      if (document.hidden) pauseOnLeave();
     }
     function keydown(event: KeyboardEvent) {
       const target = event.target as HTMLElement;
       if (
         event.defaultPrevented ||
+        document.hidden ||
         event.isComposing ||
         event.ctrlKey ||
         event.altKey ||
@@ -166,11 +176,15 @@ export function Practice({
         return;
       }
       if (
-        run.paused || run.complete || run.listening ||
+        (run.paused && !autoPaused) || run.complete || run.listening ||
         window.matchMedia("(max-width: 700px)").matches ||
         !/^[a-zA-Z'-]$/.test(event.key)
       ) return;
       event.preventDefault();
+      if (run.paused) {
+        setAutoPaused(false);
+        run.resume();
+      }
       if (preferences.keySoundEnabled) audio.key(preferences.keySoundVolume);
       const result = run.input(event.key.toLowerCase());
       if (result === "completed") {
@@ -190,15 +204,15 @@ export function Practice({
     }
     document.addEventListener("keydown", keydown);
     document.addEventListener("visibilitychange", visibility);
-    window.addEventListener("blur", pause);
+    window.addEventListener("blur", pauseOnLeave);
     return () => {
       document.removeEventListener("keydown", keydown);
       document.removeEventListener("visibilitychange", visibility);
-      window.removeEventListener("blur", pause);
+      window.removeEventListener("blur", pauseOnLeave);
     };
   }, [run, items, mode, audio, preferences.keySoundEnabled, preferences.keySoundVolume,
     articleSpeechEnabled, articleSegmentSpeechEnabled, preferences.kanaSpeechEnabled,
-    advance, listen, pause, redraw, skipListening, speak]);
+    advance, listen, pause, redraw, skipListening, speak, autoPaused]);
   const elapsed = run.timer.elapsed();
   const stats = summarize(run.correct, run.errors, elapsed);
   const correct = run.correct;
@@ -267,7 +281,7 @@ export function Practice({
   const activeGroup = groups.find((group) => group.remaining.length > 0);
   const keySoundMuted = preferences.keySoundEnabled && preferences.keySoundVolume === 0;
   const stageLabel = run.paused
-    ? t("stagePaused")
+    ? t(autoPaused && !run.listening ? "stageAutoPaused" : "stagePaused")
     : run.listening
       ? t("stageListening")
       : run.correct === 0
@@ -371,13 +385,13 @@ export function Practice({
           <div className={s.feedback} role="status">
             {run.listening
               ? run.paused ? t("feedbackListeningPaused") : t("feedbackListening")
-              : run.lastError
-              ? t("feedbackError")
               : run.paused
-                ? t("feedbackPaused")
-                : mode === "article"
-                  ? continuous ? t("feedbackContinuous") : t("feedbackSentence")
-                  : t("feedbackKana")}
+                ? t(autoPaused ? "feedbackAutoPaused" : "feedbackPaused")
+                : run.lastError
+                  ? t("feedbackError")
+                  : mode === "article"
+                    ? continuous ? t("feedbackContinuous") : t("feedbackSentence")
+                    : t("feedbackKana")}
           </div>
           {run.listening && (
             <div className={s.listeningActions}>

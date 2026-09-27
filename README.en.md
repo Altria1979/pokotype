@@ -61,7 +61,7 @@ The home-page screenshot above shows the question count, start button, and pract
 | 「ん」 | A single `n` completes a standalone question or a sentence-final 「ん」; before a vowel or `y`, use `nn` or `n'` to distinguish it |
 | Long vowels and punctuation | Type `-` for 「ー」; punctuation and whitespace are skipped automatically, and no spaces are needed between romaji groups |
 | Mistakes | An incorrect key does not advance your position; simply type the correct character without using Backspace |
-| Pausing and listening | Pressing `Esc`, switching tabs, or moving focus away from the window pauses practice; select the resume control to continue. Press `Enter` to skip full-sentence playback |
+| Pausing and listening | Switching tabs or moving focus away pauses the timer; when you return, typing resumes practice and counts the first key. After pausing with `Esc` or the pause button, select the resume control. For paused full-sentence playback, resume to replay or press `Enter` to skip |
 
 You can open “Typing rules” at any time. Opening it during practice pauses the session; after closing it, resume manually. Timing starts with the first correct keystroke and excludes pauses and full-sentence playback. Speed is measured in **correct keystrokes per minute**, not English words per minute (WPM).
 
