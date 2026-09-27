@@ -1,0 +1,92 @@
+tests/home-routing.spec.ts
+  s_fd0781b4e4cebd::t_eca49fe9511279 88-89
+src/components/HomeStructuredData.tsx
+  s_fd0781b4e4cebd::t_8a9d1386de5938 1-35
+src/i18n/messages/zh-CN/Metadata.json
+  s_fd0781b4e4cebd::t_dc877c070629eb 2-11
+src/app/[locale]/articles/[slug]/page.tsx
+  s_fd0781b4e4cebd::t_3e02460140b41c 1-69
+src/i18n/messages/ja/Learning.json
+  s_fd0781b4e4cebd::t_3e02460140b41c 1-34
+src/app/social-preview.png/route.tsx
+  s_fd0781b4e4cebd::t_8a9d1386de5938 1-25
+src/app/[locale]/page.tsx
+  s_fd0781b4e4cebd::t_3e02460140b41c 2-3,7-8
+docs/seo.md
+  s_fd0781b4e4cebd::t_9699300298ebd2 1-47
+src/components/Articles.tsx
+  s_fd0781b4e4cebd::t_48c587270a9fc0 266
+src/components/LearningContent.tsx
+  s_fd0781b4e4cebd::t_48c587270a9fc0 54,62,66
+  s_fd0781b4e4cebd::t_3e02460140b41c 1-53,55-61,63-65,67-77
+src/i18n/messages/ja/Metadata.json
+  s_fd0781b4e4cebd::t_dc877c070629eb 2-11
+scripts/preview.mjs
+  s_fd0781b4e4cebd::t_8a9d1386de5938 13
+src/i18n/seo.test.ts
+  s_fd0781b4e4cebd::t_4820801ab18bb6 1-43
+src/i18n/messages/zh-CN/Learning.json
+  s_fd0781b4e4cebd::t_3e02460140b41c 1-34
+src/app/sitemap.ts
+  s_fd0781b4e4cebd::t_8a9d1386de5938 1-14
+src/i18n/messages/en/Metadata.json
+  s_fd0781b4e4cebd::t_dc877c070629eb 2-11
+README.en.md
+  s_fd0781b4e4cebd::t_e10426a9c47f09 107
+README.ja.md
+  s_fd0781b4e4cebd::t_e10426a9c47f09 107
+tests/i18n.spec.ts
+  s_fd0781b4e4cebd::t_48c587270a9fc0 336
+src/i18n/messages/ja/index.ts
+  s_fd0781b4e4cebd::t_3e02460140b41c 5,20
+src/i18n/messages/en/Learning.json
+  s_fd0781b4e4cebd::t_3e02460140b41c 1-34
+src/lib/site.ts
+  s_fd0781b4e4cebd::t_8a9d1386de5938 1-30
+src/components/LearningContent.module.css
+  s_fd0781b4e4cebd::t_3e02460140b41c 1-100,102,108-240
+  s_fd0781b4e4cebd::t_48c587270a9fc0 101,103-107
+src/i18n/messages/en/index.ts
+  s_fd0781b4e4cebd::t_3e02460140b41c 5,20
+package.json
+  s_fd0781b4e4cebd::t_8a9d1386de5938 9
+docs/internationalization.md
+  s_fd0781b4e4cebd::t_e10426a9c47f09 26
+tests/seo.spec.ts
+  s_fd0781b4e4cebd::t_48c587270a9fc0 161-172
+  s_fd0781b4e4cebd::t_aaeb7d4a75ba2c 1-2,4-34,37-48,50-64,66-73,76-79,82-91,93-95,97-134,136-160
+  s_fd0781b4e4cebd::t_36b4621df8173b 3,35-36,49,65,74-75,80-81,92,96,135
+README.md
+  s_fd0781b4e4cebd::t_e10426a9c47f09 107
+src/lib/site.test.ts
+  s_fd0781b4e4cebd::t_dc877c070629eb 1-40,42-47
+  s_fd0781b4e4cebd::t_fd87f86972ceb8 41
+src/components/Shell.tsx
+  s_fd0781b4e4cebd::t_48c587270a9fc0 67
+src/app/[locale]/articles/page.tsx
+  s_fd0781b4e4cebd::t_3e02460140b41c 2,10
+src/app/robots.ts
+  s_fd0781b4e4cebd::t_8a9d1386de5938 1-9
+docs/development.md
+  s_fd0781b4e4cebd::t_e10426a9c47f09 33,35,59
+src/i18n/seo.ts
+  s_fd0781b4e4cebd::t_8a9d1386de5938 4-6,21-40,42-45,47-55
+src/i18n/messages/zh-CN/index.ts
+  s_fd0781b4e4cebd::t_3e02460140b41c 5,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ec4a43143bfe412b36993d9263b595906a8fffba",
+  "prompts": {},
+  "sessions": {
+    "s_fd0781b4e4cebd": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0e206-68bf-7f12-bcc7-8fefbbc9590f",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
