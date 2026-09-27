@@ -1,0 +1,29 @@
+README.md
+  s_177f38951110e6::t_cdc1f39c1eb5db 165-170
+LICENSE
+  s_177f38951110e6::t_ca90a02713bbd3 1-202
+package.json
+  s_177f38951110e6::t_cdc1f39c1eb5db 5
+README.ja.md
+  s_177f38951110e6::t_cdc1f39c1eb5db 165-170
+README.en.md
+  s_177f38951110e6::t_cdc1f39c1eb5db 165-170
+package-lock.json
+  s_177f38951110e6::t_0112f00ed4f7be 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "46c4d86086c6af11b57da360bf07c53de031da03",
+  "prompts": {},
+  "sessions": {
+    "s_177f38951110e6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0e1a9-2329-7fb2-8a45-eb71df32e603",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
