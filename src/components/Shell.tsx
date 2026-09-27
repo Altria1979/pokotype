@@ -127,6 +127,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <span className={s.footerBrand}>
               Pokotype <span>·</span> {t("tagline")}
             </span>
+            <a
+              className={s.repositoryLink}
+              href="https://github.com/Altria1979/pokotype"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub <span aria-hidden="true">↗</span>
+            </a>
             <span className={s.local}>
               <i /> {t("local")}
             </span>
