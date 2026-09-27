@@ -127,10 +127,10 @@ test("手机菜单打开后切换桌面再返回手机时保持收起", async ({
   await expect(navigation).not.toBeVisible();
 });
 
-test("桌面和手机导航在滚动后收成浮动胶囊，正文位置保持稳定", async ({
+test("多端导航滚动后变为浮动胶囊并与正文等宽，正文位置保持稳定", async ({
   page,
 }) => {
-  for (const width of [1440, 390]) {
+  for (const width of [1440, 1920, 2560, 1024, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 844 });
     await page.goto("/zh-CN/settings/");
     const header = page.getByRole("banner");
@@ -148,8 +148,15 @@ test("桌面和手机导航在滚动后收成浮动胶囊，正文位置保持�
       .poll(async () => Math.round((await header.boundingBox())!.y))
       .toBe(12);
     await expect
-      .poll(async () => (await header.boundingBox())!.width)
-      .toBeLessThanOrEqual(1160);
+      .poll(async () => {
+        const headerBox = (await header.boundingBox())!;
+        const mainBox = (await main.boundingBox())!;
+        return Math.max(
+          Math.abs(headerBox.x - mainBox.x),
+          Math.abs(headerBox.width - mainBox.width),
+        );
+      })
+      .toBeLessThanOrEqual(1);
     expect(
       await main.evaluate(
         (element) => element.getBoundingClientRect().top + window.scrollY,
@@ -157,7 +164,7 @@ test("桌面和手机导航在滚动后收成浮动胶囊，正文位置保持�
     ).toBeCloseTo(contentTop, 1);
     await expect(header).toBeInViewport({ ratio: 1 });
 
-    if (width === 390) {
+    if (width <= 900) {
       const menu = page.getByRole("button", { name: "导航菜单", exact: true });
       await menu.click();
       await expect(
@@ -173,6 +180,44 @@ test("桌面和手机导航在滚动后收成浮动胶囊，正文位置保持�
     await expect
       .poll(async () => Math.round((await header.boundingBox())!.y))
       .toBe(0);
+  }
+});
+
+test("导航仍以 900px 为菜单断点", async ({ page }) => {
+  await page.goto("/zh-CN/");
+  const menu = page.getByRole("button", { name: "导航菜单", exact: true });
+  const navigation = page.getByRole("navigation", { name: "主导航" });
+  await page.setViewportSize({ width: 900, height: 900 });
+  await expect(menu).toBeVisible();
+  await expect(navigation).not.toBeVisible();
+  await page.setViewportSize({ width: 901, height: 900 });
+  await expect(menu).not.toBeVisible();
+  await expect(navigation).toBeVisible();
+});
+
+test("320px 三语导航在初始和浮动状态均为品牌与菜单保留间隔", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  for (const locale of ["zh-CN", "en", "ja"]) {
+    await page.goto(`/${locale}/`);
+    await expect(page.getByRole("main").locator('input[type="checkbox"]').first()).toBeEnabled();
+    await page.evaluate(() => document.fonts.ready);
+    const header = page.getByRole("banner");
+    const brand = header.getByRole("link", { name: /^Pokotype/ });
+    const menu = header.locator('button[aria-controls="main-navigation"]');
+    for (const scrollY of [0, 100]) {
+      await page.evaluate((top) => window.scrollTo(0, top), scrollY);
+      await expect(header).toHaveAttribute("data-floating", String(scrollY > 16));
+      const menuBox = (await menu.boundingBox())!;
+      const brandBox = (await brand.boundingBox())!;
+      const brandTextRight = await brand.evaluate((element) => {
+        const text = document.createRange();
+        text.selectNodeContents(element.querySelector("span:last-child")!);
+        return text.getBoundingClientRect().right;
+      });
+      expect(menuBox.x - brandTextRight, `${locale}, scrollY=${scrollY}: brand text gap`).toBeGreaterThanOrEqual(8);
+      expect(menuBox.x - brandBox.x - brandBox.width, `${locale}, scrollY=${scrollY}: sibling gap`).toBeGreaterThanOrEqual(8);
+    }
   }
 });
 

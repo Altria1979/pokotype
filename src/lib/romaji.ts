@@ -73,6 +73,12 @@ export function normalizeReading(value: string): string {
     .join("");
 }
 
+/** Preferred input spelling for one kana or contracted kana in the selection chart. */
+export function getKanaRomaji(kana: string): string | undefined {
+  const reading = normalizeReading(kana);
+  return reading === "ん" ? "n" : SPELLINGS[reading]?.[0];
+}
+
 type Edge = {
   key: string;
   to: number;

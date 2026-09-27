@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useFormatter, useTranslations } from "next-intl";
 import { KANA_GROUPS, makeKanaQueue, toKatakana } from "@/lib/kana";
+import { getKanaRomaji } from "@/lib/romaji";
 import { useData } from "./DataProvider";
 import { Icon } from "./Icon";
 import { InputRulesHelp } from "./InputRulesHelp";
@@ -29,14 +30,13 @@ export function KanaPractice() {
   const rangeButton = useRef<HTMLButtonElement>(null);
   const rangeHeading = useRef<HTMLHeadingElement>(null);
   const [starting, startTransition] = useTransition();
-  const [category, setCategory] = useState("清音");
   const [message, setMessage] = useState<"emptyRange" | "noWeakHistory" | "">("");
-  const groups = KANA_GROUPS.filter((g) => g.category === category);
+  const categories = [...new Set(KANA_GROUPS.map((g) => g.category))];
   const selected = preferences.groupIds;
   const pool = KANA_GROUPS.filter((g) => selected.includes(g.id))
     .flatMap((g) => g.kana)
     .map((k) => (preferences.script === "katakana" ? toKatakana(k) : k));
-  const categorySummary = format.list([...new Set(KANA_GROUPS.map((g) => g.category))]
+  const categorySummary = format.list(categories
     .flatMap((name) => {
       const categoryGroups = KANA_GROUPS.filter((g) => g.category === name);
       const count = categoryGroups.filter((g) =>
@@ -115,7 +115,7 @@ export function KanaPractice() {
   return (
     <>
       <section className={s.launch} aria-labelledby="kana-title">
-        <div className={s.launchContent}>
+        <div className={s.launchIntro}>
           <div className="eyebrow">{t("eyebrow")}</div>
           <h1 id="kana-title">{t("title")}</h1>
           <p className="subtitle">{t("subtitle")}</p>
@@ -137,7 +137,8 @@ export function KanaPractice() {
               <p>{t("previewSteps")}</p>
             </div>
           </div>
-
+        </div>
+        <div className={s.launchSetup}>
           <div
             role="region"
             className={s.summary}
@@ -261,66 +262,66 @@ export function KanaPractice() {
         </div>
 
         <div className={s.selection}>
-          <div className={s.tabs} role="tablist" aria-label={t("categoriesLabel")}>
-            {(["清音", "浊音", "半浊音", "拗音"] as const).map((c) => (
-              <button
-                role="tab"
-                disabled={!ready}
-                aria-selected={category === c}
-                key={c}
-                className={category === c ? s.tabActive : ""}
-                onClick={() => setCategory(c)}
+          <p className={s.selectionHint}>{t("selectRows")}</p>
+          {categories.map((category) => {
+            const groups = KANA_GROUPS.filter((g) => g.category === category);
+            const ids = groups.map((g) => g.id);
+            const allSelected = ids.every((id) => selected.includes(id));
+            const headingId = `kana-${categoryKeys[category]}`;
+            return (
+              <section
+                key={category}
+                className={s.category}
+                aria-labelledby={headingId}
               >
-                {categoryLabel(c)}
-              </button>
-            ))}
-          </div>
-          <div className={s.selectHeader}>
-            <span>{t("selectRows")}</span>
-            <button
-              className="text-button"
-              disabled={!ready}
-              onClick={() => {
-                const ids = groups.map((g) => g.id);
-                const all = ids.every((id) => selected.includes(id));
-                updatePreferences({
-                  groupIds: all
-                    ? selected.filter((id) => !ids.includes(id))
-                    : [...new Set([...selected, ...ids])],
-                });
-              }}
-            >
-              {groups.every((g) => selected.includes(g.id))
-                ? t("deselectCategory")
-                : t("selectCategory")}
-            </button>
-          </div>
-          <div className={s.rows}>
-            {groups.map((g) => (
-              <button
-                key={g.id}
-                disabled={!ready}
-                aria-pressed={selected.includes(g.id)}
-                aria-label={rowLabel(g)}
-                className={`${s.row} ${selected.includes(g.id) ? s.rowSelected : ""}`}
-                onClick={() => toggle(g.id)}
-              >
-                <span className={s.checkbox}>
-                  {selected.includes(g.id) && <Icon name="check" size={11} />}
-                </span>
-                <span className={s.rowLabel}>
-                  {rowLabel(g)}
-                </span>
-                <span className={s.rowKana} lang="ja">
-                  {g.kana.map((k) => (
-                    <span key={k}>
-                      {preferences.script === "katakana" ? toKatakana(k) : k}
-                    </span>
+                <div className={s.selectHeader}>
+                  <h3 id={headingId}>{categoryLabel(category)}</h3>
+                  <button
+                    className="text-button"
+                    disabled={!ready}
+                    onClick={() => updatePreferences({
+                      groupIds: allSelected
+                        ? selected.filter((id) => !ids.includes(id))
+                        : [...new Set([...selected, ...ids])],
+                    })}
+                  >
+                    {allSelected ? t("deselectCategory") : t("selectCategory")}
+                  </button>
+                </div>
+                <div className={s.rows}>
+                  {groups.map((g) => (
+                    <button
+                      key={g.id}
+                      disabled={!ready}
+                      aria-pressed={selected.includes(g.id)}
+                      aria-label={rowLabel(g)}
+                      className={`${s.row} ${selected.includes(g.id) ? s.rowSelected : ""}`}
+                      onClick={() => toggle(g.id)}
+                    >
+                      <span className={s.checkbox}>
+                        {selected.includes(g.id) && <Icon name="check" size={11} />}
+                      </span>
+                      <span className={s.rowLabel}>
+                        {rowLabel(g)}
+                      </span>
+                      <span className={s.rowKana} lang="ja">
+                        {g.kana.map((k) => (
+                          <span key={k} className={s.kanaCell}>
+                            <span>
+                              {preferences.script === "katakana" ? toKatakana(k) : k}
+                            </span>
+                            <span className={s.kanaRomaji} lang="ja-Latn">
+                              {getKanaRomaji(k)}
+                            </span>
+                          </span>
+                        ))}
+                      </span>
+                    </button>
                   ))}
-                </span>
-              </button>
-            ))}
-          </div>
+                </div>
+              </section>
+            );
+          })}
           <div className={s.selectionFooter}>
             <span>
               {t.rich("selectedKana", { count: pool.length, value: (chunks) => <b>{chunks}</b> })}

@@ -2,11 +2,12 @@
   position: relative;
   padding: 0 0 32px;
 }
-.launchContent {
+.launchIntro,
+.launchSetup {
   position: relative;
   z-index: 1;
-  width: min(100%, 800px);
-  margin-inline: auto;
+  width: 100%;
+  min-width: 0;
   text-align: center;
 }
 .launch h1 {
@@ -30,6 +31,7 @@
   justify-content: center;
   align-items: center;
   gap: 20px;
+  min-width: 0;
   margin: 22px 0 18px;
 }
 .previewCard > div:last-child {
@@ -178,8 +180,8 @@
   margin: 0 0 12px;
 }
 .range {
-  max-width: 1040px;
-  margin: 32px auto 28px;
+  width: 100%;
+  margin: 32px 0 28px;
   padding: 32px;
 }
 .rangeHeader {
@@ -247,43 +249,33 @@
   margin-bottom: 24px;
   letter-spacing: -1px;
 }
-.tabs {
-  display: flex;
-  border-bottom: 1px solid var(--border);
-  gap: 26px;
-}
-.tabs button {
-  position: relative;
-  border: 0;
-  border-radius: 0;
-  padding: 12px 0;
+.selectionHint {
+  margin: 18px 0;
   font-size: 12px;
   color: var(--muted);
-  background: none;
 }
-.tabs button.tabActive {
-  color: var(--text);
-  font-weight: 600;
-}
-.tabActive::after {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--text);
-  content: "";
+.category + .category {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
 }
 .selectHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 11px;
-  color: var(--muted);
-  margin: 14px 0 8px;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 10px;
+}
+.selectHeader h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
 }
 .selectHeader button {
-  font-size: 11px;
+  font-size: 12px;
+  min-height: 36px;
 }
 .rows {
   display: flex;
@@ -328,6 +320,7 @@
 }
 .rowLabel {
   width: 65px;
+  flex-shrink: 0;
   text-align: left;
   font-size: 11px;
   color: var(--muted);
@@ -342,9 +335,21 @@
   font-size: 23px;
   line-height: 1.2;
 }
-.rowKana span {
+.kanaCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
   min-width: 28px;
   text-align: center;
+  white-space: nowrap;
+}
+.kanaRomaji {
+  color: var(--secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.4;
+  font-style: normal;
 }
 .selectionFooter {
   display: flex;
@@ -513,8 +518,12 @@
   .selectionDone {
     flex-wrap: wrap;
   }
-  .tabs {
-    gap: 22px;
+  .category + .category {
+    margin-top: 24px;
+    padding-top: 16px;
+  }
+  .selectHeader h3 {
+    font-size: 18px;
   }
   .row {
     padding: 6px 8px;
@@ -525,7 +534,7 @@
   .rowKana {
     font-size: 18px;
   }
-  .rowKana span {
+  .kanaCell {
     min-width: 0;
   }
   .selectionFooter {

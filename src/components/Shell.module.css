@@ -1,17 +1,17 @@
 .app {
   --header-space: 80px;
+  --page-gutter: 64px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 0 64px;
+  padding: 0 var(--page-gutter);
 }
 .headerSpace {
   height: var(--header-space);
   flex-shrink: 0;
 }
 .header {
-  width: calc(100% - 128px);
-  max-width: 1472px;
+  width: calc(100% - var(--page-gutter) * 2);
   min-height: var(--header-space);
   margin: 0 auto;
   display: flex;
@@ -26,7 +26,6 @@
   z-index: 30;
   transition:
     top 0.25s ease,
-    max-width 0.25s ease,
     width 0.25s ease,
     min-height 0.25s ease,
     padding 0.25s ease,
@@ -35,8 +34,6 @@
 }
 .floating {
   top: 12px;
-  width: calc(100% - 48px);
-  max-width: 1160px;
   min-height: 64px;
   padding: 0 20px;
   border-color: var(--border);
@@ -169,7 +166,6 @@
 }
 .main {
   width: 100%;
-  max-width: 1472px;
   margin: 0 auto;
   padding: 44px 0 56px;
   flex: 1;
@@ -181,7 +177,6 @@
 }
 .footer {
   width: 100%;
-  max-width: 1472px;
   margin: 0 auto;
 }
 .app:has([data-practice-input]) .footerScene {
@@ -189,7 +184,6 @@
 }
 .footerMeta {
   width: 100%;
-  max-width: 1472px;
   margin: 0 auto;
   padding: 26px 0;
   display: flex;
@@ -242,6 +236,11 @@
 }
 .skip:focus {
   transform: translateY(0);
+}
+@media (max-width: 1200px) {
+  .app {
+    --page-gutter: 32px;
+  }
 }
 @media (max-width: 1180px) {
   .headerNote {
@@ -337,13 +336,9 @@
 }
 @media (max-width: 700px) {
   .app {
-    padding: 0 24px;
-  }
-  .header {
-    width: calc(100% - 48px);
+    --page-gutter: 24px;
   }
   .floating {
-    width: calc(100% - 24px);
     min-height: 60px;
     padding-inline: 14px;
   }
@@ -367,6 +362,15 @@
 @media (min-width: 701px) {
   .main:has([data-continuous-practice]) {
     padding: 12px 0 16px;
+  }
+}
+@media (max-width: 360px) {
+  .header {
+    column-gap: 8px;
+  }
+  .brand {
+    font-size: 20px;
+    gap: 8px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
