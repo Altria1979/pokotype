@@ -55,7 +55,7 @@ npm run preview
 
 ### Vercel 部署
 
-[GitHub 仓库](https://github.com/Altria1979/pokotype)已连接到 Vercel，`main` 为生产分支，后续推送会自动构建并部署到 [pokotype.vercel.app](https://pokotype.vercel.app)。仓库内的 `vercel.json` 固定使用 `npm ci` 安装依赖和 `npm run build` 构建。Vercel 使用 Next.js 预设自动处理静态导出，Output Directory 保持默认，不手动覆盖为 `out`；本地静态预览仍使用 `out/`。
+[GitHub 仓库](https://github.com/Altria1979/pokotype)已连接到 Vercel，`main` 为生产分支，后续推送会自动构建并部署到 [pokotype.vercel.app](https://pokotype.vercel.app)。仓库内的 `vercel.json` 使用 Other 静态站点预设（`framework: null`），固定使用 `npm ci` 安装依赖、`npm run build` 构建，并完整发布 `out/`，包括额外生成的 sitemap。应用仍使用 Next.js 的 `output: "export"`，无需服务端运行时。
 
 在 Vercel 的 Production 环境中设置 `SITE_URL` 为实际生产域名（包含 `https://`），以生成正确的 canonical、hreflang 和 sitemap。部署不需要设置 DeepSeek 或阿里百炼密钥；用户在浏览器中自行配置自己的密钥。
 
