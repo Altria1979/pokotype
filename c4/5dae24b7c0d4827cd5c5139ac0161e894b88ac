@@ -1,0 +1,37 @@
+vercel.json
+  s_d1967ae42976ef::t_02f875425a1ca0 6-9
+src/app/(legacy)/page.tsx
+  s_d1967ae42976ef::t_02f875425a1ca0 1-16
+tests/i18n.spec.ts
+  s_d1967ae42976ef::t_af7e2cfec5c3b8 60-130,169
+src/i18n/locales.ts
+  s_d1967ae42976ef::t_02f875425a1ca0 3
+scripts/preview.mjs
+  s_d1967ae42976ef::t_02f875425a1ca0 5,21-30
+scripts/build-sitemap.mjs
+  s_d1967ae42976ef::t_02f875425a1ca0 14
+README.md
+  s_d1967ae42976ef::t_02f875425a1ca0 90-92
+src/i18n/locales.test.ts
+  s_d1967ae42976ef::t_02f875425a1ca0 11
+src/i18n/seo.ts
+  s_d1967ae42976ef::t_02f875425a1ca0 4,32
+docs/internationalization.md
+  s_d1967ae42976ef::t_02f875425a1ca0 16-18,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "c45dae24b7c0d4827cd5c5139ac0161e894b88ac",
+  "prompts": {},
+  "sessions": {
+    "s_d1967ae42976ef": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0e147-280b-7142-96de-a13c6d335720",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
