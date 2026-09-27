@@ -1,0 +1,19 @@
+README.md
+  s_98980a6157500b::t_4ba6f917d7f633 5-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "c347e4c326097544fbb066e8ea844c3f3986b54e",
+  "prompts": {},
+  "sessions": {
+    "s_98980a6157500b": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "0f462414-0dfe-4b6e-99d5-e9fe4ea186ad",
+        "model": "composer-2.5"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
