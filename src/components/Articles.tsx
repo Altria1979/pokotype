@@ -263,7 +263,7 @@ function ArticleDetail({ article }: { article: Article }) {
     );
 
   return (
-    <div className="stack">
+    <div className="stack" data-article-view>
       <Link href="/articles/" className={s.backLink}>
         ← {t("back")}
       </Link>

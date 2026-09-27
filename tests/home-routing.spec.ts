@@ -85,7 +85,8 @@ for (const exitMethod of ["返回练习设置", "浏览器返回"] as const) {
   test(`结果保留会话地址且只保存一次，${exitMethod}后前进不会重新打开已完成会话`, async ({ page, baseURL }) => {
     await page.goto("/zh-CN/");
     const sessionUrl = await startSession(page);
-    await page.keyboard.press("q");
+    // The default kana pool has no long-vowel mark; q is valid for く → qu.
+    await page.keyboard.press("-");
     await expect(page.getByRole("status")).toContainText("这个按键不匹配");
     await completeSession(page);
     await expect(page).toHaveURL(sessionUrl);

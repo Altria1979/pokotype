@@ -2,6 +2,7 @@ import Shell from "./Shell.json";
 import Locale from "./Locale.json";
 import Data from "./Data.json";
 import Metadata from "./Metadata.json";
+import Learning from "./Learning.json";
 import History from "./History.json";
 import Kana from "./Kana.json";
 import Practice from "./Practice.json";
@@ -16,6 +17,6 @@ import ApiKey from "./ApiKey.json";
 import Models from "./Models.json";
 import ConnectionErrors from "./ConnectionErrors.json";
 
-const messages = { Shell, Locale, Data, Metadata, History, Kana, Practice, InputRules, Articles, Generate, ArticleErrors, GenerationErrors, Settings, Sound, ApiKey, Models, ConnectionErrors };
+const messages = { Shell, Locale, Data, Metadata, Learning, History, Kana, Practice, InputRules, Articles, Generate, ArticleErrors, GenerationErrors, Settings, Sound, ApiKey, Models, ConnectionErrors };
 
 export default messages;

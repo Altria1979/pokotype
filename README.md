@@ -104,7 +104,7 @@ npm run build
 npm run preview
 ```
 
-预览地址为 [http://127.0.0.1:4173](http://127.0.0.1:4173)，产物位于 `out/`。这是静态导出项目，使用静态服务器提供服务，无需 `next start`。正式部署时设置构建变量 `SITE_URL` 为自己的完整域名，以生成 canonical、hreflang 和 sitemap；AI 密钥由用户在页面中配置。
+预览地址为 [http://127.0.0.1:4173](http://127.0.0.1:4173)，产物位于 `out/`。这是静态导出项目，使用静态服务器提供服务，无需 `next start`。默认以正式站点 `https://pokotype.vercel.app` 生成 canonical、hreflang、robots 和 sitemap。部署到自己的域名时，在构建前设置 `SITE_URL`；AI 密钥由用户在页面中配置。SEO 验收与收录提交说明见 [SEO 指南](docs/seo.md)。
 
 ## 3. 技术实现与开源致谢
 

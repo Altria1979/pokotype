@@ -104,7 +104,7 @@ npm run build
 npm run preview
 ```
 
-The preview runs at [http://127.0.0.1:4173](http://127.0.0.1:4173), and the build output is in `out/`. This project uses static export and is served by a static server; `next start` is not needed. For production deployment, set the build variable `SITE_URL` to your full site domain so canonical links, hreflang links, and the sitemap use the correct address. Users configure their own AI API keys in the interface.
+The preview runs at [http://127.0.0.1:4173](http://127.0.0.1:4173), and the build output is in `out/`. This project uses static export and is served by a static server; `next start` is not needed. Canonical links, hreflang links, robots and the sitemap default to the production site `https://pokotype.vercel.app`. Set the build variable `SITE_URL` before deploying to your own domain. See the [SEO guide](docs/seo.md) for verification and indexing submission. Users configure their own AI API keys in the interface.
 
 ## 3. Technical Implementation and Open-Source Credits
 

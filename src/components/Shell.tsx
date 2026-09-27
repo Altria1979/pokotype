@@ -64,6 +64,7 @@ function Navigation({ pathname }: { pathname: string }) {
       >
         {links.map(([href, title]) => {
           const current = pathname === href || pathname + "/" === href ||
+            (href === "/articles/" && pathname.startsWith(href)) ||
             (href === "/" && (pathname === "/practice" || pathname === "/practice/"));
           return (
             <Link

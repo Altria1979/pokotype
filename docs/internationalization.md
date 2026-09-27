@@ -23,7 +23,7 @@ DataProvider 按文章、成绩和偏好追踪未落盘写入。失败后保留�
 
 ## 构建与验收
 
-正式部署在构建时设置 `SITE_URL` 为 HTTP(S) 站点 URL。首页和文章库生成 canonical、三语 hreflang 及 sitemap，`x-default` 指向日语；本地未配置时不产生绝对 SEO 链接和 sitemap。使用支持目录 index.html 的静态主机部署完整 `out/`。
+SEO 默认以 `https://pokotype.vercel.app` 为规范站点，部署到其他域名时通过构建变量 `SITE_URL` 覆盖。首页、文章库和 `/[locale]/articles/[sample-id]/` 原创示例阅读页生成自指 canonical、互相对应的三语 hreflang，`x-default` 指向日语。robots、sitemap 和社交预览图由 Next.js 静态路由生成；普通本地构建也能完整验收这些产物。首页练习说明、文章入口和示例全文不依赖 JavaScript。使用支持目录 index.html 的静态主机部署完整 `out/`。
 
 ```sh
 npm run lint

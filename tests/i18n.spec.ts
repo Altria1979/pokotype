@@ -333,7 +333,7 @@ test("禁用 JavaScript 时旧入口仍提供三语链接，英文页直接输�
     await page.getByRole("link", { name: "English", exact: true }).click();
     await expect(page).toHaveURL(/\/en\/articles\/$/);
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
-    await expect(page).toHaveTitle(/My articles/);
+    await expect(page).toHaveTitle(/Japanese Reading & Typing Practice Articles/);
     await expect(page.getByRole("navigation", { name: "Main navigation", exact: true }).getByRole("link", { name: "My articles", exact: true })).toBeVisible();
     const home = await page.goto("/en/");
     const html = await home!.text();
