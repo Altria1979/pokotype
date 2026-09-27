@@ -1,0 +1,20 @@
+src/components/Shell.module.css
+  s_3c7c566b224e4a::t_4fd41ccb0c0cf6 127,141-145,148
+  s_3c7c566b224e4a::t_b58373f24c836c 146-147
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "678865876ff7cbd310e24c4d38d1cd06ec5eb191",
+  "prompts": {},
+  "sessions": {
+    "s_3c7c566b224e4a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0e16d-2515-7ac1-a1f7-12512d717961",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
