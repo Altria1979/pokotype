@@ -1,0 +1,47 @@
+{
+  "rateLimit": "リクエストが多すぎます。しばらく待ってから再試行してください。",
+  "http": "生成リクエストが拒否されました（HTTP {status, number}）。設定を確認して再試行してください。",
+  "truncated": "記事の応答が途中で切れました。短い長さを選んで生成し直してください。",
+  "incomplete": "記事の生成が正常に完了しませんでした。テーマを調整して再試行してください。",
+  "provider": "有効なAIサービスを選択してください。",
+  "model": "128文字以内の有効なモデルIDを入力してください。",
+  "options": "1〜200文字のテーマを入力し、有効なレベルと長さを選択してください。",
+  "cancelled": "生成をキャンセルしました。",
+  "json": "記事のJSON形式が正しくありません。生成し直してください。",
+  "validation": "記事の検証に失敗しました。生成し直してください。",
+  "timeout": "生成が90秒を超えたため停止しました。しばらく待ってから再試行してください。",
+  "network": "ネットワーク接続に失敗しました。接続とブラウザーのクロスオリジン制限を確認して再試行してください。",
+  "failed": "生成に失敗しました。しばらく待ってから再試行してください。",
+  "invalidKey": {
+    "deepseek": "APIキーが無効か期限切れです。設定でDeepSeekのキーを確認してください。",
+    "bailian": "APIキーが無効か期限切れです。設定でAlibaba Cloud Model Studioのキーとリージョンを確認してください。"
+  },
+  "balance": {
+    "deepseek": "DeepSeekの残高が不足しています。入金後に再試行してください。",
+    "bailian": "Alibaba Cloud Model Studioの残高が不足しています。入金後に再試行してください。"
+  },
+  "service": {
+    "deepseek": "DeepSeekは一時的に利用できません。しばらく待ってから再試行してください。",
+    "bailian": "Alibaba Cloud Model Studioは一時的に利用できません。しばらく待ってから再試行してください。"
+  },
+  "permission": {
+    "deepseek": "このキーにはアクセス権がありません。DeepSeekのアカウントとモデルの権限を確認してください。",
+    "bailian": "このキーにはアクセス権がありません。Alibaba Cloud Model Studioのアカウントとモデルの権限を確認してください。"
+  },
+  "modelMissing": {
+    "deepseek": "DeepSeekで選択したモデルが見つかりません。モデルIDとアクセス権を確認してください。",
+    "bailian": "Alibaba Cloud Model Studioで選択したモデルが見つかりません。モデルIDとアクセス権を確認してください。"
+  },
+  "response": {
+    "deepseek": "DeepSeekから無効な応答が返されました。生成し直してください。",
+    "bailian": "Alibaba Cloud Model Studioから無効な応答が返されました。生成し直してください。"
+  },
+  "empty": {
+    "deepseek": "DeepSeekから空の内容が返されました。テーマを調整して生成し直してください。",
+    "bailian": "Alibaba Cloud Model Studioから空の内容が返されました。テーマを調整して生成し直してください。"
+  },
+  "keyRequired": {
+    "deepseek": "先に設定で自分のDeepSeekのAPIキーを入力してください。",
+    "bailian": "先に設定で自分のAlibaba Cloud Model StudioのAPIキーを入力してください。"
+  }
+}

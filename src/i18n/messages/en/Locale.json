@@ -1,0 +1,11 @@
+{
+  "label": "Interface language",
+  "blocked": {
+    "practice": "Finish or exit practice first",
+    "editing": "Save or cancel your edits first",
+    "generation": "Close the generation dialog first",
+    "settings": "Save or discard changes first",
+    "checking": "Wait for the connection check",
+    "saving": "Save pending data first"
+  }
+}

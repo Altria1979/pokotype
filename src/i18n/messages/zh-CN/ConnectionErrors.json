@@ -1,0 +1,15 @@
+{
+  "invalidProvider": "请选择有效的 AI 服务。",
+  "missingKey": "请先填写自己的 {provider} API 密钥。",
+  "unauthorized": "{provider} 密钥无效或已失效，请检查密钥及所属地域。",
+  "forbidden": "{provider} 密钥没有访问权限，请检查账户权限。",
+  "notFound": "{provider} 模型列表接口暂不可用，请稍后重试。",
+  "rateLimited": "{provider} 请求过于频繁，请稍后手动重试。",
+  "service": "{provider} 服务暂时异常，请稍后手动重试。",
+  "http": "{provider} 连接检查未被接受（HTTP {status}），请检查设置后重试。",
+  "invalidList": "{provider} 返回了无效的模型列表，请稍后重试。",
+  "emptyList": "{provider} 未返回可用的模型，请检查账户及模型权限。",
+  "cancelled": "{provider} 连接检查已取消。",
+  "timeout": "{provider} 连接检查超过 20 秒，已停止等待，请稍后重试。",
+  "network": "{provider} 网络连接失败，请检查网络及浏览器跨域访问限制后重试。"
+}

@@ -1,0 +1,11 @@
+{
+  "label": "界面语言",
+  "blocked": {
+    "practice": "请先完成或退出练习",
+    "editing": "请先保存或取消编辑",
+    "generation": "请先关闭生成窗口",
+    "settings": "请先保存或取消修改",
+    "checking": "请等待连接检查结束",
+    "saving": "请先完成数据保存"
+  }
+}

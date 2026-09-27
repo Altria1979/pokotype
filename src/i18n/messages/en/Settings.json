@@ -1,0 +1,22 @@
+{
+  "eyebrow": "MAKE IT YOURS",
+  "title": "Settings",
+  "subtitle": "Make your practice space work for you.",
+  "aiTitle": "AI generation settings",
+  "aiIntro": "Configure each service you want to use, then choose a model for generating articles. Keys stay in this browser and are sent only to the corresponding official service.",
+  "help": "If you do not have an API key or need help setting one up, contact the author on WeChat: <contact>Altria1979</contact>.",
+  "preferences": "Practice preferences",
+  "showRomaji": "Show romaji hints",
+  "showRomajiHelp": "Show the letters you can type next.",
+  "showKana": "Show kana readings",
+  "showKanaHelp": "Show readings above kanji in articles.",
+  "showTranslation": "Show Chinese translations",
+  "showTranslationHelp": "Show sentence-by-sentence meanings during article practice.",
+  "dataTitle": "About your data",
+  "dataHelp": "Articles, practice history and preferences are stored only in this browser. They cannot be restored automatically after changing devices or clearing site data. No registration or cloud sync is used.",
+  "readError": "Unable to read model settings. Check this site’s storage permissions.",
+  "invalidModel": "The model ID is empty or invalid. Your selection has not been saved.",
+  "saveError": "Your model selection could not be saved. Check browser storage permissions and retry.",
+  "retrySave": "Retry saving model settings",
+  "cancelDraft": "Cancel model changes"
+}

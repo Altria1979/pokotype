@@ -1,0 +1,12 @@
+{
+  "home": "Pokotype · Japanese typing practice",
+  "description": "Practice Japanese typing, from kana to full articles, one keystroke at a time.",
+  "articles": "My articles",
+  "history": "Practice history",
+  "settings": "Settings",
+  "practice": "Kana practice",
+  "generate": "AI article generation",
+  "openingPractice": "Opening practice…",
+  "openingArticles": "Opening your articles…",
+  "generateMoved": "AI generation has moved to your article library. Opening…"
+}

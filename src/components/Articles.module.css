@@ -1,0 +1,507 @@
+.libraryBanner {
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.libraryBanner > div {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+}
+.bannerIcon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background-color: var(--surface);
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.libraryBanner h2 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+.libraryBanner p {
+  font-size: 13px;
+  color: var(--secondary);
+  margin: 0;
+  line-height: 1.8;
+}
+.libraryCount {
+  font-family: var(--font-display);
+  font-size: 36px;
+  color: var(--text);
+  white-space: nowrap;
+  text-align: right;
+  line-height: 1.3;
+}
+.libraryCount small {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.sectionTitle {
+  margin: 8px 0 0;
+  font-family: var(--font-display);
+  font-size: 28px;
+}
+.sectionTitle span {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 400;
+  margin-left: 16px;
+}
+.articleGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+.articleCard {
+  padding: 24px;
+  color: var(--text);
+  transition:
+    border-color 0.18s,
+    background-color 0.18s;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.articleCard:hover {
+  border-color: var(--border-strong);
+  background-color: var(--canvas);
+}
+.source {
+  font-size: 11px;
+  color: var(--muted);
+}
+.cover {
+  height: 132px;
+  position: relative;
+  margin: 22px 0 24px;
+  background-color: var(--surface-muted);
+  background-image: var(--paper-texture);
+  background-blend-mode: overlay;
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cover > span {
+  font-family: var(--font-ja);
+  font-size: 72px;
+  line-height: 1;
+  color: var(--secondary);
+}
+.cover small {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-style: italic;
+  letter-spacing: 1.5px;
+  color: var(--secondary);
+}
+.cover1 {
+  background-color: var(--success-soft);
+}
+.cover1 > span,
+.cover1 small {
+  color: var(--success);
+}
+.cover2 {
+  background-color: var(--accent-soft);
+}
+.cover2 > span,
+.cover2 small {
+  color: var(--accent);
+}
+.articleCard h2 {
+  font-family: var(--font-ja);
+  font-size: 27px;
+  line-height: 1.6;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  margin-bottom: 12px;
+}
+.excerpt {
+  font-family: var(--font-ja);
+  font-size: 15px;
+  line-height: 2;
+  color: var(--secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 90px;
+}
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+  margin-top: auto;
+  font-size: 12px;
+  color: var(--muted);
+  gap: 8px;
+}
+.cardFooter > span:last-child {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+}
+.backLink {
+  font-size: 13px;
+  width: fit-content;
+  color: var(--secondary);
+}
+.practiceModes {
+  min-width: 0;
+  margin: 0;
+  padding: 20px 24px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+.practiceModes legend {
+  padding: 0 8px;
+  font-size: 13px;
+  color: var(--secondary);
+}
+.modeChoices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.modeChoice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  cursor: pointer;
+}
+.modeChoice:has(input:checked) {
+  background: var(--success-soft);
+  border-color: var(--success);
+}
+.modeChoice input {
+  accent-color: var(--success);
+  flex-shrink: 0;
+}
+.modeChoice strong,
+.modeChoice small {
+  display: block;
+}
+.modeChoice strong {
+  font-size: 15px;
+  font-weight: 500;
+}
+.modeChoice small {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--secondary);
+}
+.modeHelp {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+.modeHelp select {
+  width: auto;
+  padding: 5px 28px 5px 10px;
+  font-size: 12px;
+}
+.practiceAction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.practiceAction .startButton {
+  width: min(100%, 360px);
+  min-height: 54px;
+  gap: 12px;
+  font-size: 16px;
+}
+.practiceAction p {
+  margin: 0;
+  color: var(--secondary);
+  font-size: 12px;
+  text-align: center;
+}
+.readingPanel {
+  overflow: hidden;
+  background-color: var(--canvas);
+}
+.readingToolbar {
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.readingToolbar svg {
+  color: var(--secondary);
+}
+.readingToolbar strong {
+  font-size: 14px;
+}
+.readingToolbar button {
+  font-size: 12px;
+  padding: 8px 14px;
+}
+.articleReading {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px;
+}
+.articlePassage {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 27px;
+  line-height: 2.8;
+  letter-spacing: 0.5px;
+  overflow-wrap: anywhere;
+  line-break: strict;
+}
+.articlePassage rt {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+}
+.articleTranslation {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.articleTranslation h2 {
+  margin: 0 0 12px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.articleTranslation p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--secondary);
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+.sentences {
+  padding: 8px 40px;
+}
+.sentenceRow {
+  display: flex;
+  gap: 28px;
+  border-bottom: 1px solid var(--border);
+  padding: 32px 0;
+}
+.sentenceRow:last-child {
+  border-bottom: 0;
+}
+.sentenceNumber {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding-top: 20px;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.sentenceContent {
+  min-width: 0;
+  flex: 1;
+}
+.japanese {
+  font-family: var(--font-ja);
+  font-size: 27px;
+  line-height: 2.7;
+  letter-spacing: 0.5px;
+  margin: 0 0 10px;
+  overflow-wrap: anywhere;
+}
+.japanese ruby {
+  margin-right: 3px;
+}
+.japanese rt {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+}
+.translation {
+  font-size: 14px;
+  color: var(--secondary);
+  line-height: 1.9;
+  margin: 0;
+}
+.readingFooter {
+  background-image: var(--paper-texture);
+  background-blend-mode: overlay;
+  border-top: 1px solid var(--border);
+  background-color: var(--surface);
+  padding: 18px 28px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+.editorIntro {
+  padding: 28px 40px 0;
+}
+.editorIntro :global(.field) {
+  max-width: 600px;
+}
+.segmentEditor {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.segmentEditor label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  min-width: 0;
+}
+.segmentEditor label > span {
+  font-family: var(--font-ja);
+  overflow-wrap: anywhere;
+}
+.segmentEditor input {
+  width: 100%;
+  font-size: 16px;
+}
+@media (max-width: 1150px) {
+  .articleGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .readingToolbar {
+    padding: 20px;
+  }
+}
+@media (max-width: 850px) {
+  .sectionTitle span {
+    display: block;
+    margin: 8px 0 0;
+  }
+}
+@media (max-width: 700px) {
+  .practiceModes {
+    padding: 14px;
+  }
+  .modeChoices {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .modeChoice {
+    padding: 12px;
+  }
+  .articleGrid {
+    grid-template-columns: 1fr;
+  }
+  .libraryBanner {
+    padding: 20px 0;
+    gap: 16px;
+  }
+  .libraryBanner h2 {
+    font-size: 22px;
+  }
+  .libraryBanner p {
+    font-size: 12px;
+  }
+  .libraryBanner .bannerIcon {
+    display: none;
+  }
+  .libraryCount {
+    font-size: 30px;
+  }
+  .libraryCount small {
+    font-size: 11px;
+  }
+  .articleCard {
+    padding: 20px;
+  }
+  .articleCard h2 {
+    font-size: 25px;
+  }
+  .sectionTitle {
+    font-size: 24px;
+  }
+  .sentences {
+    padding: 0 20px;
+  }
+  .articleReading {
+    padding: 28px 20px;
+  }
+  .articlePassage {
+    font-size: 21px;
+    line-height: 2.8;
+  }
+  .articlePassage rt {
+    font-size: 10px;
+  }
+  .sentenceRow {
+    gap: 14px;
+    padding: 24px 0;
+  }
+  .japanese {
+    font-size: 20px;
+    line-height: 3;
+  }
+  .japanese rt {
+    font-size: 10px;
+  }
+  .sentenceNumber {
+    font-size: 10px;
+  }
+  .readingFooter {
+    padding: 16px 20px;
+    flex-wrap: wrap;
+  }
+  .editorIntro {
+    padding: 24px 20px 0;
+  }
+  .segmentEditor {
+    grid-template-columns: 1fr;
+  }
+  .readingToolbar {
+    gap: 16px;
+  }
+  .readingToolbar > div {
+    flex-wrap: wrap;
+  }
+}

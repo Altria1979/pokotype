@@ -1,0 +1,15 @@
+{
+  "invalidProvider": "Select a valid AI service.",
+  "missingKey": "Enter your own {provider} API key first.",
+  "unauthorized": "Your {provider} key is invalid or expired. Check the key and its region.",
+  "forbidden": "Your {provider} key does not have access. Check your account permissions.",
+  "notFound": "The {provider} model list endpoint is unavailable. Try again later.",
+  "rateLimited": "Too many {provider} requests. Try again manually later.",
+  "service": "The {provider} service is temporarily unavailable. Try again manually later.",
+  "http": "The {provider} connection check was rejected (HTTP {status}). Check your settings and retry.",
+  "invalidList": "{provider} returned an invalid model list. Try again later.",
+  "emptyList": "{provider} returned no usable models. Check your account and model permissions.",
+  "cancelled": "The {provider} connection check was cancelled.",
+  "timeout": "The {provider} connection check timed out after 20 seconds. Try again later.",
+  "network": "Could not connect to {provider}. Check your network and browser cross-origin restrictions, then retry."
+}

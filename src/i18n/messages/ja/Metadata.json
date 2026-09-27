@@ -1,0 +1,12 @@
+{
+  "home": "Pokotype · 日本語タイピング練習",
+  "description": "五十音から文章まで、一文字ずつ日本語タイピングを練習。",
+  "articles": "マイ記事",
+  "history": "練習履歴",
+  "settings": "設定",
+  "practice": "五十音練習",
+  "generate": "AI 記事生成",
+  "openingPractice": "練習を開いています…",
+  "openingArticles": "記事を開いています…",
+  "generateMoved": "AI 記事生成はマイ記事に移動しました。開いています…"
+}

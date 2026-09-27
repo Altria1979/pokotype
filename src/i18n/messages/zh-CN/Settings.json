@@ -1,0 +1,22 @@
+{
+  "eyebrow": "打造你的练习空间",
+  "title": "设置",
+  "subtitle": "按照自己的习惯，调整练习空间。",
+  "aiTitle": "AI 生成设置",
+  "aiIntro": "分别配置想使用的服务，再选择生成文章的模型。密钥只保存在此浏览器，并发送给对应的官方服务。",
+  "help": "如果你还没有 API Key，或不清楚如何配置，可以联系作者微信 <contact>Altria1979</contact> 获取帮助。",
+  "preferences": "练习偏好",
+  "showRomaji": "显示罗马音提示",
+  "showRomajiHelp": "提示下一步可以输入的拼写。",
+  "showKana": "显示假名读音",
+  "showKanaHelp": "在文章中的汉字上方显示读音。",
+  "showTranslation": "显示中文翻译",
+  "showTranslationHelp": "练习文章时同时显示逐句释义。",
+  "dataTitle": "关于你的数据",
+  "dataHelp": "文章、练习记录和偏好仅保存在当前浏览器。更换设备或清除网站数据后不会自动恢复。无需注册，也没有后台同步。",
+  "readError": "无法读取浏览器模型设置，请检查网站存储权限。",
+  "invalidModel": "模型 ID 尚未填写或格式无效，选择暂未保存。",
+  "saveError": "模型选择未能保存，请检查浏览器存储权限后重新选择。",
+  "retrySave": "重试保存模型设置",
+  "cancelDraft": "取消模型修改"
+}

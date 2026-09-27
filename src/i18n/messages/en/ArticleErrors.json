@@ -1,0 +1,12 @@
+{
+  "invalid": "Invalid article format. Please generate it again.",
+  "title": "The article title is empty or too long. Generate it again or edit it.",
+  "sentenceCount": "An article must contain 1–80 sentences.",
+  "segments": "Sentence {sentence, number} has an invalid segment format.",
+  "translation": "The translation of sentence {sentence, number} is empty or too long. Generate it again or edit it.",
+  "text": "The original text of sentence {sentence, number} is empty or too long. Generate it again or edit it.",
+  "readingFormat": "Sentence {sentence, number} has an invalid reading format.",
+  "reading": "Sentence {sentence, number} needs typeable kana readings. Write kanji and numbers as kana.",
+  "noKana": "Sentence {sentence, number} has no kana to practice.",
+  "tooLong": "The article is too long. Shorten it to 5,000 characters or fewer."
+}

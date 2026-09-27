@@ -1,0 +1,67 @@
+{
+  "eyebrow": "为你创作的文字",
+  "title": "AI 生成文章",
+  "closeLabel": "关闭生成窗口",
+  "close": "关闭",
+  "providers": {
+    "deepseek": "DeepSeek",
+    "bailian": "阿里百炼"
+  },
+  "readSettingsError": "无法读取 AI 设置，请重新选择服务和模型。",
+  "readLocalKeyError": "无法读取本地密钥，请在设置中重新填写。",
+  "saveSettingsError": "本次选择已生效，但未能记住 AI 设置。请检查浏览器存储权限。",
+  "readKeyError": "无法读取密钥，请在设置中重新填写。",
+  "keyRequired": "请先在设置中填写自己的 {provider} 密钥。",
+  "saved": "已保存到我的文章库",
+  "generated": "文章已生成",
+  "saveError": "文章暂存在当前页面，未能保存到浏览器。请重试保存，避免刷新后丢失。",
+  "reviewHelp": "练习前可以先查看文章，确认并修正假名读音。",
+  "saving": "正在保存…",
+  "retrySave": "重试保存",
+  "stay": "留在当前页",
+  "viewArticle": "查看文章",
+  "intro": "选一个喜欢的话题，生成后自动加入我的文章库。",
+  "topic": "文章主题",
+  "level": "日语等级",
+  "levels": {
+    "N5": "N5 · 初学入门",
+    "N4": "N4 · 基础表达",
+    "N3": "N3 · 日常进阶",
+    "N2": "N2 · 深入阅读",
+    "N1": "N1 · 高阶挑战"
+  },
+  "levelHelp": "AI 会据此调整词汇和语法，实际难度可能略有差异。",
+  "customTopic": "自定义主题",
+  "customPlaceholder": "例如：在东京一家安静的咖啡馆度过下午",
+  "customCount": "{count, number} / 200 字",
+  "length": "文章篇幅",
+  "lengths": {
+    "short": {
+      "title": "短篇",
+      "description": "100–200 字"
+    },
+    "medium": {
+      "title": "中篇",
+      "description": "300–500 字"
+    },
+    "long": {
+      "title": "长篇",
+      "description": "600–800 字"
+    }
+  },
+  "ownKey": "使用你自己的 {provider} 密钥。",
+  "settings": "前往设置",
+  "generating": "正在创作你的文章…",
+  "submit": "生成练习文章",
+  "cancel": "取消生成",
+  "waiting": "通常需要一些时间，最长等待 90 秒。关闭窗口会取消生成。",
+  "cost": "使用你自己的 {provider} 额度，文章仅保存在此浏览器。",
+  "topics": {
+    "daily": "日常",
+    "travel": "旅行",
+    "school": "校园",
+    "work": "工作",
+    "culture": "文化",
+    "custom": "自定义"
+  }
+}

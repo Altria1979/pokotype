@@ -1,0 +1,47 @@
+{
+  "rateLimit": "Too many requests. Please try again later.",
+  "http": "The generation request was rejected (HTTP {status, number}). Check your settings and try again.",
+  "truncated": "The article response was cut off. Choose a shorter length and generate it again.",
+  "incomplete": "The article did not finish generating. Adjust the topic and try again.",
+  "provider": "Select a valid AI provider.",
+  "model": "Enter a valid model ID of up to 128 characters.",
+  "options": "Enter a topic of 1–200 characters and select a valid level and length.",
+  "cancelled": "Generation cancelled.",
+  "json": "The article has invalid JSON. Please generate it again.",
+  "validation": "Article validation failed. Please generate it again.",
+  "timeout": "Generation exceeded 90 seconds and was stopped. Please try again later.",
+  "network": "The network connection failed. Check your network and browser cross-origin restrictions, then try again.",
+  "failed": "Generation failed. Please try again later.",
+  "invalidKey": {
+    "deepseek": "Your API key is invalid or expired. Check your DeepSeek key in Settings.",
+    "bailian": "Your API key is invalid or expired. Check your Alibaba Cloud Model Studio key and region in Settings."
+  },
+  "balance": {
+    "deepseek": "Your DeepSeek balance is insufficient. Add funds and try again.",
+    "bailian": "Your Alibaba Cloud Model Studio balance is insufficient. Add funds and try again."
+  },
+  "service": {
+    "deepseek": "DeepSeek is temporarily unavailable. Please try again later.",
+    "bailian": "Alibaba Cloud Model Studio is temporarily unavailable. Please try again later."
+  },
+  "permission": {
+    "deepseek": "This key does not have access. Check your DeepSeek account and model permissions.",
+    "bailian": "This key does not have access. Check your Alibaba Cloud Model Studio account and model permissions."
+  },
+  "modelMissing": {
+    "deepseek": "DeepSeek could not find the selected model. Check the model ID and your access permissions.",
+    "bailian": "Alibaba Cloud Model Studio could not find the selected model. Check the model ID and your access permissions."
+  },
+  "response": {
+    "deepseek": "DeepSeek returned an invalid response. Please generate again.",
+    "bailian": "Alibaba Cloud Model Studio returned an invalid response. Please generate again."
+  },
+  "empty": {
+    "deepseek": "DeepSeek returned empty content. Adjust the topic and generate again.",
+    "bailian": "Alibaba Cloud Model Studio returned empty content. Adjust the topic and generate again."
+  },
+  "keyRequired": {
+    "deepseek": "First enter your own DeepSeek API key in Settings.",
+    "bailian": "First enter your own Alibaba Cloud Model Studio API key in Settings."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "providers": {
+    "deepseek": "DeepSeek",
+    "bailian": "Alibaba Cloud Bailian"
+  },
+  "provider": "AI service",
+  "bailianHelp": "Use a Bailian key from the China (Beijing) region.",
+  "deepseekHelp": "Use your own DeepSeek key and credits.",
+  "model": "Generation model",
+  "custom": "Custom model",
+  "synced": "{count, plural, one {# model synced.} other {# models synced.}} Choose a model that supports text chat for article generation.",
+  "alias": "The V4 Flash compatibility alias now points to V4.1 Flash.",
+  "compatibilityName": "DeepSeek V4 Flash (compatibility alias)",
+  "otherModel": "You can also enter another text model ID supported by this service.",
+  "customId": "Custom model ID",
+  "customHelp": "Enter an official model ID with API access enabled. Use only letters, numbers and . _ : - characters.",
+  "viewList": "View model list",
+  "listTitle": "{provider} models",
+  "listCount": "{count, plural, one {# model} other {# models}} · Scroll to browse",
+  "closeList": "Close model list",
+  "close": "Close",
+  "list": "Model list",
+  "listNote": "Models returned by this check. Access to each model is confirmed when generating an article."
+}

@@ -1,0 +1,67 @@
+{
+  "eyebrow": "WORDS MADE FOR YOU",
+  "title": "Create an article with AI",
+  "closeLabel": "Close article generator",
+  "close": "Close",
+  "providers": {
+    "deepseek": "DeepSeek",
+    "bailian": "Alibaba Cloud Model Studio"
+  },
+  "readSettingsError": "Could not read AI settings. Select a provider and model again.",
+  "readLocalKeyError": "Could not read your saved API key. Enter it again in Settings.",
+  "saveSettingsError": "Your selection is active but could not be saved. Check your browser storage permissions.",
+  "readKeyError": "Could not read your API key. Enter it again in Settings.",
+  "keyRequired": "First enter your own {provider} API key in Settings.",
+  "saved": "Saved to your article library",
+  "generated": "Article created",
+  "saveError": "This article is available on the current page but could not be saved to your browser. Retry saving before refreshing.",
+  "reviewHelp": "Preview the article and check or correct its kana readings before practicing.",
+  "saving": "Saving…",
+  "retrySave": "Retry saving",
+  "stay": "Stay on this page",
+  "viewArticle": "View article",
+  "intro": "Choose a topic you like. Your new article will be added to your library.",
+  "topic": "Article topic",
+  "level": "Japanese level",
+  "levels": {
+    "N5": "N5 · Beginner",
+    "N4": "N4 · Elementary",
+    "N3": "N3 · Intermediate",
+    "N2": "N2 · Upper intermediate",
+    "N1": "N1 · Advanced"
+  },
+  "levelHelp": "AI adjusts vocabulary and grammar to this level. Actual difficulty may vary.",
+  "customTopic": "Custom topic",
+  "customPlaceholder": "For example: spending an afternoon in a quiet café in Tokyo",
+  "customCount": "{count, number} / 200 characters",
+  "length": "Article length",
+  "lengths": {
+    "short": {
+      "title": "Short",
+      "description": "100–200 characters"
+    },
+    "medium": {
+      "title": "Medium",
+      "description": "300–500 characters"
+    },
+    "long": {
+      "title": "Long",
+      "description": "600–800 characters"
+    }
+  },
+  "ownKey": "Use your own {provider} API key. ",
+  "settings": "Open Settings",
+  "generating": "Writing your article…",
+  "submit": "Create practice article",
+  "cancel": "Cancel generation",
+  "waiting": "This may take a little time, up to 90 seconds. Closing this window cancels generation.",
+  "cost": "Uses your own {provider} quota. Articles are saved only in this browser.",
+  "topics": {
+    "daily": "Daily life",
+    "travel": "Travel",
+    "school": "School",
+    "work": "Work",
+    "culture": "Culture",
+    "custom": "Custom"
+  }
+}

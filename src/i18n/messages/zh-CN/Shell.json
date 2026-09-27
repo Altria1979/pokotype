@@ -1,0 +1,22 @@
+{
+  "kana": "五十音练习",
+  "articles": "我的文章库",
+  "history": "练习记录",
+  "settings": "设置",
+  "menuLabel": "导航菜单",
+  "menu": "菜单",
+  "closeMenu": "收起",
+  "navigation": "主导航",
+  "skip": "跳到主要内容",
+  "brand": "Pokotype · 日语打字练习",
+  "subtitle": "日语打字练习",
+  "tagline": "一点点敲进日语",
+  "local": "进度保存在此浏览器",
+  "footerEyebrow": "从一句开始",
+  "footerTitleFirst": "让日语，",
+  "footerTitleLast": "成为指尖的习惯。",
+  "footerDescription": "从一个假名，到一篇属于你的文章。",
+  "generate": "用 AI 写一篇",
+  "sample": "试试示例文章",
+  "artCaption": "一音，一步。"
+}

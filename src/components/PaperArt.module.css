@@ -1,0 +1,128 @@
+.art {
+  --ink-x: 0px;
+  --ink-y: 0px;
+  --light-x: 50%;
+  --light-y: 50%;
+  --light-radius: 147px;
+  --light-stop: 55%;
+  width: 460px;
+  max-width: 100%;
+  aspect-ratio: 1.6;
+  position: relative;
+  isolation: isolate;
+  flex-shrink: 0;
+  overflow: hidden;
+  background-color: var(--canvas);
+}
+.layers {
+  position: absolute;
+  inset: 0;
+}
+.layers span {
+  position: absolute;
+  height: 31%;
+  border-radius: 999px;
+  transform: translate(
+      calc(var(--ink-x) * var(--depth, -1)),
+      calc(var(--ink-y) * var(--depth, -1))
+    )
+    rotate(var(--rotation, 0deg));
+}
+.blue {
+  top: 5%;
+  right: 4%;
+  width: 76%;
+  background: linear-gradient(90deg, var(--blue), var(--success));
+  z-index: 3;
+}
+.orange {
+  --depth: -0.7;
+  --rotation: -35deg;
+  top: 22%;
+  right: 14%;
+  width: 72%;
+  background: linear-gradient(
+    135deg,
+    var(--success),
+    var(--art-orange) 60%,
+    var(--art-yellow)
+  );
+  z-index: 2;
+}
+.pink {
+  --depth: -1.2;
+  top: 42%;
+  left: 2%;
+  width: 92%;
+  background: linear-gradient(
+    90deg,
+    var(--art-orange),
+    var(--art-pink) 50%,
+    var(--art-purple)
+  );
+  z-index: 4;
+}
+.violet {
+  --depth: -0.8;
+  --rotation: 35deg;
+  top: 58%;
+  left: 19%;
+  width: 75%;
+  background: linear-gradient(
+    -45deg,
+    var(--art-purple),
+    var(--blue) 70%,
+    var(--art-orange)
+  );
+  z-index: 3;
+}
+.ink {
+  --depth: -0.9;
+  bottom: 0;
+  right: 7%;
+  width: 84%;
+  background: linear-gradient(
+    90deg,
+    var(--art-orange),
+    var(--text) 40%,
+    var(--canvas) 80%
+  );
+  z-index: 5;
+}
+/* Fade the ink first, then grain the composite. Text stays on the layer above. */
+.art::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle var(--light-radius) at var(--light-x) var(--light-y),
+    transparent 0%,
+    var(--canvas) var(--light-stop)
+  );
+  z-index: 6;
+  pointer-events: none;
+}
+.art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--paper-texture);
+  mix-blend-mode: overlay;
+  z-index: 7;
+  pointer-events: none;
+}
+.caption {
+  position: absolute;
+  right: 10%;
+  bottom: 7%;
+  z-index: 8;
+  font-family: var(--font-ja);
+  font-size: 12px;
+  color: var(--secondary);
+  letter-spacing: 2px;
+}
+@media (max-width: 700px) {
+  .art {
+    width: 300px;
+  }
+}

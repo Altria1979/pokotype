@@ -1,0 +1,12 @@
+{
+  "preferencesRead": "Browser preferences could not be read. Default settings are in use.",
+  "dataRead": "Local data could not be read. You can still practice, but please do not clear browser data.",
+  "articleSave": "The article is available on this page but could not be saved. Retry before closing the page.",
+  "articleDelete": "Deletion failed. Your article is still available. Please try again.",
+  "recordSave": "These results have not been saved to the browser. They remain available on this page.",
+  "preferencesSave": "Preferences could not be saved, but still apply on this page.",
+  "close": "Dismiss message",
+  "unsaved": "Some data has not been saved. Save it before switching languages.",
+  "retry": "Retry saving",
+  "saving": "Saving…"
+}

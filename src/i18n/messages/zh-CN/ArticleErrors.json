@@ -1,0 +1,12 @@
+{
+  "invalid": "文章格式无效，请重新生成。",
+  "title": "文章标题为空或过长，请重新生成或修正。",
+  "sentenceCount": "文章需包含 1–80 个句子。",
+  "segments": "第 {sentence, number} 句分段格式无效。",
+  "translation": "第 {sentence, number} 句翻译为空或过长，请重新生成或修正。",
+  "text": "第 {sentence, number} 句原文为空或过长，请重新生成或修正。",
+  "readingFormat": "第 {sentence, number} 句读音格式无效。",
+  "reading": "第 {sentence, number} 句读音需为可输入的假名，汉字与数字请填写假名读音。",
+  "noKana": "第 {sentence, number} 句没有可练习的假名。",
+  "tooLong": "文章过长，请缩短至 5000 字以内。"
+}

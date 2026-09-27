@@ -1,0 +1,12 @@
+{
+  "home": "Pokotype · 日语打字练习",
+  "description": "从五十音到文章，一点点敲进日语。",
+  "articles": "我的文章库",
+  "history": "练习记录",
+  "settings": "设置",
+  "practice": "五十音练习",
+  "generate": "AI 生成文章",
+  "openingPractice": "正在打开练习…",
+  "openingArticles": "正在打开文章库…",
+  "generateMoved": "AI 生成已移至文章库，正在打开…"
+}

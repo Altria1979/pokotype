@@ -1,0 +1,47 @@
+{
+  "rateLimit": "请求过于频繁，请稍后手动重试。",
+  "http": "生成请求未被接受（HTTP {status, number}），请检查设置后重试。",
+  "truncated": "文章响应被截断，请选择较短篇幅后重新生成。",
+  "incomplete": "文章未正常生成完成，请调整主题后重试。",
+  "provider": "请选择有效的 AI 服务。",
+  "model": "请填写有效的模型 ID（最多 128 字符）。",
+  "options": "请填写 1–200 字的主题，并选择有效的等级和篇幅。",
+  "cancelled": "已取消生成。",
+  "json": "文章 JSON 格式无效，请重新生成。",
+  "validation": "文章校验失败：请重新生成。",
+  "timeout": "生成超过 90 秒，已停止等待，请稍后重试。",
+  "network": "网络连接失败，请检查网络及浏览器跨域访问限制后重试。",
+  "failed": "生成失败，请稍后重试。",
+  "invalidKey": {
+    "deepseek": "密钥无效或已失效，请在设置中检查 DeepSeek 密钥。",
+    "bailian": "密钥无效或已失效，请在设置中检查 阿里百炼 密钥及所属地域。"
+  },
+  "balance": {
+    "deepseek": "DeepSeek 账户余额不足，请充值后再试。",
+    "bailian": "阿里百炼 账户余额不足，请充值后再试。"
+  },
+  "service": {
+    "deepseek": "DeepSeek 服务暂时异常，请稍后手动重试。",
+    "bailian": "阿里百炼 服务暂时异常，请稍后手动重试。"
+  },
+  "permission": {
+    "deepseek": "该密钥暂时没有访问权限，请检查 DeepSeek 账户及模型权限。",
+    "bailian": "该密钥暂时没有访问权限，请检查 阿里百炼 账户及模型权限。"
+  },
+  "modelMissing": {
+    "deepseek": "DeepSeek 未找到所选模型，请检查模型 ID 及访问权限。",
+    "bailian": "阿里百炼 未找到所选模型，请检查模型 ID 及访问权限。"
+  },
+  "response": {
+    "deepseek": "DeepSeek 返回了无效响应，请重新生成。",
+    "bailian": "阿里百炼 返回了无效响应，请重新生成。"
+  },
+  "empty": {
+    "deepseek": "DeepSeek 返回了空内容，请调整主题后重新生成。",
+    "bailian": "阿里百炼 返回了空内容，请调整主题后重新生成。"
+  },
+  "keyRequired": {
+    "deepseek": "请先在设置中填写自己的 DeepSeek 密钥。",
+    "bailian": "请先在设置中填写自己的 阿里百炼 密钥。"
+  }
+}

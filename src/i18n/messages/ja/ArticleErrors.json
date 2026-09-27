@@ -1,0 +1,12 @@
+{
+  "invalid": "記事の形式が正しくありません。生成し直してください。",
+  "title": "記事のタイトルが空か長すぎます。生成し直すか修正してください。",
+  "sentenceCount": "記事には1〜80文が必要です。",
+  "segments": "第{sentence, number}文の区切りの形式が正しくありません。",
+  "translation": "第{sentence, number}文の訳が空か長すぎます。生成し直すか修正してください。",
+  "text": "第{sentence, number}文の原文が空か長すぎます。生成し直すか修正してください。",
+  "readingFormat": "第{sentence, number}文の読み方の形式が正しくありません。",
+  "reading": "第{sentence, number}文の読み方は入力可能な仮名にしてください。漢字と数字にも仮名の読み方が必要です。",
+  "noKana": "第{sentence, number}文に練習できる仮名がありません。",
+  "tooLong": "記事が長すぎます。5,000文字以内にしてください。"
+}

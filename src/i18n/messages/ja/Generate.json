@@ -1,0 +1,67 @@
+{
+  "eyebrow": "あなたのための文章",
+  "title": "AIで記事を作成",
+  "closeLabel": "記事生成ウィンドウを閉じる",
+  "close": "閉じる",
+  "providers": {
+    "deepseek": "DeepSeek",
+    "bailian": "Alibaba Cloud Model Studio"
+  },
+  "readSettingsError": "AI設定を読み込めませんでした。サービスとモデルを選び直してください。",
+  "readLocalKeyError": "保存済みのAPIキーを読み込めませんでした。設定で入力し直してください。",
+  "saveSettingsError": "選択は反映されましたが、AI設定を保存できませんでした。ブラウザーの保存権限を確認してください。",
+  "readKeyError": "APIキーを読み込めませんでした。設定で入力し直してください。",
+  "keyRequired": "先に設定で自分の{provider}のAPIキーを入力してください。",
+  "saved": "記事ライブラリに保存しました",
+  "generated": "記事を作成しました",
+  "saveError": "記事は現在のページにありますが、ブラウザーに保存できませんでした。再読み込みで失われないよう、保存を再試行してください。",
+  "reviewHelp": "練習前に記事を確認し、必要に応じて仮名の読み方を修正できます。",
+  "saving": "保存中…",
+  "retrySave": "保存を再試行",
+  "stay": "このページに留まる",
+  "viewArticle": "記事を見る",
+  "intro": "好きなテーマを選びましょう。生成した記事はライブラリに追加されます。",
+  "topic": "記事のテーマ",
+  "level": "日本語レベル",
+  "levels": {
+    "N5": "N5 · 入門",
+    "N4": "N4 · 基礎",
+    "N3": "N3 · 中級",
+    "N2": "N2 · 読解力アップ",
+    "N1": "N1 · 上級"
+  },
+  "levelHelp": "AIが語彙と文法を調整します。実際の難易度には多少の差があります。",
+  "customTopic": "自由なテーマ",
+  "customPlaceholder": "例：東京の静かなカフェで午後を過ごす",
+  "customCount": "{count, number} / 200 文字",
+  "length": "記事の長さ",
+  "lengths": {
+    "short": {
+      "title": "短め",
+      "description": "100〜200文字"
+    },
+    "medium": {
+      "title": "普通",
+      "description": "300〜500文字"
+    },
+    "long": {
+      "title": "長め",
+      "description": "600〜800文字"
+    }
+  },
+  "ownKey": "自分の{provider}のAPIキーを使います。",
+  "settings": "設定を開く",
+  "generating": "記事を作成しています…",
+  "submit": "練習用の記事を作成",
+  "cancel": "生成をキャンセル",
+  "waiting": "生成には最大90秒かかる場合があります。このウィンドウを閉じると生成をキャンセルします。",
+  "cost": "自分の{provider}の利用枠を使います。記事はこのブラウザーのみに保存されます。",
+  "topics": {
+    "daily": "日常",
+    "travel": "旅行",
+    "school": "学校",
+    "work": "仕事",
+    "culture": "文化",
+    "custom": "自由入力"
+  }
+}

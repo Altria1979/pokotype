@@ -1,0 +1,24 @@
+{
+  "providers": {
+    "deepseek": "DeepSeek",
+    "bailian": "Alibaba Cloud Bailian"
+  },
+  "provider": "AI サービス",
+  "bailianHelp": "中国（北京）リージョンの Bailian キーを使用してください。",
+  "deepseekHelp": "ご自身の DeepSeek キーと利用枠を使用します。",
+  "model": "生成モデル",
+  "custom": "カスタムモデル",
+  "synced": "{count} 個のモデルを同期しました。文章生成にはテキスト対話に対応したモデルを選んでください。",
+  "alias": "V4 Flash の互換エイリアスは現在 V4.1 Flash を参照しています。",
+  "compatibilityName": "DeepSeek V4 Flash（互換エイリアス）",
+  "otherModel": "このサービスが対応する別のテキストモデル ID も入力できます。",
+  "customId": "カスタムモデル ID",
+  "customHelp": "利用権限のある公式モデル ID を入力してください。英数字と . _ : - のみ使用できます。",
+  "viewList": "モデル一覧を見る",
+  "listTitle": "{provider} のモデル一覧",
+  "listCount": "全 {count} モデル・スクロールして確認できます",
+  "closeList": "モデル一覧を閉じる",
+  "close": "閉じる",
+  "list": "モデル一覧",
+  "listNote": "今回の確認で取得したモデル一覧です。各モデルの利用権限は生成時に確認されます。"
+}

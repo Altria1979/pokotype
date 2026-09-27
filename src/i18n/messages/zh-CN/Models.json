@@ -1,0 +1,24 @@
+{
+  "providers": {
+    "deepseek": "DeepSeek",
+    "bailian": "阿里百炼"
+  },
+  "provider": "AI 服务",
+  "bailianHelp": "请使用华北 2（北京）地域的百炼密钥。",
+  "deepseekHelp": "使用你自己的 DeepSeek 密钥和额度。",
+  "model": "生成模型",
+  "custom": "自定义模型",
+  "synced": "已同步 {count} 个模型。文章生成请选择支持文本对话的模型。",
+  "alias": "V4 Flash 兼容别名现已指向 V4.1 Flash。",
+  "compatibilityName": "DeepSeek V4 Flash（兼容别名）",
+  "otherModel": "也可以填写此服务支持的其他文本模型 ID。",
+  "customId": "自定义模型 ID",
+  "customHelp": "填写官方模型 ID，需已开通调用权限。仅支持字母、数字及 . _ : -。",
+  "viewList": "查看模型列表",
+  "listTitle": "{provider} 模型列表",
+  "listCount": "共 {count} 个模型 · 可上下滚动查看",
+  "closeList": "关闭模型列表",
+  "close": "关闭",
+  "list": "模型列表",
+  "listNote": "本次检查返回的模型目录，具体调用权限以生成结果为准。"
+}
