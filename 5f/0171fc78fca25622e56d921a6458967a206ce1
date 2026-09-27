@@ -1,0 +1,21 @@
+vercel.json
+  s_d1967ae42976ef::t_7672983c56485e 5
+README.md
+  s_d1967ae42976ef::t_7672983c56485e 58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "5f0171fc78fca25622e56d921a6458967a206ce1",
+  "prompts": {},
+  "sessions": {
+    "s_d1967ae42976ef": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0e147-280b-7142-96de-a13c6d335720",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
