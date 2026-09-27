@@ -2,7 +2,23 @@
 
 日语打字练习。**从五十音到文章，一点点敲进日语。**
 
-Next.js App Router + React + TypeScript，静态导出，无需账号或后端。米白纸感界面采用顶部导航，以电脑键盘练习为主；手机可浏览文章和设置。
+米白纸感界面采用顶部导航，以电脑键盘练习为主；手机可浏览文章和设置。无需账号或后端，数据与 API 密钥仅保存在浏览器本地。
+
+## 技术栈
+
+| 类别 | 选型 |
+| --- | --- |
+| 应用框架 | [Next.js 16](https://nextjs.org/) App Router（`output: "export"` 静态导出，`trailingSlash`） |
+| UI | [React 19](https://react.dev/) + [TypeScript 5.9](https://www.typescriptlang.org/) |
+| 国际化 | [next-intl 4](https://next-intl.dev/)（`/zh-CN/`、`/en/`、`/ja/`） |
+| 样式 | CSS Modules + `src/app/globals.css` 主题变量（无第三方 UI 组件库） |
+| 本地数据 | `localStorage`（语言、密钥、偏好）+ IndexedDB（文章、成绩、统计） |
+| AI 文章 | 浏览器直连 [DeepSeek](https://api.deepseek.com/) Chat Completions 与 [阿里百炼](https://help.aliyun.com/zh/model-studio/) OpenAI 兼容端点；用户自备密钥 |
+| 音频 | Web Audio 按键音 + `speechSynthesis` 日语朗读 |
+| 质量 | ESLint 9（`eslint-config-next`）· Vitest 4 单元测试 · Playwright 1.58 端到端（对 `out/` 静态预览） |
+| 部署 | [Vercel](https://vercel.com/) 静态站点（`vercel.json`，构建产物 `out/`） |
+
+罗马音判定引擎在 `src/lib/romaji.ts`，与 React 解耦，并保留歧义与边界回归测试。
 
 ## 功能
 
