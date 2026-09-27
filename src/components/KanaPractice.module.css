@@ -2,6 +2,19 @@
   position: relative;
   padding: 0 0 32px;
 }
+.productHuntBadge {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 250px;
+  max-width: 100%;
+  margin: 0 auto 24px;
+}
+.productHuntBadge img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
 .launchIntro,
 .launchSetup {
   position: relative;
@@ -468,6 +481,17 @@
   padding: 2px 5px;
   font-family: var(--font-mono);
   color: var(--secondary);
+}
+@media (min-width: 1241px) {
+  .productHuntBadge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+  }
+  .art {
+    top: 102px;
+  }
 }
 @media (max-width: 1240px) {
   .art {

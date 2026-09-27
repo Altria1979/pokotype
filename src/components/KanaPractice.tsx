@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useFormatter, useTranslations } from "next-intl";
+import Image from "next/image";
 import { KANA_GROUPS, makeKanaQueue, toKatakana } from "@/lib/kana";
 import { getKanaRomaji } from "@/lib/romaji";
 import { useData } from "./DataProvider";
@@ -115,6 +116,21 @@ export function KanaPractice() {
   return (
     <>
       <section className={s.launch} aria-labelledby="kana-title">
+        <a
+          className={s.productHuntBadge}
+          href="https://www.producthunt.com/products/pokotype?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-pokotype"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1262500&theme=light&t=1790513535293"
+            alt="Pokotype - Practice Japanese typing, from kana to full articles | Product Hunt"
+            width={250}
+            height={54}
+            unoptimized
+            loading="eager"
+          />
+        </a>
         <div className={s.launchIntro}>
           <div className="eyebrow">{t("eyebrow")}</div>
           <h1 id="kana-title">{t("title")}</h1>
