@@ -124,7 +124,7 @@
   gap: 7px;
   border: 1px solid var(--border-strong);
   border-radius: 999px;
-  padding: 7px 10px;
+  padding: 0 12px;
   color: var(--text);
   background: var(--surface);
 }
@@ -138,7 +138,14 @@
   font: inherit;
   font-size: 13px;
 }
-.languageControl:focus-within { outline: 2px solid var(--text); outline-offset: 3px; }
+.languageControl select:focus {
+  outline: none;
+}
+.languageControl:has(select:focus-visible) {
+  border-color: var(--focus);
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
 .languageReason { display: block; margin-top: 4px; font-size: 10px; color: var(--muted); line-height: 1.4; }
 @media (max-width: 1100px) and (min-width: 901px) {
   .header { gap: 12px; }
