@@ -8,7 +8,7 @@ describe("locale navigation", () => {
     expect(preferredLocale("bad", ["fr-FR", "en-GB"])).toBe("en");
     expect(preferredLocale(null, ["zh-TW"])).toBe("zh-CN");
     expect(preferredLocale(null, ["ja-JP"])).toBe("ja");
-    expect(preferredLocale(null, ["fr"])).toBe("zh-CN");
+    expect(preferredLocale(null, ["fr"])).toBe("ja");
     expect(isLocale("en-US")).toBe(false);
   });
   it("replaces only the locale segment and preserves query and fragment verbatim", () => {

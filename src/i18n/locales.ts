@@ -1,6 +1,6 @@
 export const locales = ["zh-CN", "en", "ja"] as const;
 export type Locale = (typeof locales)[number];
-export const defaultLocale: Locale = "zh-CN";
+export const defaultLocale: Locale = "ja";
 export const localeNames: Record<Locale, string> = { "zh-CN": "简体中文", en: "English", ja: "日本語" };
 export const LOCALE_STORAGE_KEY = "pokotype:locale:v1";
 

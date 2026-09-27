@@ -3,5 +3,8 @@
   "framework": null,
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
-  "outputDirectory": "out"
+  "outputDirectory": "out",
+  "redirects": [
+    { "source": "/", "destination": "/ja/", "permanent": false }
+  ]
 }

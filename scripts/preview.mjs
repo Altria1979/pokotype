@@ -2,6 +2,7 @@ import http from "node:http";
 import { readFile } from "node:fs/promises";
 import { resolve, extname, sep } from "node:path";
 const root = resolve("out");
+const { redirects = [] } = JSON.parse(await readFile("vercel.json", "utf8"));
 const mime = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript",
@@ -17,9 +18,16 @@ const port = Number(process.env.PORT || 4173);
 http
   .createServer(async (req, res) => {
     try {
-      const pathname = decodeURIComponent(
-        new URL(req.url, "http://localhost").pathname,
-      );
+      const url = new URL(req.url, "http://localhost");
+      const pathname = decodeURIComponent(url.pathname);
+      const redirect = redirects.find(({ source }) => source === pathname);
+      if (redirect) {
+        res.writeHead(redirect.permanent ? 308 : 307, {
+          Location: redirect.destination + url.search,
+        });
+        res.end();
+        return;
+      }
       const file = resolve(
         root,
         "." + pathname,

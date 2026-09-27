@@ -13,7 +13,9 @@
 
 ## 路由与保护
 
-内部链接和跳转从 `src/i18n/navigation.ts` 导入。语言切换只替换 locale 路径段，保留 query/hash 并 replace 当前历史项。无前缀兼容入口在浏览器中跳转，并保留三语 HTML 链接。
+内部链接和跳转从 `src/i18n/navigation.ts` 导入。语言切换只替换 locale 路径段，保留 query/hash 并 replace 当前历史项。
+
+首页 `/` 在 Vercel 通过 HTTP 307 直接进入 `/ja/`，无需等待 JavaScript，也不显示语言过渡页。`scripts/preview.mjs` 读取同一条 `vercel.json` 规则；其他静态主机应配置相同跳转。根页面仅保留自动导航兜底。用户从页头或移动菜单手动切换语言，浏览器语言及历史选择不覆盖首页的日语默认值。其他无前缀兼容入口仍在浏览器中按偏好跳转，并保留三语 HTML 链接。
 
 组件使用 `useLocaleBlock(reason, active)` 注册未完成操作。语言入口在任意阻塞原因存在时禁用，显示原因。该机制只保护语言切换，不拦截地址栏、刷新或其他既有导航行为。
 
@@ -21,7 +23,7 @@ DataProvider 按文章、成绩和偏好追踪未落盘写入。失败后保留�
 
 ## 构建与验收
 
-正式部署在构建时设置 `SITE_URL` 为 HTTP(S) 站点 URL。首页和文章库生成 canonical、三语 hreflang 及 sitemap；本地未配置时不产生绝对 SEO 链接和 sitemap。使用支持目录 index.html 的静态主机部署完整 `out/`。
+正式部署在构建时设置 `SITE_URL` 为 HTTP(S) 站点 URL。首页和文章库生成 canonical、三语 hreflang 及 sitemap，`x-default` 指向日语；本地未配置时不产生绝对 SEO 链接和 sitemap。使用支持目录 index.html 的静态主机部署完整 `out/`。
 
 ```sh
 npm run lint

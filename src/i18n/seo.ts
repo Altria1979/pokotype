@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { isLocale, locales, localizedPath } from "./locales";
+import { defaultLocale, isLocale, locales, localizedPath } from "./locales";
 
 export type LocalePageProps = { params: Promise<{ locale: string }> };
 type Page = "home" | "articles" | "practice" | "history" | "settings" | "generate";
@@ -29,7 +29,7 @@ export async function pageMetadata(value: string, page: Page): Promise<Metadata>
       metadataBase: base,
       alternates: {
         canonical: url(locale),
-        languages: { ...Object.fromEntries(locales.map((language) => [language, url(language)])), "x-default": url("zh-CN") },
+        languages: { ...Object.fromEntries(locales.map((language) => [language, url(language)])), "x-default": url(defaultLocale) },
       },
     } : {}),
   };

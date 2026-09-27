@@ -57,6 +57,77 @@ for (const { locale, language, heading, navigation } of locales) {
   });
 }
 
+test.describe("首页无脚本直达", () => {
+  test.use({ javaScriptEnabled: false, locale: "en-US" });
+
+  test("服务端直接打开日语首页，不显示语言过渡页", async ({ page, baseURL }) => {
+    const response = await page.goto("/");
+    expect(response?.ok()).toBe(true);
+    const initialRequest = response!.request().redirectedFrom();
+    expect(initialRequest?.url()).toBe(new URL("/", baseURL).href);
+    expect((await initialRequest!.response())?.status()).toBe(307);
+    await expect(page).toHaveURL(new URL("/ja/", baseURL).href);
+    const html = await response!.text();
+    expect(html).toContain('<html lang="ja"');
+    expect(html).not.toContain("正在打开 · Opening · ページを開いています");
+    await expect(page.getByRole("heading", { name: "五十音練習", exact: true })).toBeVisible();
+    await expect(switcher(page, "表示言語")).toHaveValue("ja");
+  });
+});
+
+for (const { browserLocale, savedLocale } of [
+  { browserLocale: "en-US", savedLocale: "en" },
+  { browserLocale: "zh-CN", savedLocale: "zh-CN" },
+]) {
+  test.describe(`首页默认语言：${browserLocale}`, () => {
+    test.use({ locale: browserLocale });
+
+    test("浏览器语言和旧偏好不覆盖日语首页", async ({ page }) => {
+      await page.addInitScript(({ key, value }) => localStorage.setItem(key, value), {
+        key: localeStorageKey, value: savedLocale,
+      });
+      await page.goto("/");
+      await expect(page).toHaveURL(/\/ja\/$/);
+      await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+      await expect(page.getByRole("heading", { name: "五十音練習", exact: true })).toBeVisible();
+      await expect(switcher(page, "表示言語")).toHaveValue("ja");
+      await page.reload();
+      await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+    });
+  });
+}
+
+test("从默认首页切换语言保留查询参数、锚点和练习偏好", async ({ page }) => {
+  await page.goto("/?from=default&tag=one%20two#kana-title");
+  await expect(page).toHaveURL(/\/ja\/\?from=default&tag=one%20two#kana-title$/);
+  await expect(switcher(page, "表示言語")).toBeEnabled();
+  await page.getByLabel("ローマ字のヒントを表示", { exact: true }).uncheck();
+  await expect(switcher(page, "表示言語")).toBeEnabled();
+  await switcher(page, "表示言語").selectOption("en");
+  await expect(page).toHaveURL(/\/en\/\?from=default&tag=one%20two#kana-title$/);
+  await expect(page.getByLabel("Show romaji hints", { exact: true })).not.toBeChecked();
+  await expect(switcher(page, "Interface language")).toBeEnabled();
+  await switcher(page, "Interface language").selectOption("zh-CN");
+  await expect(page).toHaveURL(/\/zh-CN\/\?from=default&tag=one%20two#kana-title$/);
+  await expect(page.getByLabel("显示罗马音提示", { exact: true })).not.toBeChecked();
+  await expect(page.getByRole("heading", { name: "五十音练习", exact: true })).toBeVisible();
+});
+
+test("从默认首页开始练习保留会话并可输入第一题", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/");
+  await page.getByRole("button", { name: "練習を始める 20 問", exact: true }).click();
+  await expect(page).toHaveURL(/\/ja\/practice\/\?session=[0-9a-f-]+$/);
+  await expect(page.getByRole("region", { name: "五十音タイピング練習", exact: true })).toBeFocused();
+  await expect(page.getByText("1 / 20", { exact: true })).toBeVisible();
+  const remaining = await page.getByLabel("入力の進捗").locator("[data-romaji-pending]").allTextContents();
+  expect(remaining.join("")).not.toBe("");
+  await page.keyboard.type(remaining.join(""));
+  await expect(page.getByText("2 / 20", { exact: true })).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
 test("语言切换 replace 当前页面并保留查询参数、锚点和练习偏好", async ({ page }) => {
   await page.goto("/zh-CN/history/");
   await page.goto("/zh-CN/?from=shared&tag=one%20two#kana-title");
@@ -95,7 +166,7 @@ test.describe("浏览器语言识别", () => {
     expect(errors).toEqual([]);
   });
 
-  test("无保存偏好时旧入口匹配浏览器日语", async ({ page }) => {
+  test("日语浏览器打开根入口直接进入日语首页", async ({ page }) => {
     await page.goto("/");
     await expect(page).toHaveURL(/\/ja\/$/);
     await expect(switcher(page, "表示言語")).toHaveValue("ja");
