@@ -1,0 +1,37 @@
+tests/practice-resume.spec.ts
+  s_f81efb2401e986::t_1efd673850675b 122,175,188,193
+  s_f81efb2401e986::t_a145f9c26e997c 76-77
+  s_f81efb2401e986::t_3f2ebe0b85fce5 1-75,78-121,123-174,176-187,189-192,194
+README.md
+  s_f81efb2401e986::t_2b8a2e8d9de301 64
+src/i18n/messages/zh-CN/Practice.json
+  s_f81efb2401e986::t_2b8a2e8d9de301 17,35
+README.en.md
+  s_f81efb2401e986::t_2b8a2e8d9de301 64
+src/i18n/messages/en/Practice.json
+  s_f81efb2401e986::t_2b8a2e8d9de301 17,35
+src/components/Practice.tsx
+  s_f81efb2401e986::t_2b8a2e8d9de301 43,99,108,146-147,149-151,153,159,179,184-187,207,211,215,284,389-391
+  s_f81efb2401e986::t_86d7b2c70afe7b 148
+  s_f81efb2401e986::t_93ae9c79216995 392-394
+src/i18n/messages/ja/Practice.json
+  s_f81efb2401e986::t_2b8a2e8d9de301 17,35
+README.ja.md
+  s_f81efb2401e986::t_2b8a2e8d9de301 64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "d4942785b4e45d57c3c66b519b9c3c5a1fee2dcd",
+  "prompts": {},
+  "sessions": {
+    "s_f81efb2401e986": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0e19f-495c-7761-8c41-d8a4b41cbfca",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
