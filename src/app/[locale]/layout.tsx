@@ -6,6 +6,7 @@ import { loadMessages } from "@/i18n/messages";
 import { LocaleGuard } from "@/components/LocaleGuard";
 import { Shell } from "@/components/Shell";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "../globals.css";
 
 export const dynamicParams = false;
@@ -22,5 +23,6 @@ export default async function LocaleLayout({ children, params }: {
       <LocaleGuard><Shell>{children}</Shell></LocaleGuard>
     </NextIntlClientProvider>
     <Analytics />
+    <SpeedInsights />
   </body></html>;
 }
