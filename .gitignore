@@ -29,3 +29,6 @@ playwright-report/
 .DS_Store
 *.log
 .sites-runtime/
+src-tauri/target/
+src-tauri/gen/
+desktop-dist/
