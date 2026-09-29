@@ -1,0 +1,152 @@
+name: Desktop builds and releases
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    tags:
+      - desktop-v*
+
+permissions:
+  contents: read
+
+concurrency:
+  group: desktop-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    name: Web and release checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Validate desktop version
+        id: version
+        run: node scripts/desktop-release.mjs prepare
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: node --test scripts/desktop-release.test.mjs
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - name: Retain browser failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-browser-failures
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  bundle:
+    name: Bundle ${{ matrix.platform }}
+    needs: checks
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-aarch64
+            runner: macos-15
+            target: aarch64-apple-darwin
+            bundles: dmg
+          - platform: macos-x86_64
+            runner: macos-15-intel
+            target: x86_64-apple-darwin
+            bundles: dmg
+          - platform: windows-x86_64
+            runner: windows-2022
+            target: x86_64-pc-windows-msvc
+            bundles: nsis
+    defaults:
+      run:
+        shell: bash
+    env:
+      DESKTOP_VERSION: ${{ needs.checks.outputs.version }}
+      DESKTOP_TARGET: ${{ matrix.target }}
+      DESKTOP_BUNDLES: ${{ matrix.bundles }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.98.1
+          targets: ${{ matrix.target }}
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri -> target
+          key: ${{ matrix.target }}
+      - run: npm ci
+      - name: Prepare version override
+        id: version
+        run: node scripts/desktop-release.mjs prepare
+      - run: cargo fmt --manifest-path src-tauri/Cargo.toml --check
+      - name: Build installer
+        env:
+          DESKTOP_CONFIG: ${{ steps.version.outputs.config }}
+        run: npm run desktop:build -- --target "$DESKTOP_TARGET" --bundles "$DESKTOP_BUNDLES" --config "$DESKTOP_CONFIG" -- --locked
+      - name: Check native code
+        run: cargo clippy --manifest-path src-tauri/Cargo.toml --target "$DESKTOP_TARGET" --locked --all-targets -- -D warnings
+      - name: Test native code
+        run: cargo test --manifest-path src-tauri/Cargo.toml --target "$DESKTOP_TARGET" --locked
+      - name: Stage one installer for this platform
+        run: node scripts/desktop-release.mjs stage
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-installer-${{ matrix.platform }}
+          path: desktop-dist/*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+
+  publish:
+    name: Publish complete desktop pre-release
+    needs: [checks, bundle]
+    if: github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'desktop-v')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: desktop-installer-*
+          merge-multiple: true
+          path: desktop-dist
+      - name: Validate all installers before release
+        env:
+          DESKTOP_VERSION: ${{ needs.checks.outputs.version }}
+        run: node scripts/desktop-release.mjs verify
+      - name: Upload draft assets, verify, then publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DESKTOP_VERSION: ${{ needs.checks.outputs.version }}
+          DESKTOP_NATIVE_ACCEPTANCE_TAG: ${{ vars.DESKTOP_NATIVE_ACCEPTANCE_TAG }}
+          DESKTOP_NATIVE_ACCEPTANCE_URL: ${{ vars.DESKTOP_NATIVE_ACCEPTANCE_URL }}
+        run: node scripts/desktop-release.mjs publish

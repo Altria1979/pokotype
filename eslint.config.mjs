@@ -11,5 +11,7 @@ export default defineConfig([
     ".omx/**",
     "test-results/**",
     "playwright-report/**",
+    "src-tauri/target/**",
+    "src-tauri/gen/**",
   ]),
 ]);

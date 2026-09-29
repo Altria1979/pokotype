@@ -29,6 +29,14 @@ export function PaperFooter() {
             {t("sample")} <span aria-hidden="true">↗</span>
           </Link>
         </div>
+        <a
+          className={s.desktopDownload}
+          href="https://github.com/Altria1979/pokotype/releases"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {t("desktopDownload")} <span aria-hidden="true">↗</span>
+        </a>
       </div>
     </section>
   );
