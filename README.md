@@ -4,7 +4,7 @@
 
 **从五十音到文章，一点点敲进日语。**
 
-[在线体验](https://pokotype.vercel.app/zh-CN/) · [应用源码](https://github.com/Altria1979/pokotype) · [问题反馈](https://github.com/Altria1979/pokotype/issues)
+[在线体验](https://pokotype.vercel.app/zh-CN/) · [桌面版 Releases](https://github.com/Altria1979/pokotype/releases) · [应用源码](https://github.com/Altria1979/pokotype) · [问题反馈](https://github.com/Altria1979/pokotype/issues)
 
 ## 1. 项目背景与功能
 
@@ -83,6 +83,16 @@ AI 调用消耗你自己的服务额度；不使用 AI 时无需配置密钥。�
 - 未完成的练习仅保存在页面内存中，刷新会失去进度；已保存的设置和完成记录仍保留。未完成练习不会计为完成记录。
 - 在「设置 → 声音与朗读」调整按键音、自动朗读、音量、语速和音色。日语语音由浏览器／系统提供，在线音色可能需要联网；没有可用音色时仍能打字练习。
 - 练习期间（含暂停和结果页）、编辑、生成窗口打开或存在未保存内容时，语言切换会暂时禁用。退出练习页面、关闭生成窗口，或保存／退出编辑后再切换；保存失败时请使用「重试保存」。
+
+### macOS / Windows 桌面版
+
+桌面版使用 Tauri 2 封装同一套静态页面，安装包通过 [GitHub Releases](https://github.com/Altria1979/pokotype/releases) 分发：Mac Apple Silicon（arm64）与 Intel 各提供 `.dmg`，Windows x64 提供 `.exe`。请以 Releases 中实际发布的附件为准；若尚无桌面版附件，可继续使用网页版。
+
+首版为公开测试版，Mac 暂无 Developer ID 签名与公证，Windows 暂无发行签名，系统可能提示或拦截安装。基础假名练习、内置和已保存文章可以离线使用；AI 生成需要联网，朗读是否离线可用取决于系统音色。桌面版的数据与浏览器独立，不自动迁移或同步。
+
+更新时退出应用，再下载同平台的新版安装包覆盖安装；没有应用内自动更新。保留应用数据时，正常退出重开和覆盖升级应保留已保存内容；卸载、清理应用数据后重装可能丢失文章、记录和密钥。正式签名与自动更新留待后续版本。
+
+开发环境除 Node.js / npm 外，还需 Rust 与平台编译工具，按 [Tauri 官方环境要求](https://v2.tauri.app/start/prerequisites/)准备。运行 `npm run desktop:dev` 开发，`npm run desktop:build` 打包，`npm run desktop:icon` 生成图标。`desktop-v*` 标签触发三平台打包；检查、全部安装包和原生验收记录齐备后才创建 Pre-release。安装、构建、验收与发布步骤见[桌面版指南](docs/desktop.md)。
 
 ### 在本地运行
 

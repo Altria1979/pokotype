@@ -11,12 +11,13 @@
   "brand": "Pokotype · 日本語タイピング練習",
   "subtitle": "日本語タイピング練習",
   "tagline": "一文字ずつ、日本語に親しむ",
-  "local": "進捗はこのブラウザーに保存されます",
+  "local": "進捗はこの端末に保存されます",
   "footerEyebrow": "一文ずつ、着実に",
   "footerTitleFirst": "日本語を、",
   "footerTitleLast": "指先の習慣に。",
   "footerDescription": "一つの仮名から、自分だけの記事へ。",
   "generate": "AI で記事を作る",
   "sample": "サンプル記事を試す",
+  "desktopDownload": "デスクトップ版 · macOS / Windows",
   "artCaption": "一音、一歩。"
 }

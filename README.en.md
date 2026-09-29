@@ -4,7 +4,7 @@
 
 **From your first kana to full articles, type your way into Japanese.**
 
-[Try it online](https://pokotype.vercel.app/en/) · [Application source](https://github.com/Altria1979/pokotype) · [Report an issue](https://github.com/Altria1979/pokotype/issues)
+[Try it online](https://pokotype.vercel.app/en/) · [Desktop releases](https://github.com/Altria1979/pokotype/releases) · [Application source](https://github.com/Altria1979/pokotype) · [Report an issue](https://github.com/Altria1979/pokotype/issues)
 
 ## 1. Background and Features
 
@@ -83,6 +83,16 @@ AI requests use your own provider quota. No key is needed if you do not use AI. 
 - An unfinished session exists only in page memory, so refreshing loses its progress. Saved settings and completed records remain. Unfinished sessions are not counted as completed records.
 - Go to “Settings → Sound and speech” to adjust key sounds, automatic speech, volume, speaking rate, and voice. Japanese voices come from your browser or operating system; online voices may need an internet connection. You can still practice typing if no voice is available.
 - Language switching is temporarily disabled during practice (including pauses and the results screen), while editing, while the generation dialog is open, or while data remains unsaved. Leave the practice screen, close the generation dialog, or save or cancel your edits before switching. If saving fails, select “Retry saving.”
+
+### macOS / Windows desktop app
+
+The desktop app packages the same static pages with Tauri 2. Installers are distributed through [GitHub Releases](https://github.com/Altria1979/pokotype/releases): separate `.dmg` files for Apple Silicon (arm64) and Intel Macs, and an `.exe` installer for Windows x64. Download the attachments available in an actual release; if there are no desktop attachments yet, use the web app.
+
+The initial public beta has no Mac Developer ID signing or notarization and no Windows publisher signing. Your system may warn about or block installation. Kana practice, built-in samples, and saved articles work offline; AI generation needs a connection, and offline speech depends on the system voice. Desktop data is separate from browser data, without automatic migration or synchronization.
+
+To update, quit the app and install the new package for your platform over the existing version. There is no in-app updater. Saved content is intended to survive app restarts and upgrades when app data is retained; uninstalling or clearing app data before reinstalling may remove articles, history, and keys. Official signing and automatic updates are planned for later versions.
+
+Development requires Node.js / npm, Rust, and the platform build tools listed in the [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/). Use `npm run desktop:dev` to develop, `npm run desktop:build` to package, and `npm run desktop:icon` to generate icons. A `desktop-v*` tag triggers all three builds; checks, all installers, and a native acceptance record must be ready before a pre-release is published. See the [desktop guide (Chinese)](docs/desktop.md) for installation, builds, acceptance, and release steps.
 
 ### Run locally
 

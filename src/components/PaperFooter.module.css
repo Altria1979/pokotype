@@ -123,6 +123,22 @@
 .actions span {
   font-family: var(--font-ui);
 }
+.desktopDownload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  margin-top: 12px;
+  color: var(--secondary);
+  font-size: 13px;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.desktopDownload:hover {
+  color: var(--text);
+}
 .mobileBreak {
   display: none;
 }

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Pokotype",
+  "version": "0.1.0",
+  "identifier": "io.github.altria1979.pokotype",
+  "build": {
+    "beforeDevCommand": "npm run dev -- --hostname localhost --port 3000",
+    "devUrl": "http://localhost:3000",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../out"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "create": false,
+        "title": "Pokotype",
+        "url": "index.html",
+        "width": 1200,
+        "height": 820,
+        "minWidth": 960,
+        "minHeight": 640,
+        "center": true,
+        "useHttpsScheme": true,
+        "backgroundColor": "#f4f1eb",
+        "dragDropEnabled": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://api.producthunt.com; font-src 'self'; connect-src 'self' ipc: http://ipc.localhost https://ipc.localhost https://api.deepseek.com https://dashscope.aliyuncs.com; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'",
+      "devCsp": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://api.producthunt.com; font-src 'self'; connect-src 'self' ipc: http://ipc.localhost https://ipc.localhost ws://localhost:3000 https://api.deepseek.com https://dashscope.aliyuncs.com; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'",
+      "capabilities": []
+    }
+  },
+  "bundle": {
+    "active": true,
+    "category": "Education",
+    "shortDescription": "Japanese typing practice, from kana to articles",
+    "copyright": "Copyright 2026 Altria1979",
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+    "macOS": {
+      "minimumSystemVersion": "13.3",
+      "signingIdentity": "-"
+    },
+    "windows": {
+      "webviewInstallMode": { "type": "downloadBootstrapper", "silent": true },
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": ["English", "SimpChinese", "Japanese"],
+        "displayLanguageSelector": true
+      }
+    }
+  }
+}
