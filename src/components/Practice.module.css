@@ -149,6 +149,28 @@
   color: var(--muted);
   line-height: 1.8;
 }
+/* Keep the native receiver in view so typing cannot scroll away from the question. */
+.textInput {
+  position: fixed;
+  top: calc(var(--practice-viewport-top, 0px) + var(--practice-viewport-height, 100dvh) * 0.5);
+  left: 50%;
+  width: 1px;
+  height: 1px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  clip-path: inset(50%);
+  pointer-events: none;
+  font-size: 16px;
+}
+.stage:has(.textInput:focus-visible) .romaji i {
+  box-shadow: 0 0 0 1px var(--focus);
+}
+.optionsDisclosure > summary {
+  display: none;
+}
 .options {
   background-color: var(--canvas);
   background-image: var(--paper-texture);
@@ -468,4 +490,156 @@
   .result {
     padding: 30px 18px;
   }
+}
+
+/* The input capability is shared; this layout only responds to available space. */
+.viewport[data-mobile-practice] {
+  height: calc(var(--practice-viewport-height, 100dvh) + var(--practice-viewport-top, 0px));
+  min-height: 0;
+  gap: 8px;
+  padding: calc(var(--practice-viewport-top, 0px) + env(safe-area-inset-top, 0px) + 8px) 0 max(8px, env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.viewport[data-mobile-practice] .practice {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 280px;
+  min-height: 0;
+}
+.viewport[data-mobile-practice] .toolbar {
+  display: flex;
+  padding: 6px 10px;
+  gap: 2px 10px;
+  flex-shrink: 0;
+}
+.viewport[data-mobile-practice] .toolbar > span {
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+.viewport[data-mobile-practice] .toolbar > div:last-child {
+  margin-left: auto;
+  gap: 6px;
+}
+.viewport[data-mobile-practice] .toolbar button {
+  min-height: 44px;
+  padding: 6px 10px;
+}
+.viewport[data-mobile-practice] .toolbarStatus {
+  display: none;
+}
+.viewport[data-mobile-practice] .progress {
+  flex-shrink: 0;
+}
+.viewport[data-mobile-practice] .stage {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 132px;
+  padding: 12px 14px 8px;
+  overflow-y: auto;
+}
+.viewport[data-mobile-practice] .stageLabel {
+  display: none;
+}
+.viewport[data-mobile-practice] .stage:has(.kana) {
+  justify-content: center;
+}
+.viewport[data-mobile-practice] .kana {
+  margin: 0;
+  font-size: clamp(48px, calc(var(--practice-viewport-height, 100dvh) * 0.14), 88px);
+  line-height: 1.3;
+}
+.viewport[data-mobile-practice] .romaji {
+  font-size: 22px;
+  min-height: 36px;
+  letter-spacing: 2px;
+}
+.viewport[data-mobile-practice] .groupedRomaji {
+  gap: 3px 8px;
+  font-size: 17px;
+  letter-spacing: 1px;
+}
+.viewport[data-mobile-practice] .romajiGroup {
+  padding: 3px 6px;
+  line-height: 1.7;
+}
+.viewport[data-mobile-practice] .sentence {
+  font-size: 23px;
+  line-height: 2.5;
+  margin: 4px 0 8px;
+}
+.viewport[data-mobile-practice] .articlePassage {
+  flex: 1 1 auto;
+  min-height: 54px;
+  max-height: clamp(84px, calc(var(--practice-viewport-height, 100dvh) * 0.3), 280px);
+  padding: 4px 8px 4px 0;
+  margin: 0 0 8px;
+}
+.viewport[data-mobile-practice] .continuousHints {
+  flex: 0 1 auto;
+  min-height: 36px;
+  max-height: clamp(62px, calc(var(--practice-viewport-height, 100dvh) * 0.18), 144px);
+  padding: 6px 0 2px;
+}
+.viewport[data-mobile-practice] .translation {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.viewport[data-mobile-practice] .feedback,
+.viewport[data-mobile-practice] .audioNotice {
+  margin-top: 6px;
+}
+.viewport[data-mobile-practice] .feedback:not([data-important]) {
+  display: none;
+}
+.viewport[data-mobile-practice] .listeningActions {
+  gap: 6px 10px;
+  margin-top: 8px;
+}
+.viewport[data-mobile-practice] .listeningActions button {
+  min-height: 44px;
+}
+.viewport[data-mobile-practice] .optionsDisclosure {
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+}
+.viewport[data-mobile-practice] .optionsDisclosure > summary {
+  display: list-item;
+  min-height: 44px;
+  padding: 11px 14px;
+  color: var(--secondary);
+  font-size: 12px;
+  cursor: pointer;
+}
+.viewport[data-mobile-practice] .optionsDisclosure > summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -3px;
+}
+.viewport[data-mobile-practice] .options {
+  gap: 4px 16px;
+  border-top: 0;
+  padding: 0 14px 10px;
+}
+.viewport[data-mobile-practice] .options label {
+  min-height: 44px;
+}
+.viewport[data-mobile-practice] .options > span:last-child {
+  display: none;
+}
+.viewport[data-mobile-practice] .liveStats {
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-size: 12px;
+}
+.viewport[data-mobile-practice] .liveStats > span {
+  gap: 4px;
+}
+.viewport[data-mobile-practice] .liveStats svg {
+  width: 16px;
+  height: 16px;
+}
+.viewport[data-mobile-practice] .keyboard {
+  display: none;
 }

@@ -310,9 +310,6 @@ label {
   border-top: 1px solid var(--border);
   margin: 24px 0;
 }
-.mobile-notice {
-  display: none;
-}
 .empty {
   text-align: center;
   padding: 64px 24px;
@@ -419,19 +416,6 @@ dialog::backdrop {
   }
   .pad {
     padding: 22px;
-  }
-  .mobile-notice {
-    display: block;
-    background: var(--accent-soft);
-    color: var(--accent);
-    padding: 12px 16px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-size: 12px;
-  }
-  .desktop-practice {
-    display: none !important;
   }
   input:not([type="checkbox"]):not([type="radio"]),
   select,

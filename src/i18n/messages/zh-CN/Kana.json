@@ -14,7 +14,6 @@
   "questionCount": "每组题数",
   "questions": "{count} 题",
   "showRomaji": "显示罗马音提示",
-  "mobileNotice": "在电脑上打开 Pokotype，即可使用键盘练习。这里也能浏览文章和调整设置。",
   "emptyRange": "请至少选择一行假名。",
   "noWeakHistory": "所选范围还没有练习记录。先完成一组普通练习吧。",
   "start": "开始练习",

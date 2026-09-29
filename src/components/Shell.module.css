@@ -182,6 +182,18 @@
 .app:has([data-practice-input]) .footerScene {
   display: none;
 }
+.app:has([data-mobile-practice]) {
+  --page-gutter: 12px;
+  min-height: 0;
+}
+.app:has([data-mobile-practice]) .header,
+.app:has([data-mobile-practice]) .headerSpace,
+.app:has([data-mobile-practice]) .footer {
+  display: none;
+}
+.app:has([data-mobile-practice]) .main {
+  padding: 0;
+}
 .footerMeta {
   width: 100%;
   margin: 0 auto;

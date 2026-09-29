@@ -14,7 +14,6 @@
   "questionCount": "Questions per session",
   "questions": "{count, plural, one {# question} other {# questions}}",
   "showRomaji": "Show romaji hints",
-  "mobileNotice": "Open Pokotype on a computer to practice with a keyboard. You can browse articles and change settings here.",
   "emptyRange": "Select at least one kana row.",
   "noWeakHistory": "There is no practice history for this range yet. Complete a regular session first.",
   "start": "Start practice",
