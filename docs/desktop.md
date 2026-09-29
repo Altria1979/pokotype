@@ -76,6 +76,8 @@ npm run desktop:build -- --target x86_64-pc-windows-msvc --bundles nsis
 
 发布标签例如 `desktop-v0.1.0-beta.1`；去掉 `desktop-v` 的部分作为本次桌面版本，工作流生成构建版本覆盖配置，无需为每个测试版手工改写网页包版本。
 
+应用版本和安装包文件名保留完整版本（例如 `0.1.0-beta.1`），Windows NSIS 也用完整版本识别 `beta.1` 到 `beta.2` 的升级。Mac 的系统元数据使用数字格式：`CFBundleShortVersionString` 为 `0.1.0`，`CFBundleVersion` 使用该工作流的正整数 `GITHUB_RUN_NUMBER`；同一次运行重试不会改变构建号。工作流将临时 Info.plist 的绝对路径传给 Tauri，在默认 plist 生成后覆盖短版本字段。这个处理符合 [Apple 的版本字段格式](https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleversion)，不改变应用标识、数据目录或手动覆盖安装方式。
+
 首次发布前先将桌面工作流合入仓库默认分支，再从已合入的提交创建版本标签。若发布目标相对默认分支还含有工作流文件变更，GitHub 的 [Release API](https://docs.github.com/en/rest/releases/releases#create-a-release) 可能要求 `GITHUB_TOKEN` 无法获得的工作流写权限，返回 403 或 404。保持从默认分支的已合入提交发布，无需额外个人 token。
 
 首次公开版本前必须完成下方的真实安装验收，并在仓库 **Settings → Secrets and variables → Actions → Variables** 设置：

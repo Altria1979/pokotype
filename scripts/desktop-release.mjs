@@ -25,6 +25,28 @@ export function versionFromTag(tag) {
   return validateVersion(tag.slice("desktop-v".length));
 }
 
+export async function writeVersionOverride(version, runNumber, directory) {
+  validateVersion(version);
+  if (typeof runNumber !== "string" || !/^[1-9]\d*$/.test(runNumber)) {
+    throw new Error("GITHUB_RUN_NUMBER must be a positive integer for the macOS bundle build version.");
+  }
+  const infoPlist = path.resolve(directory, "desktop-info.plist");
+  const config = path.resolve(directory, "desktop-tauri-config.json");
+  const coreVersion = version.split(/[+-]/)[0];
+  // Tauri merges this plist after its defaults; keep the full SemVer in app metadata.
+  await writeFile(infoPlist, `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>CFBundleShortVersionString</key><string>${coreVersion}</string>
+</dict></plist>
+`);
+  await writeFile(config, `${JSON.stringify({
+    version,
+    bundle: { macOS: { bundleVersion: runNumber, infoPlist } },
+  })}\n`);
+  return config;
+}
+
 export function requireNativeAcceptance(tag, acceptedTag, acceptanceUrl) {
   versionFromTag(tag);
   if (acceptedTag !== tag) {
@@ -172,8 +194,7 @@ async function main(command) {
       : validateVersion(configuration.version);
     if (env.DESKTOP_VERSION && env.DESKTOP_VERSION !== version) throw new Error("Build version differs from the checks job.");
     if (!env.RUNNER_TEMP || !env.GITHUB_OUTPUT) throw new Error("prepare runs inside GitHub Actions and requires RUNNER_TEMP and GITHUB_OUTPUT.");
-    const config = path.join(env.RUNNER_TEMP, "desktop-tauri-config.json");
-    await writeFile(config, `${JSON.stringify({ version })}\n`);
+    const config = await writeVersionOverride(version, env.GITHUB_RUN_NUMBER, env.RUNNER_TEMP);
     await appendFile(env.GITHUB_OUTPUT, `version=${version}\nconfig=${config}\n`);
     console.log(`Desktop build version: ${version}`);
     return;

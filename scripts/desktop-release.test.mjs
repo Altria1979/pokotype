@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -13,6 +13,7 @@ import {
   verifyAssets,
   verifyUploadedAssets,
   versionFromTag,
+  writeVersionOverride,
 } from "./desktop-release.mjs";
 
 const version = "0.1.0-beta.1";
@@ -40,6 +41,36 @@ test("versions preserve prereleases and reject malformed or executable tag text"
     assert.throws(() => versionFromTag(`desktop-v${invalid}`));
   }
   assert.throws(() => versionFromTag("v0.1.0"));
+});
+
+test("CI version override preserves beta SemVer and emits numeric macOS metadata", async (t) => {
+  const directory = await temporaryDirectory(t);
+  const configPath = await writeVersionOverride(version, "42", directory);
+  const original = await readFile(configPath, "utf8");
+  const config = JSON.parse(original);
+  assert.equal(config.version, "0.1.0-beta.1");
+  assert.equal(config.bundle.macOS.bundleVersion, "42");
+  assert.ok(path.isAbsolute(config.bundle.macOS.infoPlist));
+  const plist = await readFile(config.bundle.macOS.infoPlist, "utf8");
+  assert.match(plist, /<key>CFBundleShortVersionString<\/key><string>0\.1\.0<\/string>/);
+  assert.ok(!plist.includes("beta"));
+  assert.equal(config.bundle.windows, undefined);
+  assert.ok(expectedAssetNames(config.version).every((name) => name.includes("0.1.0-beta.1")));
+  await writeVersionOverride(version, "42", directory);
+  assert.equal(await readFile(configPath, "utf8"), original, "retrying the same run keeps the build version stable");
+  await writeVersionOverride("0.1.0-beta.2+build.7", "43", directory);
+  const next = JSON.parse(await readFile(configPath, "utf8"));
+  assert.equal(next.version, "0.1.0-beta.2+build.7");
+  assert.equal(next.bundle.macOS.bundleVersion, "43");
+  assert.equal(await readFile(next.bundle.macOS.infoPlist, "utf8"), plist);
+});
+
+test("invalid CI run numbers are rejected before writing version overrides", async (t) => {
+  const directory = await temporaryDirectory(t);
+  for (const invalid of [undefined, "", "0", "-1", "1.2", "1e3", "01", "42\n", "<script>", 42]) {
+    await assert.rejects(writeVersionOverride(version, invalid, directory), /GITHUB_RUN_NUMBER must be a positive integer/);
+  }
+  assert.deepEqual(await readdir(directory), []);
 });
 
 test("publishing needs native acceptance for this exact tag and an HTTPS evidence URL", () => {
