@@ -276,9 +276,6 @@ function ArticleDetail({ article }: { article: Article }) {
           </p>
         </div>
       </div>
-      <div className="mobile-notice">
-        {t("desktopNotice")}
-      </div>
       {error && (
         <div className="error" role="alert">
           {error}
@@ -464,7 +461,7 @@ function ArticleDetail({ article }: { article: Article }) {
             <span>{preferences.articlePracticeMode === "full" ? t("fullHelp") : t("sentenceHelp")}</span>
           )}
         </div>
-        <div className={`${s.practiceAction} desktop-practice`}>
+        <div className={s.practiceAction}>
           <button className={`primary ${s.startButton}`} onClick={start}>
             <Icon name="play" size={20} />
             {t("start")}

@@ -52,8 +52,7 @@ export function KanaPractice() {
     const frame = requestAnimationFrame(() => {
       const target =
         startButton.current &&
-        !startButton.current.disabled &&
-        window.matchMedia("(min-width: 701px)").matches
+        !startButton.current.disabled
           ? startButton.current
           : rangeButton.current;
       target?.focus({ preventScroll: true });
@@ -65,8 +64,7 @@ export function KanaPractice() {
   function returnToStart() {
     const target =
       startButton.current &&
-      !startButton.current.disabled &&
-      window.matchMedia("(min-width: 701px)").matches
+      !startButton.current.disabled
         ? startButton.current
         : rangeButton.current;
     target?.focus({ preventScroll: true });
@@ -92,7 +90,7 @@ export function KanaPractice() {
   }
   function start(weak: boolean) {
     setMessage("");
-    if (!ready || starting || window.matchMedia("(max-width: 700px)").matches) return;
+    if (!ready || starting) return;
     const queue = makeKanaQueue(
       pool,
       preferences.count,
@@ -194,9 +192,6 @@ export function KanaPractice() {
               {t("showRomaji")}
             </label>
           </div>
-          <div className="mobile-notice">
-            {t("mobileNotice")}
-          </div>
           {ready && pool.length === 0 && (
             <p className={s.emptyRange} id="empty-range" role="status">
               {t("emptyRange")}
@@ -210,7 +205,7 @@ export function KanaPractice() {
           <div className={s.actions}>
             <button
               ref={startButton}
-              className={`primary desktop-practice ${s.start}`}
+              className={`primary ${s.start}`}
               disabled={!ready || starting || pool.length === 0}
               aria-describedby={
                 ready && pool.length === 0 ? "empty-range" : undefined
@@ -229,7 +224,7 @@ export function KanaPractice() {
           </div>
           <div className={s.helpRow}>
             <button
-              className={`desktop-practice ${s.weak}`}
+              className={s.weak}
               disabled={!ready || starting || pool.length === 0}
               onClick={() => start(true)}
             >

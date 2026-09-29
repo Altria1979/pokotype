@@ -118,7 +118,7 @@ test("连贯预览仍可编辑标题与读音，保存副本及刷新后保留�
   await expect(page.getByLabel("输入进度")).toContainText("watakusiha");
 });
 
-test("连贯文章预览在窄桌面和手机正常阅读，无横向溢出且手机隐藏开始练习入口", async ({ page }) => {
+test("连贯文章预览在窄桌面和手机正常阅读，无横向溢出且均显示开始练习入口", async ({ page }) => {
   for (const width of [800, 390]) {
     await page.setViewportSize({ width, height: 800 });
     await page.goto(`/zh-CN/articles/?id=${SAMPLE_ARTICLES[0].id}`);
@@ -129,8 +129,7 @@ test("连贯文章预览在窄桌面和手机正常阅读，无横向溢出且�
       expect(await page.getByTestId(id).evaluate((element) => element.scrollWidth <= element.clientWidth + 1)).toBe(true);
     }
     const begin = page.getByRole("button", { name: "开始文章练习", exact: true });
-    if (width === 390) await expect(begin).not.toBeVisible();
-    else await expect(begin).toBeVisible();
+    await expect(begin).toBeVisible();
     await expect(page.getByRole("button", { name: "修改标题与读音", exact: true })).toBeVisible();
   }
 });
@@ -361,7 +360,7 @@ test("连续听读停表，暂停中跳过保持暂停，恢复及迟到回调�
   await page.keyboard.type("sh");
   await page.clock.fastForward(2_000);
   await page.keyboard.type("in");
-  await expect(page.getByText("正在朗读 · Enter 跳过", { exact: true })).toBeVisible();
+  await expect(page.getByText("正在朗读 · 可跳过朗读", { exact: true })).toBeVisible();
   await page.clock.fastForward(5_000);
   await page.keyboard.type("asa");
   await expect(timer(page)).toHaveText("2 秒");

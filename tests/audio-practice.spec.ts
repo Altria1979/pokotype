@@ -3,7 +3,7 @@ import { SAMPLE_ARTICLES, sentenceText } from "../src/lib/articles";
 import type { PracticeRecord } from "../src/lib/storage";
 
 const article = SAMPLE_ARTICLES[0];
-const listening = "正在朗读 · Enter 跳过";
+const listening = "正在朗读 · 可跳过朗读";
 
 type SpeechCall = {
   text: string;

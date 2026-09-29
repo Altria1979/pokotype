@@ -2,9 +2,10 @@
 import { Link } from "@/i18n/navigation";
 import { useFormatter, useTranslations } from "next-intl";
 import { useLocaleBlock } from "./LocaleGuard";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { summarize } from "@/lib/session";
 import { PracticeRun, type PracticeItem } from "@/lib/practice-run";
+import { PracticeTextInput } from "@/lib/practice-text-input";
 import {
   getArticleWindow,
   type ArticleGroupSize,
@@ -12,6 +13,7 @@ import {
 } from "@/lib/article-practice";
 import type { RomajiDisplayGroup } from "@/lib/romaji";
 import { useBrowserAudio } from "./useBrowserAudio";
+import { usePracticeViewport } from "./usePracticeViewport";
 import { useData } from "./DataProvider";
 import { Icon } from "./Icon";
 import { InputRulesHelp } from "./InputRulesHelp";
@@ -41,6 +43,15 @@ export function Practice({
   const [config] = useState(() => ({ articlePracticeMode, articleGroupSize }));
   const [run] = useState(() => new PracticeRun(items, mode, config.articlePracticeMode));
   const [autoPaused, setAutoPaused] = useState(false);
+  const { compact, viewportRef } = usePracticeViewport(!run.complete);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [unsupportedInput, setUnsupportedInput] = useState(false);
+  const [inputFocused, setInputFocused] = useState(false);
+  const [textAdapter] = useState(() => new PracticeTextInput());
+  const inputRef = useRef<HTMLInputElement>(null);
+  const composing = useRef(false);
+  const suppressInput = useRef(false);
+  const inputHintId = useId();
   const continuous = mode === "article" && config.articlePracticeMode !== "sentence";
   const [sessionSpeech, setSessionSpeech] = useState(() => ({
     sentence: false,
@@ -109,12 +120,71 @@ export function Practice({
     if (preferences.keySoundEnabled && preferences.keySoundVolume > 0) void audio.unlock();
     run.resume();
     if (run.listening) listen();
+    if (compact) inputRef.current?.focus({ preventScroll: true });
     redraw();
+  }
+  function focusInput() {
+    if (preferences.keySoundEnabled && preferences.keySoundVolume > 0) void audio.unlock();
+    const input = inputRef.current;
+    if (!input) return;
+    input.focus({ preventScroll: true });
+    if (!composing.current) input.setSelectionRange(input.value.length, input.value.length);
   }
   function exit() {
     audio.stopAll();
     onExit();
   }
+  // Both physical keys and native text input enter the same scoring/audio path.
+  const submitText = useCallback((text: string) => {
+    setUnsupportedInput(false);
+    for (const key of text) {
+      if (document.hidden || (run.paused && !autoPaused) || run.complete || run.listening) break;
+      if (run.paused) {
+        setAutoPaused(false);
+        run.resume();
+      }
+      if (preferences.keySoundEnabled) audio.key(preferences.keySoundVolume);
+      const result = run.input(key);
+      if (result === "completed") {
+        if (mode === "article" && articleSpeechEnabled) {
+          listen();
+        } else {
+          if (mode === "kana" && preferences.kanaSpeechEnabled)
+            speak(items[run.index].text);
+          else if (mode === "article" && articleSegmentSpeechEnabled && run.completedGroupText)
+            speak(run.completedGroupText);
+          advance(run.index);
+        }
+      } else if (result === "progress" && articleSegmentSpeechEnabled && run.completedGroupText) {
+        speak(run.completedGroupText);
+      }
+    }
+    redraw();
+  }, [run, autoPaused, preferences.keySoundEnabled, preferences.keySoundVolume,
+    preferences.kanaSpeechEnabled, audio, mode, articleSpeechEnabled, articleSegmentSpeechEnabled,
+    listen, speak, items, advance, redraw]);
+  function readText(input: HTMLInputElement, inputType?: string, isComposing = false) {
+    const result = textAdapter.read({
+      value: input.value,
+      inputType,
+      isComposing,
+      blocked: suppressInput.current || document.hidden || (run.paused && !autoPaused) || run.complete || run.listening,
+    });
+    if (result.invalid) setUnsupportedInput(true);
+    if (result.text) submitText(result.text);
+  }
+  useEffect(() => {
+    const input = inputRef.current;
+    if (!input) return;
+    // Native beforeinput exposes inputType; React's beforeinput also covers legacy textInput.
+    const beforeInput = (event: InputEvent) => {
+      if (suppressInput.current || /^(insertFromPaste|insertFromDrop|insertReplacementText|history)/.test(event.inputType)) {
+        if (event.cancelable) event.preventDefault();
+      }
+    };
+    input.addEventListener("beforeinput", beforeInput);
+    return () => input.removeEventListener("beforeinput", beforeInput);
+  }, []);
   useEffect(() => {
     if (continuous) window.scrollTo({ top: 0, behavior: "instant" });
   }, [continuous]);
@@ -144,6 +214,8 @@ export function Practice({
     articleSpeechEnabled, articleSegmentSpeechEnabled, run, advance]);
   useEffect(() => {
     function pauseOnLeave() {
+      // A browser/window shortcut can leave without delivering its keyup here.
+      suppressInput.current = false;
       // Repeated blur/hidden events must preserve an existing manual pause.
       if (run.paused || run.complete) return audio.stopAll();
       pause();
@@ -175,32 +247,9 @@ export function Practice({
         skipListening();
         return;
       }
-      if (
-        (run.paused && !autoPaused) || run.complete || run.listening ||
-        window.matchMedia("(max-width: 700px)").matches ||
-        !/^[a-zA-Z'-]$/.test(event.key)
-      ) return;
+      if (!/^[a-zA-Z'-]$/.test(event.key)) return;
       event.preventDefault();
-      if (run.paused) {
-        setAutoPaused(false);
-        run.resume();
-      }
-      if (preferences.keySoundEnabled) audio.key(preferences.keySoundVolume);
-      const result = run.input(event.key.toLowerCase());
-      if (result === "completed") {
-        if (mode === "article" && articleSpeechEnabled) {
-          listen();
-        } else {
-          if (mode === "kana" && preferences.kanaSpeechEnabled)
-            speak(items[run.index].text);
-          else if (mode === "article" && articleSegmentSpeechEnabled && run.completedGroupText)
-            speak(run.completedGroupText);
-          advance(run.index);
-        }
-      } else if (result === "progress" && articleSegmentSpeechEnabled && run.completedGroupText) {
-        speak(run.completedGroupText);
-      }
-      redraw();
+      submitText(event.key.toLowerCase());
     }
     document.addEventListener("keydown", keydown);
     document.addEventListener("visibilitychange", visibility);
@@ -210,15 +259,13 @@ export function Practice({
       document.removeEventListener("visibilitychange", visibility);
       window.removeEventListener("blur", pauseOnLeave);
     };
-  }, [run, items, mode, audio, preferences.keySoundEnabled, preferences.keySoundVolume,
-    articleSpeechEnabled, articleSegmentSpeechEnabled, preferences.kanaSpeechEnabled,
-    advance, listen, pause, redraw, skipListening, speak, autoPaused]);
+  }, [run, audio, pause, skipListening, submitText]);
   const elapsed = run.timer.elapsed();
   const stats = summarize(run.correct, run.errors, elapsed);
   const correct = run.correct;
   const index = run.index;
   useEffect(() => {
-    if (!continuous || !hints.current) return;
+    if ((!continuous && !compact) || !hints.current) return;
     const container = hints.current;
     const follow = () => {
       const caret = container.querySelector<HTMLElement>("i");
@@ -228,7 +275,7 @@ export function Practice({
     const observer = new ResizeObserver(follow);
     observer.observe(container);
     return () => observer.disconnect();
-  }, [continuous, correct, index, preferences.showRomaji, preferences.showTranslation]);
+  }, [continuous, compact, correct, index, preferences.showRomaji, preferences.showTranslation]);
   if (run.complete)
     return (
       <section className={`panel ${s.result}`}>
@@ -291,12 +338,11 @@ export function Practice({
           : continuous ? t("stageContinuous") : t("stageSentence");
   return (
     <div
-      className={`stack ${continuous ? s.continuousLayout : ""}`}
+      ref={viewportRef}
+      className={`stack ${s.viewport} ${continuous ? s.continuousLayout : ""}`}
+      data-mobile-practice={compact ? "" : undefined}
       data-continuous-practice={continuous || undefined}
     >
-      <div className="mobile-notice">
-        {t("mobileNotice")}
-      </div>
       <section className={`panel ${s.practice}`}>
         <div className={s.toolbar}>
           <span>
@@ -322,7 +368,63 @@ export function Practice({
         <div className={s.progress}>
           <span style={{ width: `${fraction * 100}%` }} />
         </div>
-        <div className={`${s.stage} ${continuous ? s.continuousStage : ""}`}>
+        <div
+          className={`${s.stage} ${continuous ? s.continuousStage : ""}`}
+          data-practice-stage
+          onClick={(event) => {
+            const target = event.target as HTMLElement;
+            if (target.closest("a,button,input,select,textarea,summary")) return;
+            const selection = window.getSelection();
+            if (selection && !selection.isCollapsed && selection.anchorNode && event.currentTarget.contains(selection.anchorNode)) return;
+            focusInput();
+          }}
+        >
+          <input
+            ref={inputRef}
+            className={s.textInput}
+            type="text"
+            inputMode="text"
+            autoCapitalize="none"
+            autoCorrect="off"
+            autoComplete="off"
+            spellCheck={false}
+            aria-label={t("inputLabel")}
+            aria-describedby={inputHintId}
+            onInput={(event) => {
+              const native = event.nativeEvent as InputEvent;
+              readText(event.currentTarget, native.inputType, native.isComposing || composing.current);
+            }}
+            onCompositionStart={() => { composing.current = true; }}
+            onCompositionEnd={(event) => {
+              composing.current = false;
+              readText(event.currentTarget, "insertFromComposition");
+            }}
+            onPaste={(event) => event.preventDefault()}
+            onDrop={(event) => event.preventDefault()}
+            onKeyDown={(event) => {
+              suppressInput.current = event.defaultPrevented || event.repeat || event.ctrlKey || event.altKey || event.metaKey;
+              if (suppressInput.current) {
+                if (event.repeat) event.preventDefault();
+                return;
+              }
+              if (event.nativeEvent.isComposing || composing.current) return;
+              if (event.key === "Escape") {
+                event.preventDefault();
+                pause();
+              } else if (event.key === " ") {
+                event.preventDefault();
+              } else if (event.key === "Enter") {
+                event.preventDefault();
+                if (run.listening) skipListening();
+              }
+            }}
+            onKeyUp={() => { suppressInput.current = false; }}
+            onFocus={() => setInputFocused(true)}
+            onBlur={() => {
+              suppressInput.current = false;
+              setInputFocused(false);
+            }}
+          />
           {!continuous && <div className={s.stageLabel}>{stageLabel}</div>}
           {mode === "kana" ? (
             <div className={s.kana} lang="ja">
@@ -337,65 +439,78 @@ export function Practice({
               showKana={preferences.showKana}
               practiceMode={config.articlePracticeMode}
               groupSize={config.articleGroupSize}
+              compact={compact}
             />
           )}
-          <div className={continuous ? s.continuousHints : undefined} ref={hints}>
-          {preferences.showTranslation && item.sentence && (
-            <p className={s.translation}>{item.sentence.translation}</p>
-          )}
-          <div
-            className={`${s.romaji} ${item.sentence ? s.groupedRomaji : ""} ${run.lastError ? s.wrong : ""}`}
-            aria-label={t("inputProgress")}
-            data-practice-input
-          >
-            {item.sentence ? (
-              groups
-                .filter((group) => group.typed || group.remaining)
-                .map((group) => (
-                  <span
-                    key={group.startSegment}
-                    className={s.romajiGroup}
-                    data-romaji-group={group.startSegment}
-                    aria-current={group === activeGroup ? "step" : undefined}
-                  >
-                    <span className={s.typed} data-romaji-typed>
-                      {group.typed}
-                    </span>
-                    {group === activeGroup && <i aria-hidden="true" />}
-                    {group.remaining && (
-                      <span className={s.pending} data-romaji-pending>
-                        {preferences.showRomaji ? group.remaining : "···"}
-                      </span>
-                    )}
-                  </span>
-                ))
-            ) : (
-              <>
-                <span className={s.typed} data-romaji-typed>
-                  {run.matcher.typed}
-                </span>
-                <i aria-hidden="true" />
-                <span className={s.pending} data-romaji-pending>
-                  {preferences.showRomaji ? run.matcher.remaining : "···"}
-                </span>
-              </>
+          <div className={continuous || (compact && mode === "article") ? s.continuousHints : undefined} ref={hints}>
+            {preferences.showTranslation && item.sentence && (
+              <p className={s.translation}>{item.sentence.translation}</p>
             )}
+            <div
+              className={`${s.romaji} ${item.sentence ? s.groupedRomaji : ""} ${run.lastError ? s.wrong : ""}`}
+              aria-label={t("inputProgress")}
+              data-practice-input
+            >
+              {item.sentence ? (
+                groups
+                  .filter((group) => group.typed || group.remaining)
+                  .map((group) => (
+                    <span
+                      key={group.startSegment}
+                      className={s.romajiGroup}
+                      data-romaji-group={group.startSegment}
+                      aria-current={group === activeGroup ? "step" : undefined}
+                    >
+                      <span className={s.typed} data-romaji-typed>
+                        {group.typed}
+                      </span>
+                      {group === activeGroup && <i aria-hidden="true" />}
+                      {group.remaining && (
+                        <span className={s.pending} data-romaji-pending>
+                          {preferences.showRomaji ? group.remaining : "···"}
+                        </span>
+                      )}
+                    </span>
+                  ))
+              ) : (
+                <>
+                  <span className={s.typed} data-romaji-typed>
+                    {run.matcher.typed}
+                  </span>
+                  <i aria-hidden="true" />
+                  <span className={s.pending} data-romaji-pending>
+                    {preferences.showRomaji ? run.matcher.remaining : "···"}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
-          </div>
-          <div className={s.feedback} role="status">
+          <div
+            id={inputHintId}
+            className={s.feedback}
+            role="status"
+            data-important={run.lastError || run.paused || run.listening || unsupportedInput || (compact && !inputFocused) || undefined}
+          >
             {run.listening
               ? run.paused ? t("feedbackListeningPaused") : t("feedbackListening")
               : run.paused
                 ? t(autoPaused ? "feedbackAutoPaused" : "feedbackPaused")
-                : run.lastError
-                  ? t("feedbackError")
-                  : mode === "article"
-                    ? continuous ? t("feedbackContinuous") : t("feedbackSentence")
-                    : t("feedbackKana")}
+                : unsupportedInput
+                  ? t("inputUnsupported")
+                  : run.lastError
+                    ? t("feedbackError")
+                    : compact && !inputFocused
+                      ? t("inputHint")
+                      : mode === "article"
+                        ? continuous ? t("feedbackContinuous") : t("feedbackSentence")
+                        : t("feedbackKana")}
           </div>
           {run.listening && (
             <div className={s.listeningActions}>
-              <button onClick={skipListening}>{t("skipSpeech")}</button>
+              <button onClick={() => {
+                skipListening();
+                if (compact) inputRef.current?.focus({ preventScroll: true });
+              }}>{t("skipSpeech")}</button>
               <span>{t("listeningTime")}</span>
             </div>
           )}
@@ -419,6 +534,11 @@ export function Practice({
             </div>
           )}
         </div>
+        <details className={s.optionsDisclosure} open={!compact || settingsOpen}>
+          <summary onClick={(event) => {
+            event.preventDefault();
+            setSettingsOpen((open) => !open);
+          }}>{t("practiceSettings")}</summary>
         <div className={s.options}>
           <label className="check-label">
             <input
@@ -490,6 +610,7 @@ export function Practice({
           </label>
           <span className="muted">{t("escapePause")}</span>
         </div>
+        </details>
       </section>
       <div className={s.liveStats} aria-label={t("statistics")}>
         <span>
@@ -534,7 +655,7 @@ function revealWithin(container: HTMLElement, target: HTMLElement) {
   }
 }
 
-function ArticlePassage({ items, index, groups, typedCount, showKana, practiceMode, groupSize }: {
+function ArticlePassage({ items, index, groups, typedCount, showKana, practiceMode, groupSize, compact }: {
   items: PracticeItem[];
   index: number;
   groups: RomajiDisplayGroup[];
@@ -542,15 +663,17 @@ function ArticlePassage({ items, index, groups, typedCount, showKana, practiceMo
   showKana: boolean;
   practiceMode: ArticlePracticeMode;
   groupSize: ArticleGroupSize;
+  compact: boolean;
 }) {
   const t = useTranslations("Practice");
   const passage = useRef<HTMLDivElement>(null);
   const continuous = practiceMode !== "sentence";
+  const scrollable = continuous || compact;
   const { start, end } = getArticleWindow(items.length, index, practiceMode, groupSize);
   const activeGroup = groups.find((group) => group.remaining.length > 0);
   useEffect(() => {
     const container = passage.current;
-    if (!continuous || !container) return;
+    if (!scrollable || !container) return;
     const follow = () => {
       const active = container.querySelector<HTMLElement>('ruby[aria-current="step"]')
         ?? container.querySelector<HTMLElement>('[data-sentence-index][aria-current="step"]');
@@ -560,15 +683,15 @@ function ArticlePassage({ items, index, groups, typedCount, showKana, practiceMo
     const observer = new ResizeObserver(follow);
     observer.observe(container);
     return () => observer.disconnect();
-  }, [continuous, index, typedCount, showKana]);
+  }, [scrollable, index, typedCount, showKana]);
   return (
     <div
       ref={passage}
-      className={`${s.sentence} ${continuous ? s.articlePassage : ""}`}
+      className={`${s.sentence} ${scrollable ? s.articlePassage : ""}`}
       lang="ja"
       data-testid="article-passage"
       aria-label={t("passage")}
-      tabIndex={continuous ? 0 : undefined}
+      tabIndex={scrollable ? 0 : undefined}
     >
       {items.slice(start, end).map((item, offset) => {
         const sentenceIndex = start + offset;

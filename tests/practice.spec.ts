@@ -202,6 +202,6 @@ test("桌面和手机布局、页面直达与控制台", async ({ page }) => {
   await expect(menu).toBeFocused();
   await expect(
     page.getByRole("button", { name: "开始练习 20 题" }),
-  ).not.toBeVisible();
+  ).toBeVisible();
   expect(errors).toEqual([]);
 });

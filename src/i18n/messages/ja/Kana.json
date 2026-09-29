@@ -14,7 +14,6 @@
   "questionCount": "1回の問題数",
   "questions": "{count} 問",
   "showRomaji": "ローマ字のヒントを表示",
-  "mobileNotice": "キーボードで練習するには、パソコンで Pokotype を開いてください。ここでは文章の閲覧や設定の変更ができます。",
   "emptyRange": "かなを1行以上選んでください。",
   "noWeakHistory": "選択した範囲にはまだ練習記録がありません。まずは通常の練習を1回終えましょう。",
   "start": "練習を始める",

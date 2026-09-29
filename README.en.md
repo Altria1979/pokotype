@@ -26,7 +26,7 @@ The interface uses warm paper tones, a subtle grain texture, and simple typograp
 | Practice history | Review accuracy, correct keystrokes per minute, active practice time, and frequently missed kana |
 | Three interface languages | 日本語, 简体中文, and English, sharing the same saved articles, results, and settings |
 
-Typing practice is designed primarily for a computer with a physical keyboard. On a phone, you can browse articles, correct readings, and change settings. Switching the interface language does not translate the Japanese text or existing Chinese translations.
+Practice on a computer, phone or iPad with a physical keyboard or the system's English alphabet keyboard. On a computer, start typing as soon as you enter practice. On touchscreens, tap the question or romaji area to open the keyboard and switch to English yourself; the website cannot select your keyboard language. Switching the interface language does not translate the Japanese text or existing Chinese translations.
 
 ## 2. How to Use Pokotype
 
@@ -35,7 +35,7 @@ Typing practice is designed primarily for a computer with a physical keyboard. O
 1. Open the [English version](https://pokotype.vercel.app/en/), [日本語 version](https://pokotype.vercel.app/ja/), or [简体中文 version](https://pokotype.vercel.app/zh-CN/). You can also switch languages in the page header.
 2. Under “Choose your practice range,” select hiragana or katakana, then choose the categories and rows you want to practice.
 3. Choose **20 questions** or **50 questions**. Keep “Show romaji hints” enabled when starting out.
-4. Select “Start practice,” switch your input method to **English / half-width Latin characters**, and type directly on your keyboard.
+4. Select “Start practice” and switch your input method to **English / half-width Latin characters**. Type directly on a computer, or tap the question or romaji area on a phone or iPad to open the system's English alphabet keyboard.
 5. Review your results after finishing. Once you have completed sessions, use “Review weak kana” to revisit difficult characters.
 
 The home-page screenshot above shows the question count, start button, and practice-range controls.
@@ -45,7 +45,7 @@ The home-page screenshot above shows the question count, start button, and pract
 1. Open “My articles” and choose an original sample, such as 「小さな朝の習慣」.
 2. Read the Japanese text, kana readings, and Chinese translation. If needed, select “Edit title and readings,” make your changes, and save.
 3. Choose a practice mode: **Full article** keeps the entire text visible and follows your typing position; **Group practice** presents 3, 5, or 10 sentences at a time; **Sentence practice** focuses on one sentence at a time. Full article is the initial default.
-4. Select “Start article practice” and type continuously using the hints. During practice, you can toggle the display of romaji hints, kana readings, and Chinese translations, as well as sound effects.
+4. Select “Start article practice” and type continuously using the hints. On a phone or iPad, tap the question or romaji area to open the keyboard. Use “Practice settings” to toggle romaji hints, kana readings, Chinese translations and sound effects.
 
 ![Article preview with reading corrections and three practice modes](docs/screenshots/en-article.jpg)
 

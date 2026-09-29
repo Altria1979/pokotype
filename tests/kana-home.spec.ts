@@ -497,29 +497,26 @@ test("首页各模块与页面同宽，所有屏幕的首屏内容均上下排�
       });
       expect(exampleCenter).toBeCloseTo(center, 0);
 
-      if (width <= 700) {
-        await expect(startButton(page)).not.toBeVisible();
-        await expect(page.getByRole("button", { name: "错项强化", exact: true })).not.toBeVisible();
-        await expect(page.locator(".mobile-notice")).toBeVisible();
-      } else {
+      await expect(startButton(page)).toBeVisible();
+      await expect(page.getByRole("button", { name: "错项强化", exact: true })).toBeVisible();
+      if (width > 700) {
         await expect(startButton(page)).toBeInViewport({ ratio: 1 });
-        const startBox = (await startButton(page).boundingBox())!;
-        expect(startBox.x + startBox.width / 2).toBeCloseTo(center, 0);
-        expect(startBox.width).toBeCloseTo(width > 900 ? 320 : mainBox.width, 0);
       }
+      const startBox = (await startButton(page).boundingBox())!;
+      expect(startBox.x + startBox.width / 2).toBeCloseTo(center, 0);
+      expect(startBox.width).toBeCloseTo(width > 900 ? 320 : mainBox.width, 0);
       expect(await page.evaluate(() => window.scrollY)).toBe(0);
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     });
   }
 });
 
-test("390px 手机上可滚动调整设置，返回后焦点回到范围入口且不横向溢出", async ({
+test("390px 手机上可滚动调整设置，返回后焦点回到开始按钮且不横向溢出", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/zh-CN/");
-  await expect(page.locator(".mobile-notice")).toBeVisible();
-  await expect(startButton(page)).not.toBeVisible();
+  await expect(startButton(page)).toBeVisible();
   await page.getByRole("button", { name: /片假名/ }).click();
   await rangeLink(page).click();
   await category(page, "清音").getByRole("button", { name: "取消本类全选" }).click();
@@ -571,7 +568,7 @@ test("390px 手机上可滚动调整设置，返回后焦点回到范围入口�
   }
   await contracted.getByRole("button", { name: "キャ行", exact: true }).click();
   await page.getByRole("button", { name: "返回开始练习", exact: true }).click();
-  await expect(rangeLink(page)).toBeFocused();
+  await expect(startButton(page)).toBeFocused();
   await expect(summary(page)).toContainText("片假名");
   await expect(summary(page)).toContainText("8 个假名");
   expect(
