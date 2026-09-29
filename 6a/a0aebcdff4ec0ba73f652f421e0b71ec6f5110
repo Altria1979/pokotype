@@ -1,0 +1,110 @@
+src/i18n/messages/zh-CN/Learning.json
+  s_fbf03629d93553::t_10ca3605c5e4da 14
+  s_fbf03629d93553::t_4dd56d9046c964 6,28
+tests/practice.spec.ts
+  s_fbf03629d93553::t_07d6217fbf642d 205
+tests/article-modes.spec.ts
+  s_fbf03629d93553::t_07d6217fbf642d 121,132
+  s_fbf03629d93553::t_554f2d9ec2b151 363
+src/i18n/messages/en/Practice.json
+  s_fbf03629d93553::t_10ca3605c5e4da 19,23,25-26,35
+  s_fbf03629d93553::t_4dd56d9046c964 24
+src/components/KanaPractice.module.css
+  s_fbf03629d93553::t_073c809598b8d2 265-267
+src/lib/practice-text-input.ts
+  s_fbf03629d93553::t_a982f9bc32ae07 1-34,36,41-47
+  s_fbf03629d93553::t_3f0f8a178df58e 35,37-40
+src/i18n/messages/zh-CN/Practice.json
+  s_fbf03629d93553::t_10ca3605c5e4da 19,23,25-26,35
+  s_fbf03629d93553::t_4dd56d9046c964 24
+README.md
+  s_fbf03629d93553::t_de42cb8140aae6 29,38,48
+README.en.md
+  s_fbf03629d93553::t_de42cb8140aae6 29,38,48
+.agents/skills/pokotype-paper-style/SKILL.md
+  s_fbf03629d93553::t_f3a0ad73faf66d 35,37,69
+  s_fbf03629d93553::t_971656869874be 68,70
+src/components/Practice.tsx
+  s_fbf03629d93553::t_65a1df91fe0cd2 49,126-132,371-381,488-493,498-504
+  s_fbf03629d93553::t_d467187e13c1b2 217-218
+  s_fbf03629d93553::t_135125b4c59a3a 445
+  s_fbf03629d93553::t_cb52aea5c31381 446-448,473,486,505-506
+  s_fbf03629d93553::t_b7e810c02cb865 5,8,16,46-48,50-54,123,137-138,140-173,175-187
+  s_fbf03629d93553::t_16ac2d9e9bac93 382-427,449-465,467-472,474-478,480-485
+  s_fbf03629d93553::t_eae1fdc2d8c959 250,252,262,268,278,341-343,510-513,537-541,613
+  s_fbf03629d93553::t_b30519061926cf 139,174
+  s_fbf03629d93553::t_1a042c1ad6f9cd 442,658,666,671,676,686,690,694
+src/components/Shell.module.css
+  s_fbf03629d93553::t_073c809598b8d2 185-196
+src/components/KanaPractice.tsx
+  s_fbf03629d93553::t_80f5b611fb0b4d 55,67,93,208,227
+src/lib/practice-text-input.test.ts
+  s_fbf03629d93553::t_a982f9bc32ae07 1-66,76-131
+  s_fbf03629d93553::t_3f0f8a178df58e 67-75
+src/i18n/messages/en/Learning.json
+  s_fbf03629d93553::t_10ca3605c5e4da 14
+  s_fbf03629d93553::t_4dd56d9046c964 6,28
+tests/mobile-practice.spec.ts
+  s_fbf03629d93553::t_43bba5f64c1f9a 19,39,42-51,53-57,74-75,104,108-110,140,219,280,313,315,368,389,400-428,472
+  s_fbf03629d93553::t_69fcdb14334c2b 40-41
+  s_fbf03629d93553::t_e57e58cb6323f2 70-71,236-243,329-341,343-345,362-367,369-373
+  s_fbf03629d93553::t_ecc63846606843 347-352
+  s_fbf03629d93553::t_3ccc554c0ae635 157,297,303
+  s_fbf03629d93553::t_91c4c765e1a08c 321
+  s_fbf03629d93553::t_3a3fb40f63af77 432
+  s_fbf03629d93553::t_f0af9cd05fb90b 342,346,353-361
+  s_fbf03629d93553::t_3723569b14d7e7 22
+  s_fbf03629d93553::t_9fe3335492e246 1-18,20-21,23-38,58-69,72-73,76-103,105-107,111-139,141-156,158-218,220-235,244-279,281-296,298-302,304-312,314,316-320,322-328,374-388,390-399,473
+  s_fbf03629d93553::t_04a0248b824f97 52,429-431,433-471
+src/i18n/messages/ja/Learning.json
+  s_fbf03629d93553::t_10ca3605c5e4da 14
+  s_fbf03629d93553::t_4dd56d9046c964 6,28
+src/components/Practice.module.css
+  s_fbf03629d93553::t_7e365163939420 507
+  s_fbf03629d93553::t_b5b4ebdc072e96 529,543-546,574,580-581,592-594
+  s_fbf03629d93553::t_16ac2d9e9bac93 168-169
+  s_fbf03629d93553::t_a1b60581812c71 538
+  s_fbf03629d93553::t_073c809598b8d2 153,166-167,170-173,494-506,508-528,530-537,539-542,547-573,575-579,582-591,595-645
+  s_fbf03629d93553::t_65a1df91fe0cd2 156-165
+  s_fbf03629d93553::t_a6a68def41a6fa 152,154-155
+src/components/Articles.tsx
+  s_fbf03629d93553::t_80f5b611fb0b4d 464
+tests/audio-practice.spec.ts
+  s_fbf03629d93553::t_554f2d9ec2b151 6
+playwright.mobile.config.ts
+  s_fbf03629d93553::t_9fe3335492e246 1-20
+README.ja.md
+  s_fbf03629d93553::t_de42cb8140aae6 29,38,48
+tests/kana-home.spec.ts
+  s_fbf03629d93553::t_07d6217fbf642d 500-502,505-507,514,519,571
+src/components/usePracticeViewport.ts
+  s_fbf03629d93553::t_7e365163939420 24,30-31
+  s_fbf03629d93553::t_073c809598b8d2 1-23,25-29,32-51
+docs/article-practice-modes.md
+  s_fbf03629d93553::t_119e5c2899c7f8 8,41
+  s_fbf03629d93553::t_971656869874be 13
+  s_fbf03629d93553::t_e96d8a153b230b 42
+docs/development.md
+  s_fbf03629d93553::t_8a590e157e06bd 181-189
+  s_fbf03629d93553::t_119e5c2899c7f8 96,98,103-104,106,108-112,139,152
+  s_fbf03629d93553::t_971656869874be 105,107
+src/i18n/messages/ja/Practice.json
+  s_fbf03629d93553::t_10ca3605c5e4da 19,23,25-26,35
+  s_fbf03629d93553::t_4dd56d9046c964 24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "6aa0aebcdff4ec0ba73f652f421e0b71ec6f5110",
+  "prompts": {},
+  "sessions": {
+    "s_fbf03629d93553": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0ed44-5048-7e52-9362-1aaeb07f2ee3",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
