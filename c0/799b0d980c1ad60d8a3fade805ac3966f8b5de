@@ -1,0 +1,24 @@
+scripts/desktop-release.mjs
+  s_fa2adf1a8b7d95::t_511fdd7f420bf0 28-49,197
+scripts/desktop-release.test.mjs
+  s_fa2adf1a8b7d95::t_511fdd7f420bf0 2,16,46-74
+  s_fa2adf1a8b7d95::t_9fe279753c505f 75
+docs/desktop.md
+  s_fa2adf1a8b7d95::t_511fdd7f420bf0 79-80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "c0799b0d980c1ad60d8a3fade805ac3966f8b5de",
+  "prompts": {},
+  "sessions": {
+    "s_fa2adf1a8b7d95": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0eafa-812f-7f11-9559-cc3e41d70e09",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
