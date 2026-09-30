@@ -655,3 +655,147 @@ test("按键音失败提示不被朗读提示覆盖，重试后恢复按键音",
   await page.keyboard.type("q");
   await expect.poll(() => page.evaluate(() => window.__practiceKeyClicks)).toBe(before + 1);
 });
+
+test("文章预览播放完整日语正文，沿用声音偏好且不受自动朗读开关影响", async ({ page }) => {
+  await mockSpeech(page);
+  await page.addInitScript(() => localStorage.setItem("pokotype:preferences:v1", JSON.stringify({
+    version: 1, value: {
+      articleSpeechEnabled: false, articleSegmentSpeechEnabled: false,
+      speechVoiceURI: "test-ja-local", speechVolume: 0.4, speechRate: 0.8, speechPitch: 1,
+    },
+  })));
+  await page.goto(`/zh-CN/articles/?id=${article.id}`);
+  const play = page.getByRole("button", { name: "播放文章", exact: true });
+  await expect(play).toHaveAttribute("title", "播放文章");
+  await expect(play).toHaveAttribute("aria-pressed", "false");
+  await expect(play).toHaveText("");
+  await play.click();
+  const stop = page.getByRole("button", { name: "停止播放", exact: true });
+  await expect(stop).toHaveAttribute("title", "停止播放");
+  await expect(stop).toHaveAttribute("aria-pressed", "true");
+  await expect(stop).toHaveText("");
+  expect(await speechCalls(page)).toEqual([{
+    text: article.sentences.map(sentenceText).join("\n"),
+    lang: "ja-JP", volume: 0.4, rate: 0.8, pitch: 1, voiceURI: "test-ja-local",
+  }]);
+  await emit(page, 0, "end");
+  await expect(play).toHaveAttribute("aria-pressed", "false");
+  await expect(page.getByTestId("article-preview-passage")).toBeVisible();
+  expect(await records(page)).toEqual([]);
+});
+
+test("文章预览重复点击停止，旧回调不影响重播，结束与失败后可以再播放", async ({ page }) => {
+  await mockSpeech(page);
+  await page.goto(`/zh-CN/articles/?id=${article.id}`);
+  const play = page.getByRole("button", { name: "播放文章", exact: true });
+  await play.click();
+  const cancellations = await page.evaluate(() => window.__practiceSpeech.cancellations);
+  await page.getByRole("button", { name: "停止播放", exact: true }).click();
+  await expect(play).toHaveAttribute("aria-pressed", "false");
+  expect(await page.evaluate(() => window.__practiceSpeech.active)).toBeNull();
+  expect(await page.evaluate(() => window.__practiceSpeech.cancellations)).toBeGreaterThan(cancellations);
+  await play.click();
+  await emit(page, 0, "end");
+  await emit(page, 0, "error");
+  await expect(page.getByRole("button", { name: "停止播放", exact: true })).toHaveAttribute("aria-pressed", "true");
+  expect(await page.evaluate(() => window.__practiceSpeech.active)).toBe(1);
+  await emit(page, 1, "error");
+  await expect(play).toHaveAttribute("aria-pressed", "false");
+  await expect(page.getByText("日语朗读暂时无法播放，可继续打字练习。", { exact: true })).toBeVisible();
+  await play.click();
+  await expect(page.getByText("日语朗读暂时无法播放，可继续打字练习。", { exact: true })).toHaveCount(0);
+  await emit(page, 1, "end");
+  await expect(page.getByRole("button", { name: "停止播放", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await emit(page, 2, "end");
+  await expect(play).toHaveAttribute("aria-pressed", "false");
+  expect(await speechCalls(page)).toHaveLength(3);
+});
+
+test("文章预览修改读音和开始练习都会停止播放，晚到事件不恢复预览声音", async ({ page }) => {
+  await mockSpeech(page);
+  await page.goto(`/zh-CN/articles/?id=${article.id}`);
+  const play = page.getByRole("button", { name: "播放文章", exact: true });
+  await play.click();
+  await page.getByRole("button", { name: "修改标题与读音", exact: true }).click();
+  await expect(page.getByLabel("文章标题", { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => window.__practiceSpeech.active)).toBeNull();
+  await emit(page, 0, "end");
+  await emit(page, 0, "error");
+  await page.getByRole("button", { name: "取消修改", exact: true }).click();
+  await expect(play).toHaveAttribute("aria-pressed", "false");
+  await play.click();
+  await page.getByRole("button", { name: "开始文章练习", exact: true }).click();
+  await expect(page.getByLabel("输入进度")).toBeVisible();
+  expect(await page.evaluate(() => window.__practiceSpeech.active)).toBeNull();
+  await emit(page, 1, "end");
+  await emit(page, 1, "error");
+  await expect(page.getByLabel("输入进度")).toBeVisible();
+  await expect(page.getByText(listening, { exact: true })).toHaveCount(0);
+  expect(await speechCalls(page)).toHaveLength(2);
+});
+
+test("文章预览页面隐藏、pagehide 和路由离开均停止声音，返回后需要手动播放", async ({ page }) => {
+  await mockSpeech(page);
+  await page.goto(`/zh-CN/articles/?id=${article.id}`);
+  const play = page.getByRole("button", { name: "播放文章", exact: true });
+  for (const [index, cause] of ["hidden", "pagehide"].entries()) {
+    await play.click();
+    await page.evaluate((cause) => {
+      if (cause === "hidden") {
+        Object.defineProperty(document, "hidden", { configurable: true, value: true });
+        document.dispatchEvent(new Event("visibilitychange"));
+        Object.defineProperty(document, "hidden", { configurable: true, value: false });
+      } else window.dispatchEvent(new Event("pagehide"));
+    }, cause);
+    await expect(play).toHaveAttribute("aria-pressed", "false");
+    expect(await page.evaluate(() => window.__practiceSpeech.active)).toBeNull();
+    await emit(page, index, "end");
+    await emit(page, index, "error");
+    await expect(play).toHaveAttribute("aria-pressed", "false");
+  }
+  await play.click();
+  const cancellations = await page.evaluate(() => window.__practiceSpeech.cancellations);
+  await page.getByRole("navigation", { name: "主导航" }).getByRole("link", { name: "设置", exact: true }).click();
+  await expect(page).toHaveURL(/\/zh-CN\/settings\/$/);
+  expect(await page.evaluate(() => window.__practiceSpeech.active)).toBeNull();
+  expect(await page.evaluate(() => window.__practiceSpeech.cancellations)).toBeGreaterThan(cancellations);
+  await emit(page, 2, "end");
+  await emit(page, 2, "error");
+  await page.goBack();
+  await expect(play).toHaveAttribute("aria-pressed", "false");
+  expect(await speechCalls(page)).toHaveLength(3);
+});
+
+test("文章预览缺少日语音色时显示提示，音色到达后可重试播放", async ({ page }) => {
+  await mockSpeech(page, false);
+  await page.goto(`/zh-CN/articles/?id=${article.id}`);
+  const play = page.getByRole("button", { name: "播放文章", exact: true });
+  await play.click();
+  await expect(page.getByText(/未找到日语语音/)).toBeVisible();
+  await expect(play).toHaveAttribute("aria-pressed", "false");
+  expect(await speechCalls(page)).toEqual([]);
+  await page.evaluate(() => window.__practiceSpeech.setJapaneseAvailable(true));
+  await play.click();
+  await expect(page.getByText(/未找到日语语音/)).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "停止播放", exact: true })).toHaveAttribute("aria-pressed", "true");
+  expect((await speechCalls(page))[0].text).toBe(article.sentences.map(sentenceText).join("\n"));
+  await emit(page, 0, "end");
+  await expect(play).toHaveAttribute("aria-pressed", "false");
+});
+
+test("文章预览没有语音 API 时显示提示并恢复播放按钮，重试不阻塞操作", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, "speechSynthesis", { configurable: true, value: undefined });
+    Object.defineProperty(window, "SpeechSynthesisUtterance", { configurable: true, value: undefined });
+  });
+  await page.goto(`/zh-CN/articles/?id=${article.id}`);
+  const play = page.getByRole("button", { name: "播放文章", exact: true });
+  for (let attempt = 0; attempt < 2; attempt++) {
+    await play.click();
+    await expect(page.getByText("当前浏览器不支持语音朗读，可继续打字练习。", { exact: true })).toBeVisible();
+    await expect(play).toHaveAttribute("aria-pressed", "false");
+    await expect(play).toBeEnabled();
+  }
+  await page.getByRole("button", { name: "修改标题与读音", exact: true }).click();
+  await expect(page.getByLabel("文章标题", { exact: true })).toBeVisible();
+});

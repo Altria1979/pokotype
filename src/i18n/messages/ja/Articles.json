@@ -26,6 +26,8 @@
   "detailEyebrow": "読む · 理解する · 入力する",
   "edit": "記事を修正",
   "preview": "記事のプレビュー",
+  "playArticle": "記事を読み上げる",
+  "stopPlayback": "読み上げを停止",
   "inLibrary": "ライブラリに追加済み",
   "cancelEdit": "変更をキャンセル",
   "saving": "保存中…",

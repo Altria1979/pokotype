@@ -26,6 +26,8 @@
   "detailEyebrow": "阅读 · 理解 · 输入",
   "edit": "修正文章",
   "preview": "文章预览",
+  "playArticle": "播放文章",
+  "stopPlayback": "停止播放",
   "inLibrary": "已加入文章库",
   "cancelEdit": "取消修改",
   "saving": "保存中…",

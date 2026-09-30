@@ -32,6 +32,13 @@ export function Icon({ name, size = 20 }: { name: string; size?: number }) {
     ),
     arrow: <path d="M5 12h14m-5-5 5 5-5 5" />,
     play: <path d="m9 5 11 7-11 7V5Z" />,
+    stop: <rect x="6" y="6" width="12" height="12" rx="1" />,
+    volume: (
+      <>
+        <path d="m11 4-5 4H3v8h3l5 4V4Z" />
+        <path d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14" />
+      </>
+    ),
     check: <path d="m5 12 4 4L19 6" />,
     clock: (
       <>

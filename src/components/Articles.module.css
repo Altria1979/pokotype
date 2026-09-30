@@ -280,6 +280,28 @@
   font-size: 12px;
   padding: 8px 14px;
 }
+.readingToolbar .playbackButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+}
+.playbackButton[aria-pressed="true"] {
+  border-color: var(--success);
+  color: var(--success);
+}
+.playbackButton[aria-pressed="true"] svg {
+  color: inherit;
+}
+.playbackNotice {
+  margin: 20px 28px 0;
+  color: var(--secondary);
+  font-size: 13px;
+  line-height: 1.8;
+}
 .articleReading {
   max-width: 1000px;
   margin: 0 auto;

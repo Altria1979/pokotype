@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useFormatter, useTranslations } from "next-intl";
 import { useErrorMessage } from "@/i18n/errors";
 import { useLocaleBlock } from "./LocaleGuard";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   SAMPLE_ARTICLES,
   sentenceReading,
@@ -18,6 +18,7 @@ import { Icon } from "./Icon";
 import { InputRulesHelp } from "./InputRulesHelp";
 import { Generate } from "./Generate";
 import { Practice } from "./Practice";
+import { useBrowserAudio } from "./useBrowserAudio";
 import {
   type ArticlePracticeMode,
   type ArticleGroupSize,
@@ -165,6 +166,8 @@ function ArticleDetail({ article }: { article: Article }) {
   }));
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const { audio, notice, clearNotice } = useBrowserAudio();
   const [practiceConfig, setPracticeConfig] = useState<{
     mode: ArticlePracticeMode;
     groupSize: ArticleGroupSize;
@@ -179,6 +182,38 @@ function ArticleDetail({ article }: { article: Article }) {
     };
   }, []);
   const template = isTemplate(article);
+
+  const stopPlayback = useCallback(() => {
+    audio.stopSpeech();
+    setPlaying(false);
+  }, [audio]);
+
+  useEffect(() => {
+    const stopWhenHidden = () => {
+      if (document.hidden) stopPlayback();
+    };
+    document.addEventListener("visibilitychange", stopWhenHidden);
+    window.addEventListener("pagehide", stopPlayback);
+    return () => {
+      document.removeEventListener("visibilitychange", stopWhenHidden);
+      window.removeEventListener("pagehide", stopPlayback);
+    };
+  }, [stopPlayback]);
+
+  function togglePlayback() {
+    if (playing) {
+      stopPlayback();
+      return;
+    }
+    clearNotice();
+    setPlaying(true);
+    audio.speak(article.sentences.map(sentenceText).join("\n"), {
+      voiceURI: preferences.speechVoiceURI,
+      rate: preferences.speechRate,
+      pitch: preferences.speechPitch,
+      volume: preferences.speechVolume,
+    }, () => setPlaying(false));
+  }
 
   async function save() {
     if (saving) return;
@@ -230,6 +265,8 @@ function ArticleDetail({ article }: { article: Article }) {
   function start() {
     try {
       validateArticleContent(article);
+      stopPlayback();
+      clearNotice();
       setError("");
       setPracticeConfig({
         mode: preferences.articlePracticeMode,
@@ -283,9 +320,21 @@ function ArticleDetail({ article }: { article: Article }) {
       )}
       <section className={`panel ${s.readingPanel}`}>
         <div className={s.readingToolbar}>
-          <div className="flex">
+          <div className="flex wrap">
             <Icon name="book" />
             <strong>{editing ? t("edit") : t("preview")}</strong>
+            {!editing && (
+              <button
+                type="button"
+                className={s.playbackButton}
+                aria-label={playing ? t("stopPlayback") : t("playArticle")}
+                title={playing ? t("stopPlayback") : t("playArticle")}
+                aria-pressed={playing}
+                onClick={togglePlayback}
+              >
+                <Icon name={playing ? "stop" : "volume"} size={18} />
+              </button>
+            )}
             <span className="pill">
               {template ? t("sample") : t("inLibrary")}
             </span>
@@ -313,7 +362,11 @@ function ArticleDetail({ article }: { article: Article }) {
               </>
             ) : (
               <>
-                <button onClick={() => setEditing(true)}>{t("editTitleAndReadings")}</button>
+                <button onClick={() => {
+                  stopPlayback();
+                  clearNotice();
+                  setEditing(true);
+                }}>{t("editTitleAndReadings")}</button>
                 {!template && (
                   <button disabled={saving} onClick={save}>
                     {saving ? t("saving") : t("saveAgain")}
@@ -323,6 +376,7 @@ function ArticleDetail({ article }: { article: Article }) {
             )}
           </div>
         </div>
+        {notice && <p className={s.playbackNotice} role="status">{notice}</p>}
         {editing && (
           <div className={s.editorIntro}>
             <div className="field">
