@@ -1,0 +1,53 @@
+src/components/Articles.module.css
+  s_5453d35118736b::t_2d40d4568826f2 95,120,128,370
+.agents/skills/pokotype-paper-style/SKILL.md
+  s_5453d35118736b::t_e000266adbf108 48,50-52,84
+src/components/KanaPractice.module.css
+  s_5453d35118736b::t_2d40d4568826f2 314
+src/components/PaperFooter.module.css
+  s_5453d35118736b::t_2d40d4568826f2 13,33
+src/components/InputRulesHelp.module.css
+  s_5453d35118736b::t_2d40d4568826f2 32
+src/components/Shell.module.css
+  s_5453d35118736b::t_2d40d4568826f2 41-43,332
+docs/paper-rework.md
+  s_5453d35118736b::t_e000266adbf108 3,5,7,9,11-12
+  s_5453d35118736b::t_e507c873bf3704 13-17
+  s_5453d35118736b::t_5248d5cefc9835 88
+tests/paper-surfaces.spec.ts
+  s_5453d35118736b::t_f0409745fc8b6a 31-35,40,46-48,70,88-89,92,109,149
+  s_5453d35118736b::t_9f4ee56251df62 101
+  s_5453d35118736b::t_b5b2bab1ab3a88 110-118
+  s_5453d35118736b::t_e38bd07c564854 123
+  s_5453d35118736b::t_ad13edc6258b76 1-30,36-39,41-45,49-69,71-87,90-91,93-100,102-108,119-122,124-148,150-222
+src/app/globals.css
+  s_5453d35118736b::t_2d40d4568826f2 24-25,27-32,51,202,391
+src/components/ApiKeyCard.module.css
+  s_5453d35118736b::t_2d40d4568826f2 7
+src/components/Practice.module.css
+  s_5453d35118736b::t_2d40d4568826f2 176
+src/components/Generate.module.css
+  s_5453d35118736b::t_2d40d4568826f2 110,138
+scripts/generate-paper-grain.mjs
+  s_5453d35118736b::t_2d40d4568826f2 4-5,8-22,33-47,73
+docs/development.md
+  s_5453d35118736b::t_e000266adbf108 160
+src/components/PaperArt.module.css
+  s_5453d35118736b::t_2d40d4568826f2 109
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "43133edfeff6ba80c46904efae74849370f7ca7a",
+  "prompts": {},
+  "sessions": {
+    "s_5453d35118736b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f049-830d-7162-8e32-4b979ce5533a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
