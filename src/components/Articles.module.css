@@ -92,8 +92,7 @@
   position: relative;
   margin: 22px 0 24px;
   background-color: var(--surface-muted);
-  background-image: var(--paper-texture);
-  background-blend-mode: overlay;
+  background-image: var(--paper-muted-texture);
   border-radius: 3px;
   overflow: hidden;
   display: flex;
@@ -118,6 +117,7 @@
 }
 .cover1 {
   background-color: var(--success-soft);
+  background-image: var(--paper-success-texture);
 }
 .cover1 > span,
 .cover1 small {
@@ -125,6 +125,7 @@
 }
 .cover2 {
   background-color: var(--accent-soft);
+  background-image: var(--paper-accent-texture);
 }
 .cover2 > span,
 .cover2 small {
@@ -366,8 +367,7 @@
   margin: 0;
 }
 .readingFooter {
-  background-image: var(--paper-texture);
-  background-blend-mode: overlay;
+  background-image: var(--paper-canvas-texture);
   border-top: 1px solid var(--border);
   background-color: var(--surface);
   padding: 18px 28px;

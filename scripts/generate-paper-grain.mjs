@@ -1,14 +1,27 @@
 import { writeFileSync } from "node:fs";
 import { deflateSync } from "node:zlib";
 
-// Keep the raw grain for surfaces and colored artwork. The page canvas gets
-// the same grain precomposed, so Safari does not need to blend a tiled background.
+// Ordinary surfaces use the final paper pixels, without runtime background
+// blending. Keep raw grain only for the isolated, multicolored artwork layers.
 const size = 256;
-const canvas = [244, 241, 235]; // --canvas in src/app/globals.css (#f4f1eb).
 const alpha = 153;
+// Keep these colors in sync with their semantic tokens in globals.css.
+const surfaces = [
+  ["canvas", [244, 241, 235], 1],
+  ["soft", [233, 238, 230], 1],
+  ["muted", [237, 234, 225], 1],
+  ["raised", [255, 253, 248], 1],
+  ["success", [232, 238, 228], 1],
+  ["accent", [244, 231, 220], 1],
+  ["floating", [244, 241, 235], 0.94],
+].map(([name, color, opacity]) => ({
+  name,
+  color,
+  opacity,
+  pixels: Buffer.alloc(size * (size * 4 + 1)),
+}));
 let seed = 0x706f6b6f;
 const pixels = Buffer.alloc(size * (size * 4 + 1));
-const canvasPixels = Buffer.alloc(pixels.length);
 for (let y = 0; y < size; y++) {
   for (let x = 0; x < size; x++) {
     seed ^= seed << 13;
@@ -17,12 +30,21 @@ for (let y = 0; y < size; y++) {
     const offset = y * (size * 4 + 1) + 1 + x * 4;
     const gray = seed >>> 24;
     pixels.set([gray, gray, gray, alpha], offset);
-    // Overlay on the light canvas, followed by the raw texture's alpha blend.
-    const color = canvas.map((base) => {
-      const overlay = 255 - (2 * (255 - base) * (255 - gray)) / 255;
-      return Math.round(base + (overlay - base) * (alpha / 255));
-    });
-    canvasPixels.set([...color, 255], offset);
+    for (const surface of surfaces) {
+      const grainAlpha = alpha / 255;
+      const baseAlpha = surface.opacity;
+      const combinedAlpha = grainAlpha + baseAlpha * (1 - grainAlpha);
+      const color = surface.color.map((base) => {
+        const overlay = 255 - (2 * (255 - base) * (255 - gray)) / 255;
+        // Alpha-aware overlay, including the floating header's translucent base.
+        const premultiplied =
+          (1 - grainAlpha) * baseAlpha * base +
+          (1 - baseAlpha) * grainAlpha * gray +
+          baseAlpha * grainAlpha * overlay;
+        return Math.round(premultiplied / combinedAlpha);
+      });
+      surface.pixels.set([...color, Math.round(combinedAlpha * 255)], offset);
+    }
   }
 }
 
@@ -48,7 +70,7 @@ header[8] = 8; // Eight-bit RGBA, no interlacing.
 header[9] = 6;
 for (const [name, data] of [
   ["paper-grain.png", pixels],
-  ["paper-canvas.png", canvasPixels],
+  ...surfaces.map(({ name, pixels }) => [`paper-${name}.png`, pixels]),
 ]) {
   writeFileSync(
     new URL(`../public/${name}`, import.meta.url),

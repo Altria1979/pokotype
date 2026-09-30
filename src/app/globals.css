@@ -21,8 +21,15 @@
   --border-strong: #b2ac9f;
   --focus: #1e5fce;
   --shadow: 0 14px 48px #302a2012;
-  --paper-texture: url("/paper-grain.png");
+  /* Raw grain is reserved for isolated artwork, never ordinary backgrounds. */
+  --paper-art-texture: url("/paper-grain.png");
   --paper-canvas-texture: url("/paper-canvas.png");
+  --paper-soft-texture: url("/paper-soft.png");
+  --paper-muted-texture: url("/paper-muted.png");
+  --paper-raised-texture: url("/paper-raised.png");
+  --paper-success-texture: url("/paper-success.png");
+  --paper-accent-texture: url("/paper-accent.png");
+  --paper-floating-texture: url("/paper-floating.png");
   --art-orange: #ed5a14;
   --art-yellow: #d99d21;
   --art-pink: #f29fc8;
@@ -41,7 +48,7 @@
 body {
   margin: 0;
   background-color: var(--canvas);
-  /* Precomposed paper avoids Safari's tiled canvas background blending bugs. */
+  /* Precomposed paper avoids Safari's tiled background blending bugs. */
   background-image: var(--paper-canvas-texture);
   color: var(--text);
   font-family: var(--font-ui);
@@ -192,8 +199,7 @@ label {
 }
 .panel {
   background-color: var(--surface);
-  background-image: var(--paper-texture);
-  background-blend-mode: overlay;
+  background-image: var(--paper-canvas-texture);
   border: 1px solid var(--border);
   border-radius: 12px;
   min-width: 0;
@@ -382,8 +388,7 @@ tr:last-child td {
 dialog {
   color: var(--text);
   background-color: var(--surface);
-  background-image: var(--paper-texture);
-  background-blend-mode: overlay;
+  background-image: var(--paper-canvas-texture);
   border: 1px solid var(--border-strong);
   border-radius: 14px;
   box-shadow: var(--shadow);

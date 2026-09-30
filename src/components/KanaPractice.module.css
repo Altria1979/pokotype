@@ -311,8 +311,7 @@
 }
 .row.rowSelected {
   background-color: var(--soft);
-  background-image: var(--paper-texture);
-  background-blend-mode: overlay;
+  background-image: var(--paper-soft-texture);
   border-bottom-color: var(--border);
 }
 .row:hover:not(:disabled) {

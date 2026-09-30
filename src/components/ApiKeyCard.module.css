@@ -4,8 +4,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--surface);
-  background-image: var(--paper-texture);
-  background-blend-mode: overlay;
+  background-image: var(--paper-canvas-texture);
 }
 .header {
   display: flex;

@@ -29,8 +29,7 @@
   padding: 22px 28px 18px;
   border-bottom: 1px solid var(--border);
   background-color: var(--canvas);
-  background-image: var(--paper-texture);
-  background-blend-mode: overlay;
+  background-image: var(--paper-canvas-texture);
 }
 .header h2 {
   margin: 0;

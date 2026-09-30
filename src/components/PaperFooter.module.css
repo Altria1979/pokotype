@@ -10,10 +10,9 @@
   border: 1px solid var(--border-strong);
   border-radius: 24px;
   background-color: var(--canvas);
-  background-image: var(--paper-texture);
+  background-image: var(--paper-canvas-texture);
   background-size: 256px 256px;
   background-position: left bottom;
-  background-blend-mode: overlay;
   overflow: hidden;
 }
 .landscape {
@@ -31,7 +30,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: var(--paper-texture);
+  background-image: var(--paper-art-texture);
   background-size: 256px 256px;
   background-position: left bottom;
   mix-blend-mode: overlay;

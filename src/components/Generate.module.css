@@ -107,8 +107,7 @@
   position: relative;
   border: 1px solid var(--border);
   background-color: var(--canvas);
-  background-image: var(--paper-texture);
-  background-blend-mode: overlay;
+  background-image: var(--paper-canvas-texture);
   border-radius: 8px;
   padding: 16px 6px;
   cursor: pointer;
@@ -136,6 +135,7 @@
 .lengthOptions .lengthSelected {
   border-color: var(--primary);
   background-color: var(--soft);
+  background-image: var(--paper-soft-texture);
   color: var(--primary);
 }
 .formFields:disabled .lengthOptions label {

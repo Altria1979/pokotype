@@ -173,8 +173,7 @@
 }
 .options {
   background-color: var(--canvas);
-  background-image: var(--paper-texture);
-  background-blend-mode: overlay;
+  background-image: var(--paper-canvas-texture);
   display: flex;
   align-items: center;
   gap: 20px;
