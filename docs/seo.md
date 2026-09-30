@@ -14,11 +14,13 @@
 
 ## 域名与构建
 
-`src/lib/site.ts` 集中生成绝对地址，默认正式域名为 `https://pokotype.vercel.app`。预览构建也指向该规范站点；部署到独立域名时，必须在构建前覆盖 `SITE_URL`，例如：
+`src/lib/site.ts` 集中生成绝对地址，默认正式域名为 `https://www.pokotype.tech`。预览构建也指向该规范站点；部署到独立域名时，必须在构建前覆盖 `SITE_URL`，例如：
 
 ```sh
 SITE_URL=https://your-domain.example npm run build
 ```
+
+`https://www.pokotype.tech` 和 `https://pokotype.vercel.app` 都保留访问，`https://pokotype.tech` 跳转至 `www`。所有入口共享同一份静态产物，canonical、hreflang、结构化数据、分享图片及 sitemap 统一使用 `www.pokotype.tech`，不会因访问备用域名而切换。Vercel 生产环境的 `SITE_URL` 应同步设为 `https://www.pokotype.tech`；该变量优先于代码默认值，修改后需重新部署。
 
 该变量不能包含凭证、查询参数或片段。它只配置 SEO 地址，不配置 Next.js 的 basePath；本项目仍按域名根目录部署。
 
@@ -40,7 +42,7 @@ npm run test:e2e
 
 ## 搜索平台提交
 
-代码发布本身不等于搜索平台已收录。站点所有者可在 [Google Search Console](https://search.google.com/search-console) 和 [Bing Webmaster Tools](https://www.bing.com/webmasters/) 中验证站点，提交 `https://pokotype.vercel.app/sitemap.xml`，再使用 URL 检查工具查看首页和示例阅读页的抓取情况。更换域名时提交新域名下的 sitemap。
+代码发布本身不等于搜索平台已收录。站点所有者可在 [Google Search Console](https://search.google.com/search-console) 和 [Bing Webmaster Tools](https://www.bing.com/webmasters/) 中验证站点，提交 `https://www.pokotype.tech/sitemap.xml`，再使用 URL 检查工具查看首页和示例阅读页的抓取情况。更换域名时提交新域名下的 sitemap。
 
 本次代码不含站长平台验证令牌，也不会伪造提交成功状态。收录时间和排名由搜索引擎决定；后续可根据真实查询、曝光和点击数据继续完善有用内容。
 

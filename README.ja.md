@@ -4,7 +4,9 @@
 
 **五十音から文章まで、一文字ずつ日本語を指先に。**
 
-[オンラインで使う](https://pokotype.vercel.app/ja/) · [デスクトップ版 Releases](https://github.com/Altria1979/pokotype/releases) · [アプリのソースコード](https://github.com/Altria1979/pokotype) · [不具合を報告](https://github.com/Altria1979/pokotype/issues)
+[オンラインで使う](https://www.pokotype.tech/ja/) · [デスクトップ版 Releases](https://github.com/Altria1979/pokotype/releases) · [アプリのソースコード](https://github.com/Altria1979/pokotype) · [不具合を報告](https://github.com/Altria1979/pokotype/issues)
+
+[www.pokotype.tech](https://www.pokotype.tech/) と [pokotype.vercel.app](https://pokotype.vercel.app/) のどちらからも利用できます。[pokotype.tech](https://pokotype.tech/) は `www` に転送されます。記事・練習履歴・設定・API キーはドメインごとにブラウザーへ保存され、自動では共有されません。
 
 ## 1. プロジェクトの背景と機能
 
@@ -32,7 +34,7 @@
 
 ### 五十音練習を始める
 
-1. [日本語版](https://pokotype.vercel.app/ja/)、[简体中文版](https://pokotype.vercel.app/zh-CN/)、または [English](https://pokotype.vercel.app/en/) を開きます。画面上部でも言語を切り替えられます。
+1. [日本語版](https://www.pokotype.tech/ja/)、[简体中文版](https://www.pokotype.tech/zh-CN/)、または [English](https://www.pokotype.tech/en/) を開きます。画面上部でも言語を切り替えられます。
 2. 「練習範囲を選ぶ」でひらがなまたはカタカナを選び、分類と練習する行を指定します。
 3. **20 問**または **50 問**を選びます。初めての方は「ローマ字のヒントを表示」を有効にしておくと便利です。
 4. 「練習を始める」を選び、入力モードを**英字／半角英数字**に切り替えます。パソコンではそのまま入力し、スマートフォンや iPad では問題かローマ字の領域をタップしてシステムの英字 26 キーキーボードを表示します。
@@ -114,7 +116,7 @@ npm run build
 npm run preview
 ```
 
-プレビューのアドレスは [http://127.0.0.1:4173](http://127.0.0.1:4173)、出力先は `out/` です。このアプリは静的エクスポートを使用するため、静的ファイルを配信するサーバーで動作し、`next start` は不要です。canonical、hreflang、robots、sitemap は標準で本番サイト `https://pokotype.vercel.app` を参照します。独自ドメインへデプロイする場合は、ビルド前に環境変数 `SITE_URL` を設定してください。検証とインデックス登録の手順は [SEO ガイド](docs/seo.md) を参照してください。AI のキーは利用者が画面上で設定します。
+プレビューのアドレスは [http://127.0.0.1:4173](http://127.0.0.1:4173)、出力先は `out/` です。このアプリは静的エクスポートを使用するため、静的ファイルを配信するサーバーで動作し、`next start` は不要です。canonical、hreflang、robots、sitemap は標準で本番サイト `https://www.pokotype.tech` を参照します。独自ドメインへデプロイする場合は、ビルド前に環境変数 `SITE_URL` を設定してください。検証とインデックス登録の手順は [SEO ガイド](docs/seo.md) を参照してください。AI のキーは利用者が画面上で設定します。
 
 ## 3. 技術的な実装とオープンソースへの謝辞
 

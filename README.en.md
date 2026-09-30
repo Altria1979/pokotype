@@ -4,7 +4,9 @@
 
 **From your first kana to full articles, type your way into Japanese.**
 
-[Try it online](https://pokotype.vercel.app/en/) · [Desktop releases](https://github.com/Altria1979/pokotype/releases) · [Application source](https://github.com/Altria1979/pokotype) · [Report an issue](https://github.com/Altria1979/pokotype/issues)
+[Try it online](https://www.pokotype.tech/en/) · [Desktop releases](https://github.com/Altria1979/pokotype/releases) · [Application source](https://github.com/Altria1979/pokotype) · [Report an issue](https://github.com/Altria1979/pokotype/issues)
+
+Access the same app at [www.pokotype.tech](https://www.pokotype.tech/) or [pokotype.vercel.app](https://pokotype.vercel.app/). [pokotype.tech](https://pokotype.tech/) redirects to `www`. Each domain keeps separate browser data: articles, practice history, settings and API keys do not automatically carry over.
 
 ## 1. Background and Features
 
@@ -32,7 +34,7 @@ Practice on a computer, phone or iPad with a physical keyboard or the system's E
 
 ### Start a kana practice session
 
-1. Open the [English version](https://pokotype.vercel.app/en/), [日本語 version](https://pokotype.vercel.app/ja/), or [简体中文 version](https://pokotype.vercel.app/zh-CN/). You can also switch languages in the page header.
+1. Open the [English version](https://www.pokotype.tech/en/), [日本語 version](https://www.pokotype.tech/ja/), or [简体中文 version](https://www.pokotype.tech/zh-CN/). You can also switch languages in the page header.
 2. Under “Choose your practice range,” select hiragana or katakana, then choose the categories and rows you want to practice.
 3. Choose **20 questions** or **50 questions**. Keep “Show romaji hints” enabled when starting out.
 4. Select “Start practice” and switch your input method to **English / half-width Latin characters**. Type directly on a computer, or tap the question or romaji area on a phone or iPad to open the system's English alphabet keyboard.
@@ -114,7 +116,7 @@ npm run build
 npm run preview
 ```
 
-The preview runs at [http://127.0.0.1:4173](http://127.0.0.1:4173), and the build output is in `out/`. This project uses static export and is served by a static server; `next start` is not needed. Canonical links, hreflang links, robots and the sitemap default to the production site `https://pokotype.vercel.app`. Set the build variable `SITE_URL` before deploying to your own domain. See the [SEO guide](docs/seo.md) for verification and indexing submission. Users configure their own AI API keys in the interface.
+The preview runs at [http://127.0.0.1:4173](http://127.0.0.1:4173), and the build output is in `out/`. This project uses static export and is served by a static server; `next start` is not needed. Canonical links, hreflang links, robots and the sitemap default to the production site `https://www.pokotype.tech`. Set the build variable `SITE_URL` before deploying to your own domain. See the [SEO guide](docs/seo.md) for verification and indexing submission. Users configure their own AI API keys in the interface.
 
 ## 3. Technical Implementation and Open-Source Credits
 

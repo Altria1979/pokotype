@@ -2,7 +2,7 @@ import { defaultLocale, locales, localizedPath, type Locale } from "../i18n/loca
 
 // Keep preview builds canonicalized to the real site unless a deployment overrides it.
 export function getSiteUrl(): URL {
-  const value = process.env.SITE_URL?.trim() || "https://pokotype.vercel.app";
+  const value = process.env.SITE_URL?.trim() || "https://www.pokotype.tech";
   const url = new URL(value.endsWith("/") ? value : `${value}/`);
   if (!["http:", "https:"].includes(url.protocol) || url.username || url.password || url.search || url.hash) {
     throw new Error("SITE_URL must be an HTTP(S) site URL without credentials, query or fragment");

@@ -30,9 +30,11 @@ npm run preview
 
 ### Vercel 部署
 
-[GitHub 仓库](https://github.com/Altria1979/pokotype)已连接到 Vercel，`main` 为生产分支，后续推送会自动构建并部署到 [pokotype.vercel.app](https://pokotype.vercel.app)。仓库内的 `vercel.json` 使用 Other 静态站点预设（`framework: null`），固定使用 `npm ci` 安装依赖、`npm run build` 构建，并完整发布 `out/`，包括静态生成的 robots、sitemap 和社交预览图。应用仍使用 Next.js 的 `output: "export"`，无需服务端运行时。
+[GitHub 仓库](https://github.com/Altria1979/pokotype)已连接到 Vercel，`main` 为生产分支，后续推送会自动构建并部署到 [www.pokotype.tech](https://www.pokotype.tech)。仓库内的 `vercel.json` 使用 Other 静态站点预设（`framework: null`），固定使用 `npm ci` 安装依赖、`npm run build` 构建，并完整发布 `out/`，包括静态生成的 robots、sitemap 和社交预览图。应用仍使用 Next.js 的 `output: "export"`，无需服务端运行时。
 
-SEO 地址默认使用实际生产域名 `https://pokotype.vercel.app`。更换域名或独立部署时，在 Vercel 构建环境中设置 `SITE_URL`（包含 `https://`），统一 canonical、hreflang、robots、sitemap 和社交分享地址。部署不需要设置 DeepSeek 或阿里百炼密钥；用户在浏览器中自行配置自己的密钥。
+生产项目同时绑定 [www.pokotype.tech](https://www.pokotype.tech/) 与 [pokotype.vercel.app](https://pokotype.vercel.app/)，两个域名均可独立访问相同应用；[pokotype.tech](https://pokotype.tech/) 保留跳转到 `www`。内部导航和资源路径使用相对地址，无需增加域名白名单或服务器路由。浏览器数据按域名隔离，不自动迁移文章、记录、设置或密钥。
+
+SEO 地址默认使用实际生产域名 `https://www.pokotype.tech`。更换域名或独立部署时，在 Vercel 构建环境中设置 `SITE_URL`（包含 `https://`），统一 canonical、hreflang、robots、sitemap 和社交分享地址。部署不需要设置 DeepSeek 或阿里百炼密钥；用户在浏览器中自行配置自己的密钥。
 
 `.gitignore` 和 `.vercelignore` 排除本地环境变量、凭据、IDE 配置、代理日志及测试产物。发布前仍需检查新增文件，不要将真实密钥写入源码、示例配置或 `NEXT_PUBLIC_*`。
 
@@ -56,7 +58,7 @@ SEO 地址默认使用实际生产域名 `https://pokotype.vercel.app`。更换�
 
 练习会话仅保存在当前页面内存中：刷新、直接打开答题地址或前进到已结束的会话都会返回当前语言的设置页，不恢复进度；配置和已完成记录仍保留。
 
-发布构建默认使用 `https://pokotype.vercel.app`，其他部署可通过 `SITE_URL=https://your-domain.example npm run build` 覆盖。Next.js 原生元数据路由静态生成 `out/robots.txt`、`out/sitemap.xml`，不再依赖额外脚本。Sitemap 包含三语首页、文章库和三篇原创示例的独立阅读页，共 15 个 URL；练习会话、历史、设置和跳转页保持 noindex。详细验收及搜索平台提交步骤见 [SEO 指南](seo.md)。
+发布构建默认使用 `https://www.pokotype.tech`，其他部署可通过 `SITE_URL=https://your-domain.example npm run build` 覆盖。Next.js 原生元数据路由静态生成 `out/robots.txt`、`out/sitemap.xml`，不再依赖额外脚本。Sitemap 包含三语首页、文章库和三篇原创示例的独立阅读页，共 15 个 URL；练习会话、历史、设置和跳转页保持 noindex。详细验收及搜索平台提交步骤见 [SEO 指南](seo.md)。
 
 实现约定与验收方法见 [多语言说明](internationalization.md)。
 

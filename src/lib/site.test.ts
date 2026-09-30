@@ -9,11 +9,11 @@ afterEach(() => vi.unstubAllEnvs());
 describe("static search discovery", () => {
   it("uses the verified production origin when the build has no override", () => {
     vi.stubEnv("SITE_URL", "");
-    expect(getSiteUrl().href).toBe("https://pokotype.vercel.app/");
-    expect(siteUrl("/en/")).toBe("https://pokotype.vercel.app/en/");
+    expect(getSiteUrl().href).toBe("https://www.pokotype.tech/");
+    expect(siteUrl("/en/")).toBe("https://www.pokotype.tech/en/");
     expect(robots()).toEqual({
       rules: { userAgent: "*", allow: "/" },
-      sitemap: "https://pokotype.vercel.app/sitemap.xml",
+      sitemap: "https://www.pokotype.tech/sitemap.xml",
     });
   });
 

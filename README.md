@@ -4,7 +4,9 @@
 
 **从五十音到文章，一点点敲进日语。**
 
-[在线体验](https://pokotype.vercel.app/zh-CN/) · [桌面版 Releases](https://github.com/Altria1979/pokotype/releases) · [应用源码](https://github.com/Altria1979/pokotype) · [问题反馈](https://github.com/Altria1979/pokotype/issues)
+[在线体验](https://www.pokotype.tech/zh-CN/) · [桌面版 Releases](https://github.com/Altria1979/pokotype/releases) · [应用源码](https://github.com/Altria1979/pokotype) · [问题反馈](https://github.com/Altria1979/pokotype/issues)
+
+访问地址：[www.pokotype.tech](https://www.pokotype.tech/) · [pokotype.vercel.app](https://pokotype.vercel.app/)；[pokotype.tech](https://pokotype.tech/) 自动跳转到 `www`。不同域名的文章、练习记录、设置及 API 密钥分别保存在浏览器中，不自动互通。
 
 ## 1. 项目背景与功能
 
@@ -32,7 +34,7 @@
 
 ### 开始一轮五十音练习
 
-1. 打开[中文版](https://pokotype.vercel.app/zh-CN/)、[日本語版](https://pokotype.vercel.app/ja/)或 [English](https://pokotype.vercel.app/en/)，也可在页头切换语言。
+1. 打开[中文版](https://www.pokotype.tech/zh-CN/)、[日本語版](https://www.pokotype.tech/ja/)或 [English](https://www.pokotype.tech/en/)，也可在页头切换语言。
 2. 在「选择练习范围」中选择平假名或片假名，再选择分类和需要练习的行。
 3. 选择 **20 题**或 **50 题**，初学时保留「显示罗马音提示」。
 4. 点击「开始练习」，把输入法切到**英文／半角字母模式**。电脑可直接输入；手机和 iPad 点题目或罗马音区域唤起键盘，用系统英文 26 键键盘输入。
@@ -114,7 +116,7 @@ npm run build
 npm run preview
 ```
 
-预览地址为 [http://127.0.0.1:4173](http://127.0.0.1:4173)，产物位于 `out/`。这是静态导出项目，使用静态服务器提供服务，无需 `next start`。默认以正式站点 `https://pokotype.vercel.app` 生成 canonical、hreflang、robots 和 sitemap。部署到自己的域名时，在构建前设置 `SITE_URL`；AI 密钥由用户在页面中配置。SEO 验收与收录提交说明见 [SEO 指南](docs/seo.md)。
+预览地址为 [http://127.0.0.1:4173](http://127.0.0.1:4173)，产物位于 `out/`。这是静态导出项目，使用静态服务器提供服务，无需 `next start`。默认以正式站点 `https://www.pokotype.tech` 生成 canonical、hreflang、robots 和 sitemap。部署到自己的域名时，在构建前设置 `SITE_URL`；AI 密钥由用户在页面中配置。SEO 验收与收录提交说明见 [SEO 指南](docs/seo.md)。
 
 ## 3. 技术实现与开源致谢
 

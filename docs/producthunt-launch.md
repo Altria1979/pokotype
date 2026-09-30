@@ -14,7 +14,9 @@ Pokotype
 
 ## Website
 
-https://pokotype.vercel.app/en/
+Current website: https://www.pokotype.tech/en/
+
+Original launch URL (still accessible): https://pokotype.vercel.app/en/
 
 ## Tagline
 
