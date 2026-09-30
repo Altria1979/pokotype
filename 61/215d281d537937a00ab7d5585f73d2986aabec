@@ -1,0 +1,44 @@
+docs/development.md
+  s_6356d425ccf1f4::t_401f67448b42f2 35-37,61
+  s_6356d425ccf1f4::t_fb7a69dfd4a8c2 33
+docs/internationalization.md
+  s_6356d425ccf1f4::t_401f67448b42f2 26
+docs/producthunt-launch.md
+  s_6356d425ccf1f4::t_401f67448b42f2 17-19
+README.en.md
+  s_6356d425ccf1f4::t_401f67448b42f2 7-9,37,119
+README.md
+  s_6356d425ccf1f4::t_401f67448b42f2 7-9,37,119
+src/lib/site.ts
+  s_6356d425ccf1f4::t_401f67448b42f2 5
+docs/seo.md
+  s_6356d425ccf1f4::t_401f67448b42f2 17,23-24,45
+README.ja.md
+  s_6356d425ccf1f4::t_401f67448b42f2 7-9,37,119
+src/lib/site.test.ts
+  s_5453d35118736b::t_e902641bfb705c 12-13,16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "61215d281d537937a00ab7d5585f73d2986aabec",
+  "prompts": {},
+  "sessions": {
+    "s_5453d35118736b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f049-830d-7162-8e32-4b979ce5533a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    },
+    "s_6356d425ccf1f4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f0e7-2783-7270-9a9d-43aaf49c8dc5",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
