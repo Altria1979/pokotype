@@ -1,0 +1,28 @@
+docs/paper-rework.md
+  s_5453d35118736b::t_dbc4d7d09167a2 3-10
+  s_5453d35118736b::t_053d69c4519190 11-12
+.agents/skills/pokotype-paper-style/SKILL.md
+  s_5453d35118736b::t_dbc4d7d09167a2 50-51
+tests/paper-style.spec.ts
+  s_5453d35118736b::t_ce2a60cf6baa32 156-217
+scripts/generate-paper-grain.mjs
+  s_5453d35118736b::t_dbc4d7d09167a2 4-5,7-8,11,19-25,49-62
+src/app/globals.css
+  s_5453d35118736b::t_dbc4d7d09167a2 25,44-45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "b3d24f7fa674254783ffee6d8f350d928abf68c8",
+  "prompts": {},
+  "sessions": {
+    "s_5453d35118736b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f049-830d-7162-8e32-4b979ce5533a",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
