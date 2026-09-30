@@ -153,6 +153,68 @@ function colorDistance(a: number[], b: number[]) {
   return Math.hypot(...a.map((value, index) => value - b[index]));
 }
 
+async function expectWarmPaperGutter(page: Page) {
+  const colors: number[][] = [];
+  // Stay outside the page panels and sample different parts of the tiled grain.
+  for (let index = 0; index < 12; index++) {
+    const x = 2 + (index % 3) * 3;
+    const y = 96 + index * 47;
+    const color = await pixel(page, x, y);
+    colors.push(color);
+    const location = `paper at (${x}, ${y}): ${color.join(", ")}`;
+    for (const channel of color) {
+      expect(channel, location).toBeGreaterThan(210);
+    }
+    expect(color[0], location).toBeGreaterThanOrEqual(color[1]);
+    expect(color[1], location).toBeGreaterThanOrEqual(color[2]);
+  }
+  // A plain fallback color would hide the bug but also remove the paper texture.
+  expect(new Set(colors.map((color) => color.join(","))).size).toBeGreaterThan(1);
+}
+
+for (const viewport of [
+  { width: 390, height: 844 },
+  { width: 1440, height: 1000 },
+]) {
+  const mobile = viewport.width === 390;
+  test.describe(`${viewport.width}×${viewport.height} 纸面兼容性`, () => {
+    test.use({ viewport, isMobile: mobile, hasTouch: mobile });
+
+    test("背景混合失效时首页和练习仍保持浅米白纸纹", async ({ page }) => {
+      await page.goto("/zh-CN/");
+      const start = page.getByRole("button", {
+        name: "开始练习 20 题",
+        exact: true,
+      });
+      await expect(start).toBeEnabled();
+      // Reproduce Safari's failed canvas blend without changing the image itself.
+      await page.addStyleTag({
+        content: "body { background-blend-mode: normal !important; }",
+      });
+      await test.step("首页的真实背景像素", async () => {
+        await expectWarmPaperGutter(page);
+      });
+
+      if (mobile) await start.tap();
+      else await start.click();
+      const stage = page.locator("[data-practice-stage]");
+      await expect(stage).toBeVisible();
+      if (mobile) {
+        await stage.tap();
+        await expect(
+          page.getByRole("textbox", { name: "罗马音输入", exact: true }),
+        ).toBeFocused();
+      }
+      // Starting a session can scroll to its focused region; use page coordinates.
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+      await test.step("进入练习后的真实背景像素", async () => {
+        await expectWarmPaperGutter(page);
+      });
+    });
+  });
+}
+
 for (const viewport of [
   { width: 1440, height: 800 },
   { width: 1440, height: 900 },

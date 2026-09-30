@@ -22,6 +22,7 @@
   --focus: #1e5fce;
   --shadow: 0 14px 48px #302a2012;
   --paper-texture: url("/paper-grain.png");
+  --paper-canvas-texture: url("/paper-canvas.png");
   --art-orange: #ed5a14;
   --art-yellow: #d99d21;
   --art-pink: #f29fc8;
@@ -40,8 +41,8 @@
 body {
   margin: 0;
   background-color: var(--canvas);
-  background-image: var(--paper-texture);
-  background-blend-mode: overlay;
+  /* Precomposed paper avoids Safari's tiled canvas background blending bugs. */
+  background-image: var(--paper-canvas-texture);
   color: var(--text);
   font-family: var(--font-ui);
   font-size: 14px;
