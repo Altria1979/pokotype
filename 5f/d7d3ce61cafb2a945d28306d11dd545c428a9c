@@ -1,0 +1,31 @@
+src/components/Icon.tsx
+  s_6356d425ccf1f4::t_b1c86ce7060c77 35-41
+src/i18n/messages/en/Articles.json
+  s_6356d425ccf1f4::t_b1c86ce7060c77 29-30
+src/components/Articles.module.css
+  s_6356d425ccf1f4::t_b1c86ce7060c77 283-304
+src/i18n/messages/zh-CN/Articles.json
+  s_6356d425ccf1f4::t_b1c86ce7060c77 29-30
+src/components/Articles.tsx
+  s_6356d425ccf1f4::t_b1c86ce7060c77 8,21,169-170,186-217,268-269,323,326-337,365-369,379
+tests/audio-practice.spec.ts
+  s_6356d425ccf1f4::t_859d8d18ccc842 658-801
+src/i18n/messages/ja/Articles.json
+  s_6356d425ccf1f4::t_b1c86ce7060c77 29-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "5fd7d3ce61cafb2a945d28306d11dd545c428a9c",
+  "prompts": {},
+  "sessions": {
+    "s_6356d425ccf1f4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f0e7-2783-7270-9a9d-43aaf49c8dc5",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
