@@ -1,0 +1,58 @@
+src/i18n/messages/ja/Sound.json
+  s_789b804274c750::t_c48b3ecf806b19 5-11
+src/lib/audio.ts
+  s_789b804274c750::t_b87c854b3b07ba 11,14,35,104,111,117,129,133-134,136,140,160-179,182,187
+  s_789b804274c750::t_c622a395feac8c 31,79,141-158,180,185-186,192-193,202-204,300
+tests/audio-native.spec.ts
+  s_789b804274c750::t_152595dc9ed3fb 53,64
+  s_789b804274c750::t_d1d2a97e624343 146,152-153,179-181,191,198,204,224-225,228-251
+src/lib/audio.test.ts
+  s_789b804274c750::t_152595dc9ed3fb 320-321,414
+  s_789b804274c750::t_92d259c6b4243e 277-281,307,311-312,314-319,322-339,417,419,422,425,439,441-443,451,453,461,471,485,508,511,526,540-541,549,554
+  s_789b804274c750::t_35286bfe653035 313
+  s_789b804274c750::t_cccfaacf21d79e 286,340-344,346,349,351-411
+tests/audio-practice.spec.ts
+  s_789b804274c750::t_92d259c6b4243e 58-61,70
+  s_789b804274c750::t_f1b4cd89677779 209,213-214,261
+docs/key-sound-fix.md
+  s_789b804274c750::t_68ba469c9a20f7 15-18
+  s_789b804274c750::t_eb1393f6c4da21 3-14,19
+  s_789b804274c750::t_5b6d6b95996d3c 25,27
+  s_789b804274c750::t_2d8d0927b5eef9 29-30
+  s_789b804274c750::t_35286bfe653035 1-2,20-24,26,31-33
+  s_789b804274c750::t_d3ab1b4602c364 28
+src/i18n/messages/en/Sound.json
+  s_789b804274c750::t_c48b3ecf806b19 5-11
+tests/audio-settings.spec.ts
+  s_789b804274c750::t_1941ff2b3a57be 2,10-11,35-42,53,58,62,91-92,98,109,120,136,139,189-230
+  s_789b804274c750::t_92d259c6b4243e 51-52,54
+  s_789b804274c750::t_878a0db9945f95 231
+src/lib/storage.ts
+  s_789b804274c750::t_c48b3ecf806b19 11,38,60,394
+src/components/SoundSettings.tsx
+  s_789b804274c750::t_c48b3ecf806b19 13,69-85,168,188
+src/lib/storage.test.ts
+  s_789b804274c750::t_c48b3ecf806b19 268-288,332-333
+src/components/Practice.tsx
+  s_789b804274c750::t_c48b3ecf806b19 146,163,527
+src/i18n/messages/zh-CN/Sound.json
+  s_789b804274c750::t_c48b3ecf806b19 5-11
+docs/audio-verification.md
+  s_789b804274c750::t_35286bfe653035 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "dd138024213bae89d8845ae9d17ae2136b48312e",
+  "prompts": {},
+  "sessions": {
+    "s_789b804274c750": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f54e-a621-7572-bb2f-8a1138bd9479",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
