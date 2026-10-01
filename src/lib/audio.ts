@@ -8,9 +8,10 @@ type AudioCallbacks = {
 };
 
 export type SpeechOptions = { voiceURI: string; rate: number; volume: number; pitch?: number };
+export type KeySoundType = "percussive" | "electronic";
 
 type Click = {
-  oscillator: OscillatorNode;
+  source: AudioScheduledSourceNode;
   gain: GainNode;
   timer: ReturnType<typeof setTimeout>;
 };
@@ -27,10 +28,11 @@ export class BrowserAudio {
   private speechGeneration = 0;
   private speechTimer: ReturnType<typeof setTimeout> | undefined;
   private context: AudioContext | undefined;
+  private keyBuffer: AudioBuffer | undefined;
   private resuming: Promise<void> | undefined;
   private clicks = new Set<Click>();
   private keyGeneration = 0;
-  private pendingKey: { volume: number; requestedAt: number } | undefined;
+  private pendingKey: { volume: number; type: KeySoundType; requestedAt: number } | undefined;
 
   constructor(private readonly callbacks: AudioCallbacks) {}
 
@@ -74,6 +76,7 @@ export class BrowserAudio {
         }
         this.stopKeys();
         this.context = new Constructor();
+        this.keyBuffer = undefined;
       }
       const context = this.context;
       if (context.state === "running") {
@@ -98,20 +101,20 @@ export class BrowserAudio {
     return this.resuming ?? Promise.resolve();
   }
 
-  key(volume: number) {
+  key(volume: number, type: KeySoundType = "percussive") {
     const level = clamp(volume, 0, 1, 0);
     if (!this.initialized) return;
     if (level === 0) {
       this.stopKeys();
       return;
     }
-    const request = { volume: level, requestedAt: performance.now() };
+    const request = { volume: level, type, requestedAt: performance.now() };
     const resumed = this.unlock();
     const context = this.context;
     if (!context) return;
     this.pendingKey = undefined;
     if (context.state === "running") {
-      this.playKey(context, level);
+      this.playKey(context, level, type);
       return;
     }
     this.pendingKey = request;
@@ -123,40 +126,71 @@ export class BrowserAudio {
         return;
       }
       if (performance.now() - request.requestedAt <= 100)
-        this.playKey(context, request.volume);
+        this.playKey(context, request.volume, request.type);
     });
   }
 
-  private playKey(context: AudioContext, level: number) {
-    // Four voices with at most 0.18 gain each leave headroom even for rapid input.
+  private playKey(context: AudioContext, level: number, type: KeySoundType) {
+    // Both timbres share four voices at at most 0.2 gain to leave output headroom.
     while (this.clicks.size >= 4) this.releaseClick(this.clicks.values().next().value!);
-    let oscillator: OscillatorNode | undefined;
+    let source: AudioScheduledSourceNode | undefined;
     let gain: GainNode | undefined;
     let click: Click | undefined;
     try {
-      oscillator = context.createOscillator();
-      gain = context.createGain();
+      if (type === "percussive" && !this.keyBuffer) {
+        const buffer = context.createBuffer(1, Math.ceil(context.sampleRate * 0.045), context.sampleRate);
+        const samples = buffer.getChannelData(0);
+        let peak = 0;
+        for (let index = 0; index < samples.length; index++) {
+          const time = index / context.sampleRate;
+          // A sharp contact click and two damped body resonances make a dry “da”.
+          const attack = Math.min(1, time / 0.0005);
+          const release = Math.min(1, (samples.length - 1 - index) / (context.sampleRate * 0.005));
+          samples[index] = attack * release * (
+            0.55 * (Math.random() * 2 - 1) * Math.exp(-time / 0.003)
+            + 0.3 * Math.sin(2 * Math.PI * 950 * time) * Math.exp(-time / 0.007)
+            + 0.15 * Math.sin(2 * Math.PI * 2100 * time) * Math.exp(-time / 0.004)
+          );
+          peak = Math.max(peak, Math.abs(samples[index]));
+        }
+        for (let index = 0; index < samples.length; index++) samples[index] /= peak;
+        this.keyBuffer = buffer;
+      }
       const now = context.currentTime;
-      oscillator.type = "square";
-      oscillator.frequency.setValueAtTime(420, now);
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, 0.18 * Math.sqrt(level)), now + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
-      gain.gain.setValueAtTime(0, now + 0.09);
-      oscillator.connect(gain);
+      const duration = type === "electronic" ? 0.09 : 0.045;
+      if (type === "electronic") {
+        const oscillator = context.createOscillator();
+        source = oscillator;
+        oscillator.type = "square";
+        oscillator.frequency.setValueAtTime(420, now);
+      } else {
+        const bufferSource = context.createBufferSource();
+        source = bufferSource;
+        bufferSource.buffer = this.keyBuffer!;
+      }
+      gain = context.createGain();
+      if (type === "electronic") {
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, 0.18 * Math.sqrt(level)), now + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+        gain.gain.setValueAtTime(0, now + duration);
+      } else {
+        gain.gain.setValueAtTime(0.2 * Math.sqrt(level), now);
+      }
+      source.connect(gain);
       gain.connect(context.destination);
-      const activeClick: Click = { oscillator, gain, timer: setTimeout(() => this.releaseClick(activeClick), 150) };
+      const activeClick: Click = { source, gain, timer: setTimeout(() => this.releaseClick(activeClick), duration * 1000 + 55) };
       click = activeClick;
       this.clicks.add(activeClick);
-      oscillator.onended = () => this.releaseClick(activeClick);
-      oscillator.start(now);
-      oscillator.stop(now + 0.09);
+      source.onended = () => this.releaseClick(activeClick);
+      source.start(now);
+      source.stop(now + duration);
       this.callbacks.onKeyNotice("");
     } catch {
       if (click) this.releaseClick(click);
       else {
-        try { oscillator?.stop(); } catch {}
-        try { oscillator?.disconnect(); } catch {}
+        try { source?.stop(); } catch {}
+        try { source?.disconnect(); } catch {}
         try { gain?.disconnect(); } catch {}
       }
       this.callbacks.onKeyNotice(this.noticeText("keyFailed", "按键音效未能播放，请点击“重试按键音”。"));
@@ -165,9 +199,9 @@ export class BrowserAudio {
 
   private releaseClick(click: Click) {
     clearTimeout(click.timer);
-    click.oscillator.onended = null;
-    try { click.oscillator.stop(); } catch {}
-    try { click.oscillator.disconnect(); } catch {}
+    click.source.onended = null;
+    try { click.source.stop(); } catch {}
+    try { click.source.disconnect(); } catch {}
     try { click.gain.disconnect(); } catch {}
     this.clicks.delete(click);
   }
@@ -263,6 +297,7 @@ export class BrowserAudio {
     this.voices = [];
     const context = this.context;
     this.context = undefined;
+    this.keyBuffer = undefined;
     this.resuming = undefined;
     try { void context?.close().catch(() => {}); } catch {}
   }

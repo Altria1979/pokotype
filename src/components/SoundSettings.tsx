@@ -10,7 +10,7 @@ import s from "./Preferences.module.css";
 export function SoundSettings() {
   const t = useTranslations("Sound");
   const format = useFormatter();
-  const { preferences, updatePreferences } = useData();
+  const { preferences, updatePreferences, ready } = useData();
   const { audio, voices, notice, keyNotice, clearNotice } = useBrowserAudio();
   const japaneseVoices = voices.filter((voice) => /^ja(?:[-_]|$)/i.test(voice.lang));
   const missingVoice = !!preferences.speechVoiceURI && !japaneseVoices.some(
@@ -66,6 +66,23 @@ export function SoundSettings() {
           ))}
         </div>
         <div>
+          <div className="field">
+            <label htmlFor="keySoundType">{t("keySoundType")}</label>
+            <select
+              id="keySoundType"
+              value={preferences.keySoundType}
+              disabled={!ready}
+              aria-describedby="key-sound-type-help"
+              onChange={(event) => {
+                audio.stopKeys();
+                updatePreferences({ keySoundType: event.target.value as Preferences["keySoundType"] });
+              }}
+            >
+              <option value="percussive">{t("keySoundTypes.percussive")}</option>
+              <option value="electronic">{t("keySoundTypes.electronic")}</option>
+            </select>
+            <small id="key-sound-type-help">{t("keySoundTypeHelp")}</small>
+          </div>
           {(["keySoundVolume", "speechVolume"] as const).map((field) => (
             <div className="field" key={field}>
               <label htmlFor={field}>{t(field)}</label>
@@ -148,7 +165,7 @@ export function SoundSettings() {
             <small>{t("pitchHelp")}</small>
           </div>
           <div className="flex wrap">
-            <button type="button" onClick={() => audio.key(preferences.keySoundVolume)}>{t("previewKey")}</button>
+            <button type="button" onClick={() => audio.key(preferences.keySoundVolume, preferences.keySoundType)}>{t("previewKey")}</button>
             <button type="button" onClick={() => {
               clearNotice();
               audio.speak("こんにちは。日本語の練習を始めましょう。", {
@@ -168,7 +185,7 @@ export function SoundSettings() {
               <button
                 type="button"
                 disabled={preferences.keySoundVolume === 0}
-                onClick={() => audio.key(preferences.keySoundVolume)}
+                onClick={() => audio.key(preferences.keySoundVolume, preferences.keySoundType)}
               >
                 {t("retryKey")}
               </button>

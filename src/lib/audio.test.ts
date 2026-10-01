@@ -274,13 +274,16 @@ class MockContext {
     gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn<(value: number, time: number) => void>() },
     connect: vi.fn(), disconnect: vi.fn(),
   }));
-  createBuffer = vi.fn((_channels: number, length: number) => ({ getChannelData: () => new Float32Array(length) }));
-  createBufferSource = vi.fn(() => ({ buffer: null, connect: vi.fn(), disconnect: vi.fn(), start: vi.fn(), stop: vi.fn() }));
+  createBuffer = vi.fn((_channels: number, length: number, sampleRate: number) => {
+    const samples = new Float32Array(length);
+    return { length, sampleRate, getChannelData: () => samples };
+  });
+  createBufferSource = vi.fn(() => ({ buffer: null, connect: vi.fn(), disconnect: vi.fn(), start: vi.fn(), stop: vi.fn(), onended: null }));
   createBiquadFilter = vi.fn(() => ({ type: "", frequency: { setValueAtTime: vi.fn() }, connect: vi.fn(), disconnect: vi.fn() }));
   constructor() { MockContext.instances.push(this); }
 }
 
-describe("electronic key feedback", () => {
+describe("selectable key feedback", () => {
   beforeEach(() => {
     MockContext.instances = [];
     Object.assign(window, { AudioContext: MockContext });
@@ -301,32 +304,125 @@ describe("electronic key feedback", () => {
     } };
   }
 
-  it("lazily creates a short 420Hz electronic tone with audible default gain", () => {
+  it("lazily creates a short normalized impact with a sharp attack and no sustained tail", () => {
     expect(MockContext.instances).toHaveLength(0);
     audio.key(0.25);
     const context = MockContext.instances[0];
-    const oscillator = context.createOscillator.mock.results[0].value;
-    expect(oscillator.type).toBe("square");
-    expect(oscillator.frequency.setValueAtTime).toHaveBeenCalledWith(420, 0);
-    expect(oscillator.stop).toHaveBeenCalledWith(0.09);
-    const levels: [number, number][] = context.createGain.mock.results[0].value.gain.exponentialRampToValueAtTime.mock.calls;
-    expect(levels.some(([gain]) => gain >= 0.05 && gain <= 0.2)).toBe(true);
+    const source = context.createBufferSource.mock.results[0].value;
+    const buffer = context.createBuffer.mock.results[0].value;
+    const samples: Float32Array = buffer.getChannelData();
+    expect(context.createBuffer).toHaveBeenCalledWith(1, 2160, 48000);
+    expect(source.buffer).toBe(buffer);
+    expect(source.stop).toHaveBeenCalledWith(0.045);
+    expect(context.createOscillator).not.toHaveBeenCalled();
+    expect(Math.max(...samples.map(Math.abs))).toBeCloseTo(1);
+    expect(samples.every(Number.isFinite)).toBe(true);
+    expect(Math.abs(samples[0])).toBe(0);
+    expect(Math.abs(samples.at(-1)!)).toBe(0);
+    const energy = (start: number, end: number) => samples.slice(start, end).reduce((sum, value) => sum + value * value, 0);
+    expect(energy(0, 480)).toBeGreaterThan(energy(960, samples.length) * 30);
+    expect(context.createGain.mock.results[0].value.gain.setValueAtTime).toHaveBeenCalledWith(0.1, 0);
     expect(onKeyNotice).toHaveBeenLastCalledWith("");
     expect(onNotice).not.toHaveBeenCalled();
   });
 
-  it("bounds simultaneous tones and frees nodes on end, stop and disposal", () => {
+  it("reuses the impact within a context and rebuilds it for a replacement context", () => {
+    audio.key(0.25);
+    audio.key(1);
+    const context = MockContext.instances[0];
+    expect(context.createBuffer).toHaveBeenCalledOnce();
+    expect(context.createBufferSource.mock.results[0].value.buffer).toBe(context.createBufferSource.mock.results[1].value.buffer);
+    expect(context.createGain.mock.results[1].value.gain.setValueAtTime).toHaveBeenCalledWith(0.2, 0);
+    context.state = "closed";
+    audio.key(0.25);
+    expect(MockContext.instances[1].createBuffer).toHaveBeenCalledOnce();
+    expect(MockContext.instances[1].createBufferSource.mock.results[0].value.buffer).not.toBe(context.createBufferSource.mock.results[0].value.buffer);
+  });
+
+  it("plays the selected electronic tone and returns to the default percussive sound", () => {
+    audio.key(0.25, "electronic");
+    const context = MockContext.instances[0];
+    const oscillator = context.createOscillator.mock.results[0].value;
+    const gain = context.createGain.mock.results[0].value.gain;
+    expect(oscillator.type).toBe("square");
+    expect(oscillator.frequency.setValueAtTime).toHaveBeenCalledWith(420, 0);
+    expect(oscillator.start).toHaveBeenCalledWith(0);
+    expect(oscillator.stop).toHaveBeenCalledWith(0.09);
+    expect(gain.exponentialRampToValueAtTime).toHaveBeenCalledWith(0.09, 0.01);
+    expect(gain.exponentialRampToValueAtTime).toHaveBeenCalledWith(0.0001, 0.08);
+    expect(gain.setValueAtTime).toHaveBeenCalledWith(0, 0.09);
+    expect(context.createBuffer).not.toHaveBeenCalled();
+    audio.key(0.25);
+    expect(context.createBufferSource).toHaveBeenCalledOnce();
+    expect(context.createOscillator).toHaveBeenCalledOnce();
+  });
+
+  it.each(["stopKeys", "stopAll", "dispose"] as const)("%s clears both timbres sharing the same four-voice limit", (action) => {
+    for (let index = 0; index < 10; index++) audio.key(1, index % 2 ? "electronic" : "percussive");
+    const context = MockContext.instances[0];
+    expect(context.createBufferSource).toHaveBeenCalledTimes(5);
+    expect(context.createOscillator).toHaveBeenCalledTimes(5);
+    expect(context.createBufferSource.mock.results[0].value.disconnect).toHaveBeenCalled();
+    expect(context.createOscillator.mock.results[0].value.disconnect).toHaveBeenCalled();
+    expect(vi.getTimerCount()).toBe(4);
+    audio[action]();
+    expect(vi.getTimerCount()).toBe(0);
+    for (const { value } of [...context.createBufferSource.mock.results, ...context.createOscillator.mock.results]) {
+      expect(value.stop).toHaveBeenCalled();
+      expect(value.disconnect).toHaveBeenCalled();
+    }
+    for (const { value } of context.createGain.mock.results) expect(value.disconnect).toHaveBeenCalled();
+  });
+
+  it("frees an electronic voice on its end event", () => {
+    audio.key(1, "electronic");
+    const context = MockContext.instances[0];
+    const source = context.createOscillator.mock.results[0].value as unknown as OscillatorNode;
+    source.onended?.call(source, new Event("ended"));
+    expect(source.disconnect).toHaveBeenCalled();
+    expect(context.createGain.mock.results[0].value.disconnect).toHaveBeenCalled();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it.each(["percussive", "electronic"] as const)("retains only the latest %s selection while audio is unlocking", async (type) => {
+    const { context, resume } = await suspended();
+    audio.key(0.1, type === "percussive" ? "electronic" : "percussive");
+    await vi.advanceTimersByTimeAsync(60);
+    audio.key(1, type);
+    await vi.advanceTimersByTimeAsync(60);
+    expect(context.createBufferSource).not.toHaveBeenCalled();
+    expect(context.createOscillator).not.toHaveBeenCalled();
+    await resume();
+    expect(context.createBufferSource).toHaveBeenCalledTimes(type === "percussive" ? 1 : 0);
+    expect(context.createOscillator).toHaveBeenCalledTimes(type === "electronic" ? 1 : 0);
+    const gain = context.createGain.mock.results[0].value.gain;
+    if (type === "electronic") expect(gain.exponentialRampToValueAtTime).toHaveBeenCalledWith(0.18, 0.01);
+    else expect(gain.setValueAtTime).toHaveBeenCalledWith(0.2, 0);
+  });
+
+  it("cancels a pending electronic sound when muted before unlock", async () => {
+    audio.key(0, "electronic");
+    expect(MockContext.instances).toHaveLength(0);
+    const { context, resume } = await suspended();
+    audio.key(1, "electronic");
+    audio.key(0);
+    await resume();
+    expect(context.createBufferSource).not.toHaveBeenCalled();
+    expect(context.createOscillator).not.toHaveBeenCalled();
+  });
+
+  it("bounds simultaneous impacts and frees nodes on end, stop and disposal", () => {
     for (let index = 0; index < 20; index++) audio.key(1);
     const context = MockContext.instances[0];
-    expect(context.createOscillator).toHaveBeenCalledTimes(20);
+    expect(context.createBufferSource).toHaveBeenCalledTimes(20);
     expect(vi.getTimerCount()).toBe(4);
-    expect(context.createOscillator.mock.results[0].value.disconnect).toHaveBeenCalled();
+    expect(context.createBufferSource.mock.results[0].value.disconnect).toHaveBeenCalled();
     audio.stopKeys();
     expect(vi.getTimerCount()).toBe(0);
-    for (const { value } of context.createOscillator.mock.results) expect(value.disconnect).toHaveBeenCalled();
+    for (const { value } of context.createBufferSource.mock.results) expect(value.disconnect).toHaveBeenCalled();
     for (const { value } of context.createGain.mock.results) expect(value.disconnect).toHaveBeenCalled();
     audio.key(0.25);
-    const last = context.createOscillator.mock.results.at(-1)!.value as unknown as OscillatorNode;
+    const last = context.createBufferSource.mock.results.at(-1)!.value as unknown as AudioBufferSourceNode;
     last.onended?.call(last, new Event("ended"));
     expect(vi.getTimerCount()).toBe(0);
     audio.dispose();
@@ -340,11 +436,11 @@ describe("electronic key feedback", () => {
     audio.key(1);
     await vi.advanceTimersByTimeAsync(60);
     expect(context.resume).toHaveBeenCalledOnce();
-    expect(context.createOscillator).not.toHaveBeenCalled();
+    expect(context.createBufferSource).not.toHaveBeenCalled();
     await resume();
-    expect(context.createOscillator).toHaveBeenCalledOnce();
-    expect(context.createGain.mock.results[0].value.gain.exponentialRampToValueAtTime)
-      .toHaveBeenCalledWith(0.18, 0.01);
+    expect(context.createBufferSource).toHaveBeenCalledOnce();
+    expect(context.createGain.mock.results[0].value.gain.setValueAtTime)
+      .toHaveBeenCalledWith(0.2, 0);
   });
 
   it("drops keys older than 100ms instead of replaying a backlog", async () => {
@@ -352,9 +448,9 @@ describe("electronic key feedback", () => {
     audio.key(0.25);
     await vi.advanceTimersByTimeAsync(101);
     await resume();
-    expect(context.createOscillator).not.toHaveBeenCalled();
+    expect(context.createBufferSource).not.toHaveBeenCalled();
     audio.key(0.25);
-    expect(context.createOscillator).toHaveBeenCalledOnce();
+    expect(context.createBufferSource).toHaveBeenCalledOnce();
   });
 
   it.each(["stopKeys", "stopAll", "dispose"] as const)("%s cancels a pending key even if resume finishes later", async (action) => {
@@ -362,7 +458,7 @@ describe("electronic key feedback", () => {
     audio.key(0.25);
     audio[action]();
     await resume();
-    expect(context.createOscillator).not.toHaveBeenCalled();
+    expect(context.createBufferSource).not.toHaveBeenCalled();
   });
 
   it("zero volume cancels pending keys and never initializes new audio resources", async () => {
@@ -372,7 +468,7 @@ describe("electronic key feedback", () => {
     audio.key(0.25);
     audio.key(0);
     await resume();
-    expect(context.createOscillator).not.toHaveBeenCalled();
+    expect(context.createBufferSource).not.toHaveBeenCalled();
   });
 
   it("recovers a rejected resume on retry without changing speech notices", async () => {
@@ -386,7 +482,7 @@ describe("electronic key feedback", () => {
     expect(onNotice).not.toHaveBeenCalled();
     audio.key(0.25);
     await vi.advanceTimersByTimeAsync(0);
-    expect(context.createOscillator).toHaveBeenCalledOnce();
+    expect(context.createBufferSource).toHaveBeenCalledOnce();
     expect(onKeyNotice).toHaveBeenLastCalledWith("");
   });
 
@@ -409,10 +505,10 @@ describe("electronic key feedback", () => {
     rejectNew(new Error("blocked"));
     await vi.advanceTimersByTimeAsync(0);
     expect(onKeyNotice).toHaveBeenLastCalledWith(expect.stringContaining("重试"));
-    expect(context.createOscillator).not.toHaveBeenCalled();
+    expect(context.createBufferSource).not.toHaveBeenCalled();
     audio.key(0.25);
     await vi.advanceTimersByTimeAsync(0);
-    expect(context.createOscillator).toHaveBeenCalledOnce();
+    expect(context.createBufferSource).toHaveBeenCalledOnce();
   });
 
   it("contains unsupported, construction and node failures and can retry", () => {
@@ -427,7 +523,7 @@ describe("electronic key feedback", () => {
     const context = MockContext.instances[0];
     context.createGain.mockImplementationOnce(() => { throw new Error("node failed"); });
     audio.key(0.25);
-    expect(context.createOscillator.mock.results[0].value.disconnect).toHaveBeenCalled();
+    expect(context.createBufferSource.mock.results[0].value.disconnect).toHaveBeenCalled();
     expect(vi.getTimerCount()).toBe(0);
     expect(onKeyNotice).toHaveBeenLastCalledWith(expect.stringContaining("重试"));
     audio.key(0.25);
@@ -441,8 +537,8 @@ describe("electronic key feedback", () => {
     audio.initialize();
     audio.key(0.25);
     await resume();
-    expect(context.createOscillator).not.toHaveBeenCalled();
-    expect(MockContext.instances[1].createOscillator).toHaveBeenCalledOnce();
+    expect(context.createBufferSource).not.toHaveBeenCalled();
+    expect(MockContext.instances[1].createBufferSource).toHaveBeenCalledOnce();
   });
 
   it("replaces a closed context and resumes an interrupted context", async () => {
@@ -450,11 +546,11 @@ describe("electronic key feedback", () => {
     MockContext.instances[0].state = "closed";
     audio.key(0.25);
     const context = MockContext.instances[1];
-    expect(context.createOscillator).toHaveBeenCalledOnce();
+    expect(context.createBufferSource).toHaveBeenCalledOnce();
     context.state = "interrupted";
     audio.key(0.25);
     await vi.advanceTimersByTimeAsync(0);
     expect(context.resume).toHaveBeenCalledOnce();
-    expect(context.createOscillator).toHaveBeenCalledTimes(2);
+    expect(context.createBufferSource).toHaveBeenCalledTimes(2);
   });
 });

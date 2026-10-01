@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { SAMPLE_ARTICLES } from "../src/lib/articles";
 
 declare global {
   interface Window {
@@ -6,6 +7,8 @@ declare global {
       calls: { text: string; volume: number; rate: number; pitch: number; voiceURI: string }[];
       cancellations: number;
       keyStarts: number;
+      keyTypes: ("percussive" | "electronic")[];
+      failNextKey: boolean;
       updateVoices: () => void;
     };
   }
@@ -29,6 +32,14 @@ async function mockAudio(page: Page) {
       constructor(public text: string) {}
     }
     const parameter = () => ({ setValueAtTime() {}, exponentialRampToValueAtTime() {}, linearRampToValueAtTime() {} });
+    const startKey = (type: "percussive" | "electronic") => {
+      if (window.__settingsAudio.failNextKey) {
+        window.__settingsAudio.failNextKey = false;
+        throw new Error("Key sound failed");
+      }
+      window.__settingsAudio.keyStarts++;
+      window.__settingsAudio.keyTypes.push(type);
+    };
     class Context {
       state = "running";
       currentTime = 0;
@@ -37,15 +48,18 @@ async function mockAudio(page: Page) {
       close = async () => {};
       createGain = () => ({ gain: parameter(), connect() {}, disconnect() {} });
       createBuffer = (_channels: number, length: number) => ({ getChannelData: () => new Float32Array(length) });
-      createBufferSource = () => ({ connect() {}, disconnect() {}, start() {}, stop() {} });
+      createBufferSource = () => ({
+        connect() {}, disconnect() {}, stop() {},
+        start: () => startKey("percussive"),
+      });
       createBiquadFilter = () => ({ frequency: parameter(), connect() {}, disconnect() {} });
       createOscillator = () => ({
         frequency: parameter(), connect() {}, disconnect() {}, stop() {},
-        start: () => { window.__settingsAudio.keyStarts++; },
+        start: () => startKey("electronic"),
       });
     }
     window.__settingsAudio = {
-      calls: [], cancellations: 0, keyStarts: 0,
+      calls: [], cancellations: 0, keyStarts: 0, keyTypes: [], failNextKey: false,
       updateVoices() {
         voices = [
           { voiceURI: "ja-local", name: "日语本地测试", lang: "ja-JP", localService: true },
@@ -74,11 +88,14 @@ test("旧偏好补齐声音默认值，开关和声音选项独立保存", async
   await page.reload();
   await expect(page.getByRole("checkbox", { name: "显示罗马音提示" })).not.toBeChecked();
   await expect(page.getByRole("checkbox", { name: "开启按键音", exact: true })).toBeChecked();
+  await expect(page.getByLabel("按键音类型", { exact: true })).toHaveValue("percussive");
+  await expect(page.getByLabel("按键音类型", { exact: true }).locator("option")).toHaveText(["哒哒敲击", "电子音"]);
   await expect(page.getByRole("checkbox", { name: "五十音自动朗读", exact: true })).toBeChecked();
   await expect(page.getByRole("checkbox", { name: "文章逐句朗读", exact: true })).toBeChecked();
   await expect(page.getByRole("checkbox", { name: "文章分段朗读", exact: true })).toBeChecked();
   await expect(page.getByLabel("朗读音高", { exact: true })).toHaveValue("1.15");
   await page.getByRole("checkbox", { name: "开启按键音", exact: true }).uncheck();
+  await page.getByLabel("按键音类型", { exact: true }).selectOption("electronic");
   await page.getByRole("checkbox", { name: "文章逐句朗读", exact: true }).uncheck();
   await page.getByRole("checkbox", { name: "文章分段朗读", exact: true }).uncheck();
   await page.getByLabel("按键音量", { exact: true }).fill("0.4");
@@ -89,6 +106,7 @@ test("旧偏好补齐声音默认值，开关和声音选项独立保存", async
   await page.getByLabel("日语音色", { exact: true }).selectOption("ja-online");
   await page.reload();
   await expect(page.getByRole("checkbox", { name: "开启按键音", exact: true })).not.toBeChecked();
+  await expect(page.getByLabel("按键音类型", { exact: true })).toHaveValue("electronic");
   await expect(page.getByRole("checkbox", { name: "五十音自动朗读", exact: true })).toBeChecked();
   await expect(page.getByRole("checkbox", { name: "文章逐句朗读", exact: true })).not.toBeChecked();
   await expect(page.getByRole("checkbox", { name: "文章分段朗读", exact: true })).not.toBeChecked();
@@ -99,7 +117,7 @@ test("旧偏好补齐声音默认值，开关和声音选项独立保存", async
   await expect(page.getByLabel("日语音色", { exact: true })).toHaveValue("ja-online");
   await expect(page.getByText("已保存的音色在此设备不可用，将自动尝试其他日语音色。")).toBeVisible();
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("pokotype:preferences:v1")!).value)).toMatchObject({
-    script: "katakana", count: 50, groupIds: [], showRomaji: false,
+    script: "katakana", count: 50, groupIds: [], showRomaji: false, keySoundType: "electronic",
   });
 });
 
@@ -115,8 +133,10 @@ test("音色延迟加载，试听忽略练习开关且使用音量语速，离�
   await page.getByLabel("朗读音量", { exact: true }).fill("0.4");
   await page.getByLabel("朗读速度", { exact: true }).selectOption("1.2");
   await voice.selectOption("ja-online");
+  await page.getByLabel("按键音类型", { exact: true }).selectOption("electronic");
   await page.getByRole("button", { name: "试听按键音", exact: true }).click();
   await expect.poll(() => page.evaluate(() => window.__settingsAudio.keyStarts)).toBe(1);
+  expect(await page.evaluate(() => window.__settingsAudio.keyTypes)).toEqual(["electronic"]);
   await page.getByRole("button", { name: "试听日语", exact: true }).click();
   expect(await page.evaluate(() => window.__settingsAudio.calls)).toEqual([{
     text: "こんにちは。日本語の練習を始めましょう。", volume: 0.4, rate: 1.2, pitch: 1.15, voiceURI: "ja-online",
@@ -165,4 +185,47 @@ test("按键音开启但音量为零时给出提示，调高音量后恢复试�
   await expect(hint).not.toBeVisible();
   await page.getByRole("button", { name: "试听按键音", exact: true }).click();
   await expect.poll(() => page.evaluate(() => window.__settingsAudio.keyStarts)).toBe(1);
+});
+
+test("设置选择的按键音用于试听、重试和两种练习，切换后全局立即更新", async ({ page }) => {
+  await mockAudio(page);
+  await page.goto("/zh-CN/settings/");
+  await page.getByRole("checkbox", { name: "五十音自动朗读", exact: true }).uncheck();
+  await page.getByRole("checkbox", { name: "文章逐句朗读", exact: true }).uncheck();
+
+  for (const type of ["electronic", "percussive"] as const) {
+    await page.getByLabel("按键音类型", { exact: true }).selectOption(type);
+    await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("pokotype:preferences:v1")!).value.keySoundType)).toBe(type);
+    await page.evaluate(() => { window.__settingsAudio.failNextKey = true; });
+    await page.getByRole("button", { name: "试听按键音", exact: true }).click();
+    const retry = page.getByRole("button", { name: "重试按键音", exact: true });
+    await expect(retry).toBeVisible();
+    await retry.click();
+    await expect(retry).not.toBeVisible();
+    expect(await page.evaluate(() => window.__settingsAudio.keyTypes.at(-1))).toBe(type);
+
+    await page.getByRole("navigation", { name: "主导航" }).getByRole("link", { name: "五十音练习", exact: true }).click();
+    await page.getByRole("button", { name: "开始练习 20 题", exact: true }).click();
+    await expect(page.getByLabel("输入进度")).toBeVisible();
+    const kanaStarts = await page.evaluate(() => window.__settingsAudio.keyStarts);
+    await page.keyboard.type("q");
+    await expect.poll(() => page.evaluate(() => window.__settingsAudio.keyStarts)).toBe(kanaStarts + 1);
+    expect(await page.evaluate(() => window.__settingsAudio.keyTypes.at(-1))).toBe(type);
+    await page.getByRole("button", { name: "结束练习", exact: true }).click();
+
+    await page.getByRole("navigation", { name: "主导航" }).getByRole("link", { name: "我的文章库", exact: true }).click();
+    await page.getByRole("link").filter({
+      has: page.getByRole("heading", { name: SAMPLE_ARTICLES[0].title, exact: true }),
+    }).click();
+    await page.getByRole("radio", { name: "逐句练习", exact: true }).check();
+    await page.getByRole("button", { name: "开始文章练习", exact: true }).click();
+    await expect(page.getByLabel("输入进度")).toBeVisible();
+    const articleStarts = await page.evaluate(() => window.__settingsAudio.keyStarts);
+    await page.keyboard.type("q");
+    await expect.poll(() => page.evaluate(() => window.__settingsAudio.keyStarts)).toBe(articleStarts + 1);
+    expect(await page.evaluate(() => window.__settingsAudio.keyTypes.at(-1))).toBe(type);
+    await page.getByRole("button", { name: "结束练习", exact: true }).click();
+    await page.getByRole("navigation", { name: "主导航" }).getByRole("link", { name: "设置", exact: true }).click();
+    await expect(page.getByLabel("按键音类型", { exact: true })).toHaveValue(type);
+  }
 });

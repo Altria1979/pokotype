@@ -55,7 +55,10 @@ async function mockSpeech(page: Page, japaneseAvailable = true) {
         return { length, sampleRate, getChannelData: (channel: number) => data[channel] };
       }
       createBufferSource() {
-        return { buffer: null, connect() {}, disconnect() {}, start() {}, stop() {} };
+        return {
+          buffer: null, connect() {}, disconnect() {}, stop() {},
+          start() { window.__practiceKeyClicks++; },
+        };
       }
       createBiquadFilter() {
         return { type: "lowpass", frequency: parameter(), connect() {}, disconnect() {} };
@@ -64,7 +67,7 @@ async function mockSpeech(page: Page, japaneseAvailable = true) {
         return {
           type: "sine", frequency: parameter(), onended: null,
           connect() {}, disconnect() {}, stop() {},
-          start() { window.__practiceKeyClicks++; },
+          start() {},
         };
       }
     }
@@ -203,10 +206,12 @@ async function records(page: Page): Promise<PracticeRecord[]> {
 
 for (const mode of ["整篇练习", "分组练习"] as const) {
   test(`${mode}默认分段朗读完成片段才说日文，发音期间计时和跨句跨组输入继续`, async ({ page }) => {
-    await page.clock.install();
+    await page.clock.install({ time: new Date("2026-01-01T00:00:00Z") });
     await mockSpeech(page);
     await startArticle(page, true, mode);
     await expect(page.getByRole("checkbox", { name: "整句听读", exact: true })).not.toBeChecked();
+    // Let the page load normally, then count only explicit time advances after typing starts.
+    await page.clock.pauseAt(new Date("2026-01-01T01:00:00Z"));
     await page.keyboard.type("wata");
     expect(await speechCalls(page)).toEqual([]);
     await page.keyboard.type("q");
@@ -253,7 +258,7 @@ for (const mode of ["整篇练习", "分组练习"] as const) {
     await expect.poll(async () => (await records(page)).length).toBe(1);
     const saved = await records(page);
     expect(saved).toMatchObject([{ correct, errors: 1 }]);
-    expect(saved[0].durationMs).toBeGreaterThanOrEqual(6_000);
+    expect(saved[0].durationMs).toBe(6_000);
   });
 
   test(`${mode}分段朗读局部关闭、暂停及退出停声，迟到回调不重播且不修改全局偏好`, async ({ page }) => {

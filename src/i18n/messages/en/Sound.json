@@ -2,7 +2,13 @@
   "title": "Sound and speech",
   "intro": "Set key sounds, kana pronunciation, segment speech and sentence speech independently. Japanese voices are provided by your browser and device.",
   "keySoundEnabled": "Enable key sounds",
-  "keySoundEnabledHelp": "Play a short electronic sound when typing letters during practice.",
+  "keySoundEnabledHelp": "Play your chosen key sound when typing letters during practice.",
+  "keySoundType": "Key sound type",
+  "keySoundTypeHelp": "Your choice is saved automatically and used for kana and article practice. Select “Preview key sound” to listen.",
+  "keySoundTypes": {
+    "percussive": "Crisp tap",
+    "electronic": "Electronic tone"
+  },
   "kanaSpeechEnabled": "Read kana automatically",
   "kanaSpeechEnabledHelp": "Read each kana after you complete it, then move to the next question.",
   "articleSegmentSpeechEnabled": "Read article segments",

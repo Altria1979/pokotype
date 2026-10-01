@@ -50,7 +50,7 @@ async function observeNativeAudio(page: Page, volume = 0.25) {
         recording = true;
       },
       finish(durationMs) {
-        // Observe a complete short tone plus its release through real audio time.
+        // Observe a complete short impact plus its release through real audio time.
         return new Promise((resolve) => setTimeout(() => {
           recording = false;
           resolve(snapshot());
@@ -61,7 +61,7 @@ async function observeNativeAudio(page: Page, volume = 0.25) {
       constructor(options?: AudioContextOptions) {
         super(options);
         const analyser = this.createAnalyser();
-        // Retain the whole 90 ms tone even when React work delays the next frame.
+        // Retain the whole 45 ms impact even when React work delays the next frame.
         analyser.fftSize = 8192;
         analyser.smoothingTimeConstant = 0;
         const silentSink = this.createGain();
@@ -143,14 +143,14 @@ async function measure(page: Page, action: () => Promise<unknown>) {
   return result;
 }
 
-function expectTone(result: AudioMeasurement) {
+function expectKeySound(result: AudioMeasurement, type: "percussive" | "electronic" = "percussive") {
   // Deliberately broad signal bounds: reject silence/near-inaudible output and clipping,
   // without comparing exact samples or depending on the device sample rate.
   expect(result.peak).toBeGreaterThan(0.04);
   expect(result.peak).toBeLessThan(0.98);
   expect(result.rms).toBeGreaterThan(0.005);
-  expect(result.dominantFrequency).toBeGreaterThan(300);
-  expect(result.dominantFrequency).toBeLessThan(600);
+  expect(result.dominantFrequency).toBeGreaterThan(type === "percussive" ? 650 : 350);
+  expect(result.dominantFrequency).toBeLessThan(type === "percussive" ? 2400 : 500);
 }
 
 function expectSilence(result: AudioMeasurement) {
@@ -176,9 +176,9 @@ test("原生音频：文章首键、后续正确和错键有信号，开关/暂�
   await observeNativeAudio(page);
   await page.goto(`/zh-CN/articles/?id=${SAMPLE_ARTICLES[0].id}`);
   await startArticle(page);
-  expectTone(await measure(page, () => page.keyboard.type("w")));
-  expectTone(await measure(page, () => page.keyboard.type("a")));
-  expectTone(await measure(page, () => page.keyboard.type("q")));
+  expectKeySound(await measure(page, () => page.keyboard.type("w")));
+  expectKeySound(await measure(page, () => page.keyboard.type("a")));
+  expectKeySound(await measure(page, () => page.keyboard.type("q")));
   await expect(page.getByRole("status")).toContainText("这个按键不匹配");
 
   const enabled = page.getByRole("checkbox", { name: "按键音效", exact: true });
@@ -188,20 +188,20 @@ test("原生音频：文章首键、后续正确和错键有信号，开关/暂�
   await page.keyboard.press("Escape");
   expectSilence(await measure(page, () => page.keyboard.type("q")));
   await page.getByRole("button", { name: "继续练习", exact: true }).click();
-  expectTone(await measure(page, () => page.keyboard.type("q")));
+  expectKeySound(await measure(page, () => page.keyboard.type("q")));
 
   // Exercise the real context lifecycle, without faking its state or resume result.
   await page.evaluate(async () => {
     const context = window.__nativeKeyAudio.contexts.at(-1)!;
     await context.suspend();
   });
-  expectTone(await measure(page, () => page.keyboard.type("q")));
+  expectKeySound(await measure(page, () => page.keyboard.type("q")));
   await page.getByRole("button", { name: "结束练习", exact: true }).click();
   expectSilence(await measure(page, () => page.keyboard.type("q")));
   await expect.poll(() => page.evaluate(() => window.__nativeKeyAudio.contexts.every((context) => context.state === "closed"))).toBe(true);
   const previousContexts = await page.evaluate(() => window.__nativeKeyAudio.contexts.length);
   await startArticle(page);
-  expectTone(await measure(page, () => page.keyboard.type("q")));
+  expectKeySound(await measure(page, () => page.keyboard.type("q")));
   expect(await page.evaluate(() => window.__nativeKeyAudio.contexts.length)).toBeGreaterThan(previousContexts);
 });
 
@@ -221,22 +221,31 @@ test("原生音频：五十音音量为零时静音，调整设置后首键和�
   const progress = page.getByLabel("输入进度");
   await expect(progress).toBeVisible();
   const firstKey = (await progress.locator("[data-romaji-pending]").textContent())![0];
-  expectTone(await measure(page, () => page.keyboard.type(firstKey)));
-  expectTone(await measure(page, () => page.keyboard.type("q")));
+  expectKeySound(await measure(page, () => page.keyboard.type(firstKey)));
+  expectKeySound(await measure(page, () => page.keyboard.type("q")));
 });
 
-test("原生音频：设置试听与文章按键声音一致，最高音量快速连按不削波也不残留", async ({ page }) => {
-  await observeNativeAudio(page, 1);
-  await page.goto("/zh-CN/settings/");
-  const preview = await measure(page, () => page.getByRole("button", { name: "试听按键音", exact: true }).click());
-  expectTone(preview);
-  await openArticleFromNavigation(page);
-  const single = await measure(page, () => page.keyboard.type("q"));
-  expectTone(single);
-  expect(Math.abs(single.dominantFrequency - preview.dominantFrequency)).toBeLessThan(50);
-  expect(single.peak / preview.peak).toBeGreaterThan(0.6);
-  expect(single.peak / preview.peak).toBeLessThan(1.6);
-  const rapid = await measure(page, () => page.keyboard.type("q".repeat(32), { delay: 2 }));
-  expectTone(rapid);
-  expectSilence(await measure(page, async () => {}));
-});
+for (const type of ["percussive", "electronic"] as const) {
+  test(`原生音频 ${type}：试听与练习一致，快速连按不削波、不残留且支持静音`, async ({ page }) => {
+    await observeNativeAudio(page, 1);
+    await page.goto("/zh-CN/settings/");
+    await page.getByLabel("按键音类型", { exact: true }).selectOption(type);
+    const preview = await measure(page, () => page.getByRole("button", { name: "试听按键音", exact: true }).click());
+    expectKeySound(preview, type);
+    await openArticleFromNavigation(page);
+    const single = await measure(page, () => page.keyboard.type("q"));
+    expectKeySound(single, type);
+    expect(Math.abs(single.dominantFrequency - preview.dominantFrequency)).toBeLessThan(50);
+    expect(single.peak / preview.peak).toBeGreaterThan(0.6);
+    expect(single.peak / preview.peak).toBeLessThan(1.6);
+    const rapid = await measure(page, () => page.keyboard.type("q".repeat(32), { delay: 2 }));
+    expectKeySound(rapid, type);
+    expectSilence(await measure(page, async () => {}));
+    await page.getByRole("checkbox", { name: "按键音效", exact: true }).uncheck();
+    expectSilence(await measure(page, () => page.keyboard.type("q")));
+    await page.getByRole("button", { name: "结束练习", exact: true }).click();
+    await page.getByRole("navigation", { name: "主导航" }).getByRole("link", { name: "设置", exact: true }).click();
+    await page.getByLabel("按键音量", { exact: true }).fill("0");
+    expectSilence(await measure(page, () => page.getByRole("button", { name: "试听按键音", exact: true }).click()));
+  });
+}

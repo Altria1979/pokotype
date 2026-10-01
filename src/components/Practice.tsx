@@ -143,7 +143,7 @@ export function Practice({
         setAutoPaused(false);
         run.resume();
       }
-      if (preferences.keySoundEnabled) audio.key(preferences.keySoundVolume);
+      if (preferences.keySoundEnabled) audio.key(preferences.keySoundVolume, preferences.keySoundType);
       const result = run.input(key);
       if (result === "completed") {
         if (mode === "article" && articleSpeechEnabled) {
@@ -160,7 +160,7 @@ export function Practice({
       }
     }
     redraw();
-  }, [run, autoPaused, preferences.keySoundEnabled, preferences.keySoundVolume,
+  }, [run, autoPaused, preferences.keySoundEnabled, preferences.keySoundVolume, preferences.keySoundType,
     preferences.kanaSpeechEnabled, audio, mode, articleSpeechEnabled, articleSegmentSpeechEnabled,
     listen, speak, items, advance, redraw]);
   function readText(input: HTMLInputElement, inputType?: string, isComposing = false) {
@@ -524,7 +524,7 @@ export function Practice({
                   <button
                     type="button"
                     disabled={!preferences.keySoundEnabled || preferences.keySoundVolume === 0}
-                    onClick={() => audio.key(preferences.keySoundVolume)}
+                    onClick={() => audio.key(preferences.keySoundVolume, preferences.keySoundType)}
                   >
                     {t("retryKeys")}
                   </button>

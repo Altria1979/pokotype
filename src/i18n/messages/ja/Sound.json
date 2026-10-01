@@ -2,7 +2,13 @@
   "title": "サウンドと読み上げ",
   "intro": "キー音、かなの発音、区切りごと・一文ごとの読み上げを個別に設定できます。日本語の音声はブラウザーと端末から提供されます。",
   "keySoundEnabled": "キー音を有効にする",
-  "keySoundEnabledHelp": "練習中にアルファベットキーを押すと、短い電子音が鳴ります。",
+  "keySoundEnabledHelp": "練習中にアルファベットキーを押すと、選んだキー音が鳴ります。",
+  "keySoundType": "キー音の種類",
+  "keySoundTypeHelp": "選択は自動で保存され、五十音と文章の練習に共通で使われます。「キー音を試聴」で音を確認できます。",
+  "keySoundTypes": {
+    "percussive": "カタカタ打鍵音",
+    "electronic": "電子音"
+  },
   "kanaSpeechEnabled": "五十音を自動で読み上げる",
   "kanaSpeechEnabledHelp": "かなを入力し終えると発音して、次の問題に進みます。",
   "articleSegmentSpeechEnabled": "文章を区切りごとに読み上げる",

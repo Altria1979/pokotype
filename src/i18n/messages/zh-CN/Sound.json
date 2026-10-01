@@ -2,7 +2,13 @@
   "title": "声音与朗读",
   "intro": "按键音、假名发音、分段与整句朗读独立设置。日语音色由当前浏览器和设备提供。",
   "keySoundEnabled": "开启按键音",
-  "keySoundEnabledHelp": "练习时按下字母键，播放短促电子音。",
+  "keySoundEnabledHelp": "练习时按下字母键，播放你选择的按键音。",
+  "keySoundType": "按键音类型",
+  "keySoundTypeHelp": "选择后自动保存，统一用于五十音和文章练习；点击“试听按键音”即可试听。",
+  "keySoundTypes": {
+    "percussive": "哒哒敲击",
+    "electronic": "电子音"
+  },
   "kanaSpeechEnabled": "五十音自动朗读",
   "kanaSpeechEnabledHelp": "完整输入假名后发音，继续下一题。",
   "articleSegmentSpeechEnabled": "文章分段朗读",

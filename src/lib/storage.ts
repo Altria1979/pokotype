@@ -8,6 +8,7 @@ import {
 } from "./ai-models";
 import { KANA_GROUPS } from "./kana";
 import type { ArticleGroupSize, ArticlePracticeMode } from "./article-practice";
+import type { KeySoundType } from "./audio";
 
 export type PracticeRecord = {
   id: string;
@@ -34,6 +35,7 @@ export type Preferences = {
   count: 20 | 50;
   groupIds: string[];
   keySoundEnabled: boolean;
+  keySoundType: KeySoundType;
   kanaSpeechEnabled: boolean;
   articleSpeechEnabled: boolean;
   articleSegmentSpeechEnabled: boolean;
@@ -55,6 +57,7 @@ export const DEFAULT_PREFERENCES: Preferences = {
     (group) => group.id,
   ),
   keySoundEnabled: true,
+  keySoundType: "percussive",
   kanaSpeechEnabled: true,
   articleSpeechEnabled: true,
   articleSegmentSpeechEnabled: true,
@@ -388,6 +391,7 @@ const preferenceValidators: Record<keyof Preferences, (value: unknown) => boolea
     Array.isArray(value) &&
     value.every((id) => KANA_GROUPS.some((group) => group.id === id)),
   keySoundEnabled: booleanPreference,
+  keySoundType: (value) => value === "percussive" || value === "electronic",
   kanaSpeechEnabled: booleanPreference,
   articleSpeechEnabled: booleanPreference,
   articleSegmentSpeechEnabled: booleanPreference,

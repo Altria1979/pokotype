@@ -265,6 +265,27 @@ describe("local preferences and key", () => {
     savePreferences({ ...preferences, speechRate: 1.2 });
     expect(loadPreferences().speechRate).toBe(1.2);
   });
+  it.each(["percussive", "electronic"] as const)("persists %s as the global key sound without changing other preferences", (keySoundType) => {
+    const preferences: Preferences = {
+      ...DEFAULT_PREFERENCES,
+      keySoundType,
+      keySoundEnabled: false,
+      keySoundVolume: 0.4,
+      speechVoiceURI: "chosen-voice",
+    };
+    savePreferences(preferences);
+    expect(loadPreferences()).toEqual(preferences);
+  });
+  it.each([undefined, null, "unknown", 1])("uses percussive sound for missing or invalid sound type %s without overwriting storage", (keySoundType) => {
+    const raw = JSON.stringify({ version: 1, value: {
+      ...DEFAULT_PREFERENCES, keySoundType, keySoundEnabled: false, keySoundVolume: 0.4,
+    } });
+    localValues.set("pokotype:preferences:v1", raw);
+    expect(loadPreferences()).toEqual({
+      ...DEFAULT_PREFERENCES, keySoundType: "percussive", keySoundEnabled: false, keySoundVolume: 0.4,
+    });
+    expect(localValues.get("pokotype:preferences:v1")).toBe(raw);
+  });
   it("adds segment speech and light pitch to existing sound preferences without changing a chosen voice", () => {
     const previousSoundSettings = {
       keySoundEnabled: false,
@@ -308,6 +329,8 @@ describe("local preferences and key", () => {
   });
   it.each([
     ["keySoundEnabled", "true"],
+    ["keySoundType", "unknown"],
+    ["keySoundType", null],
     ["kanaSpeechEnabled", 1],
     ["articleSpeechEnabled", null],
     ["articleSegmentSpeechEnabled", "false"],
