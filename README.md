@@ -1,3 +1,7 @@
+[![Pokotype 文章打字练习：30 秒自动循环演示](docs/media/article-practice-demo.gif)](docs/media/article-practice-demo.mp4)
+
+30 秒文章打字演示 · [观看有声视频](docs/media/article-practice-demo.mp4)
+
 # Pokotype · 日语打字练习
 
 [日本語](README.ja.md) · **简体中文** · [English](README.en.md)
