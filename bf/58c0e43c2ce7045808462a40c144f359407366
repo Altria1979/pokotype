@@ -1,0 +1,19 @@
+README.md
+  s_6e821dc7343275::t_6516d422f19d7b 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "bf58c0e43c2ce7045808462a40c144f359407366",
+  "prompts": {},
+  "sessions": {
+    "s_6e821dc7343275": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0fb80-f7b8-7463-8cab-76c7c31c5e44",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Altria1979 <58761705+Altria1979@users.noreply.github.com>"
+    }
+  }
+}
